@@ -16,6 +16,8 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
 
+import boikoro.vu.editor.Launcher.EditableFile;
+
 public class Gui {
 	private static final String VU_ICON_IMAGE = "vu-icon.png";
 	private static final Border EMPTY_BORDER = javax.swing.BorderFactory.createEmptyBorder();
@@ -40,19 +42,27 @@ public class Gui {
 		});
 	}
 
+	private void setMainFrameTitle(String resourceUnderEdit){
+		mainFrame.setTitle("vu" + (null == resourceUnderEdit? "":"-"+resourceUnderEdit));
+	}
+
+	private void setStatusBarText(String text) {
+		statusBar.setText(text);
+	}
+
 	private void initMainFrame() throws IOException {
 		mainFrame = new JFrame();
 		mainFrame.setIconImage(ImageIO.read(this.getClass().getClassLoader().getResourceAsStream(VU_ICON_IMAGE)));
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		mainFrame.setBounds(0, 0, screenSize.width, screenSize.height);
-		mainFrame.setTitle("vu");
+		setMainFrameTitle(null);
 		mainFrame.setUndecorated(true);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	private void initStatusBar() {
 		statusBar = new JTextField();
-		statusBar.setText("status bar");
+		setStatusBarText("status bar");
 		setTextAreaColors(statusBar);
 		statusBar.setBorder(EMPTY_BORDER);
 	}
@@ -71,6 +81,7 @@ public class Gui {
 		editorArea.setEditable(true);
 		setTextAreaColors(editorArea);
 		editorArea.setText(text);
+		editorArea.setTabSize(4);
 	}
 
 	private void initLineNumbersArea(String text) {
@@ -104,12 +115,24 @@ public class Gui {
 		return text;
 	}
 
+	private void loadResource(EditableFile resource) throws IOException {
+		editorArea.setText(resource.getText());
+		setMainFrameTitle(resource.getFileName());
+		setStatusBarText(resource.getPath());
+	}
+
 	private void show() {
 		mainFrame.setVisible(true);
 	}
 
 	public static void startNewGui() throws IOException {
 		new Gui().show();
+	}
+
+	public static void startNewGui(EditableFile resource) throws IOException {
+		Gui gui = new Gui();
+		gui.loadResource(resource);
+		gui.show();
 	}
 
 }
