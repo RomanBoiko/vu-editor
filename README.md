@@ -29,3 +29,5 @@ Features:
 * (-)copy current file path/name into clipboard
 * (-)file explorer
 * (-)search in folder results in separate mode
+
+"!http://api.coderwall.com/romanboiko/endorsecount.png!":http://coderwall.com/romanboiko
