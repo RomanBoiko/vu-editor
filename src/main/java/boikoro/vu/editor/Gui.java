@@ -11,22 +11,12 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.text.JTextComponent;
 
-public class Widget extends JFrame {
+public class Gui extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				Widget ex = new Widget();
-				ex.setVisible(true);
-			}
-		});
-	}
-
-	public Widget() {
+	public Gui() {
 		initMainFrame();
 		final JTextArea editorArea = editorArea(createTextForEditor());
 		JTextArea lineNumbers = lineNumbersArea(linesNumbersText());
