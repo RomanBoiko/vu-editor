@@ -9,8 +9,7 @@ public class Launcher {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Gui ex = new Gui();
-					ex.setVisible(true);
+					Gui.startNewGui();
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}

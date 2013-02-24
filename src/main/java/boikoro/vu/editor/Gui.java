@@ -16,74 +16,76 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
 
-public class Gui extends JFrame {
+public class Gui {
+	private static final String VU_ICON_IMAGE = "vu-icon.png";
 	private static final Border EMPTY_BORDER = javax.swing.BorderFactory.createEmptyBorder();
-	private static final long serialVersionUID = 1L;
-
-	public Gui() throws IOException {
+	private JFrame mainFrame;
+	private JTextField statusBar;
+	private JTextArea editorArea;
+	private JTextArea lineNumbers;
+	private JScrollPane scrollPane;
+	
+	private Gui() throws IOException {
 		initMainFrame();
-		final JTextArea editorArea = editorArea(createTextForEditor());
-		JTextArea lineNumbers = lineNumbersArea(linesNumbersText());
-		JScrollPane scrollPane = editorAndLineNumbersPanel(editorArea, lineNumbers);
-		JTextField statusBar = statusBar();
-		statusBar.setBorder(EMPTY_BORDER);
-		getContentPane().add(scrollPane);
-		getContentPane().add(statusBar, BorderLayout.PAGE_END);
-		setIconImage(ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("vu-icon.png")));
-		addWindowListener(new WindowAdapter() {
+		initStatusBar();
+		initEditorArea(createTextForEditor());
+		initLineNumbersArea(linesNumbersText());
+		initEditorAndLineNumbersPanel(editorArea, lineNumbers);
+		mainFrame.getContentPane().add(scrollPane);
+		mainFrame.getContentPane().add(statusBar, BorderLayout.PAGE_END);
+		mainFrame.addWindowListener(new WindowAdapter() {
 			public void windowOpened( WindowEvent e){
 				editorArea.requestFocus();
 			}
 		});
 	}
 
-	private void initMainFrame() {
+	private void initMainFrame() throws IOException {
+		mainFrame = new JFrame();
+		mainFrame.setIconImage(ImageIO.read(this.getClass().getClassLoader().getResourceAsStream(VU_ICON_IMAGE)));
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		setBounds(0, 0, screenSize.width, screenSize.height);
-		setTitle("vu");
-		setUndecorated(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		mainFrame.setBounds(0, 0, screenSize.width, screenSize.height);
+		mainFrame.setTitle("vu");
+		mainFrame.setUndecorated(true);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	private JScrollPane editorAndLineNumbersPanel(JTextArea editorArea, JTextArea lineNumbers) {
-		JScrollPane scrollPane = new JScrollPane(editorArea);
+	private void initStatusBar() {
+		statusBar = new JTextField();
+		statusBar.setText("status bar");
+		setTextAreaColors(statusBar);
+		statusBar.setBorder(EMPTY_BORDER);
+	}
+
+	private void initEditorAndLineNumbersPanel(JTextArea editorArea, JTextArea lineNumbers) {
+		scrollPane = new JScrollPane(editorArea);
 		scrollPane.setRowHeaderView(lineNumbers);
 		scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
 		scrollPane.setBorder(EMPTY_BORDER);
-		return scrollPane;
 	}
 
-	private JTextField statusBar() {
-		JTextField statusBar = new JTextField();
-		statusBar.setText("status bar");
-		setTextAreaColors(statusBar);
-		return statusBar;
+
+	private void initEditorArea(String text) {
+		editorArea = new JTextArea();
+		editorArea.setSelectionColor(Color.GRAY);
+		editorArea.setEditable(true);
+		setTextAreaColors(editorArea);
+		editorArea.setText(text);
 	}
 
-	private JTextArea editorArea(String text) {
-		JTextArea textArea = new JTextArea();
-		textArea.setSelectionColor(Color.GRAY);
-		textArea.setEditable(true);
-		setTextAreaColors(textArea);
-		textArea.setText(text);
-		return textArea;
+	private void initLineNumbersArea(String text) {
+		lineNumbers = new JTextArea(100, 3);
+		lineNumbers.setText(text);
+		lineNumbers.setEditable(false);
+		lineNumbers.setFocusable(false);
+		lineNumbers.setBackground(Color.BLACK);
+		lineNumbers.setForeground(Color.GRAY);
 	}
 
 	private void setTextAreaColors(JTextComponent textArea) {
 		textArea.setBackground(Color.BLACK);
 		textArea.setForeground(Color.WHITE);
 		textArea.setCaretColor(Color.WHITE);
-	}
-
-
-	private JTextArea lineNumbersArea(String text) {
-		JTextArea linesNumbers = new JTextArea(100, 3);
-		linesNumbers.setText(text);
-		linesNumbers.setEditable(false);
-		linesNumbers.setFocusable(false);
-		linesNumbers.setBackground(Color.BLACK);
-		linesNumbers.setForeground(Color.GRAY);
-		return linesNumbers;
 	}
 
 	private String createTextForEditor() {
@@ -101,4 +103,13 @@ public class Gui extends JFrame {
 		}
 		return text;
 	}
+
+	private void show() {
+		mainFrame.setVisible(true);
+	}
+
+	public static void startNewGui() throws IOException {
+		new Gui().show();
+	}
+
 }
