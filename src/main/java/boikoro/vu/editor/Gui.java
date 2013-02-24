@@ -6,24 +6,30 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
 
 public class Gui extends JFrame {
+	private static final Border EMPTY_BORDER = javax.swing.BorderFactory.createEmptyBorder();
 	private static final long serialVersionUID = 1L;
 
-	public Gui() {
+	public Gui() throws IOException {
 		initMainFrame();
 		final JTextArea editorArea = editorArea(createTextForEditor());
 		JTextArea lineNumbers = lineNumbersArea(linesNumbersText());
 		JScrollPane scrollPane = editorAndLineNumbersPanel(editorArea, lineNumbers);
 		JTextField statusBar = statusBar();
+		statusBar.setBorder(EMPTY_BORDER);
 		getContentPane().add(scrollPane);
 		getContentPane().add(statusBar, BorderLayout.PAGE_END);
+		setIconImage(ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("vu-icon.png")));
 		addWindowListener(new WindowAdapter() {
 			public void windowOpened( WindowEvent e){
 				editorArea.requestFocus();
@@ -43,6 +49,7 @@ public class Gui extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(editorArea);
 		scrollPane.setRowHeaderView(lineNumbers);
 		scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
+		scrollPane.setBorder(EMPTY_BORDER);
 		return scrollPane;
 	}
 
@@ -74,8 +81,8 @@ public class Gui extends JFrame {
 		linesNumbers.setText(text);
 		linesNumbers.setEditable(false);
 		linesNumbers.setFocusable(false);
-		linesNumbers.setBackground(Color.GRAY);
-		linesNumbers.setForeground(Color.BLACK);
+		linesNumbers.setBackground(Color.BLACK);
+		linesNumbers.setForeground(Color.GRAY);
 		return linesNumbers;
 	}
 
