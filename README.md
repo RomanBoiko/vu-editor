@@ -9,7 +9,7 @@ Features:
 (+) - ready
 (-) - not ready
 
-* (-)full editor packaged into single shell file
+* (+)full editor packaged into single shell file
 * (-)open with file from command line
 * (-)save file
 * (-)open stream from command line (use in pipe)

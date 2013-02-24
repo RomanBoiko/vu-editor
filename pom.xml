@@ -76,6 +76,29 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<configuration>
+							<target>
+								<property name="executable" value="${project.build.directory}/vu"/>
+								<exec executable="cat" output="${executable}">
+									<arg value="${basedir}/vu.sh.template"/>
+									<arg value="${project.build.directory}/${project.artifactId}-${project.version}-jar-with-dependencies.jar"/>
+								</exec>
+								<chmod file="${executable}" perm="ugo+rx"/>
+								<echo>vu-editor packaged to executable: ${executable}</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>
