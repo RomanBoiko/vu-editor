@@ -1,7 +1,8 @@
 vu-editor
 =========
 
-Minimalistic editor for pragmatic programmers
+Minimalistic editor for pragmatic programmers.
+Written in the bus 344 (London)
 
 Features:
 ---------
@@ -10,8 +11,8 @@ Features:
 (-) - not ready
 
 * (+)full editor packaged into single shell file
-* (-)open with file from command line
-* (-)save file
+* (+)open with file from command line
+* (+)save file
 * (-)open stream from command line (use in pipe)
 * (-)show line numbers
 * (-)search in file
