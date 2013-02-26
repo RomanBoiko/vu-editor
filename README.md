@@ -1,7 +1,8 @@
 vu-editor
 =========
 
-Minimalistic editor for pragmatic programmers
+Minimalistic editor for pragmatic programmers.
+Written in the bus 344
 
 Features:
 ---------
