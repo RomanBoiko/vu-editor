@@ -16,9 +16,9 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
 
-import boikoro.vu.editor.Launcher.EditableFile;
 
 public class Gui {
+	private static final Dimension ZERO_DIMENSION = new Dimension(0, 0);
 	private static final String VU_ICON_IMAGE = "vu-icon.png";
 	private static final Border EMPTY_BORDER = javax.swing.BorderFactory.createEmptyBorder();
 	private JFrame mainFrame;
@@ -27,6 +27,8 @@ public class Gui {
 	private JTextArea lineNumbers;
 	private JScrollPane scrollPane;
 	
+	private EditableFile resourceUnderEdit;
+
 	private Gui() throws IOException {
 		initMainFrame();
 		initStatusBar();
@@ -42,6 +44,10 @@ public class Gui {
 		});
 	}
 
+	public void saveCurrentText() throws IOException {
+		resourceUnderEdit.saveText(editorArea.getText());
+	}
+	
 	private void setMainFrameTitle(String resourceUnderEdit){
 		mainFrame.setTitle("vu" + (null == resourceUnderEdit? "":"-"+resourceUnderEdit));
 	}
@@ -70,7 +76,8 @@ public class Gui {
 	private void initEditorAndLineNumbersPanel(JTextArea editorArea, JTextArea lineNumbers) {
 		scrollPane = new JScrollPane(editorArea);
 		scrollPane.setRowHeaderView(lineNumbers);
-		scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
+		scrollPane.getVerticalScrollBar().setPreferredSize(ZERO_DIMENSION);
+		scrollPane.getHorizontalScrollBar().setPreferredSize(ZERO_DIMENSION);
 		scrollPane.setBorder(EMPTY_BORDER);
 	}
 
@@ -82,6 +89,7 @@ public class Gui {
 		setTextAreaColors(editorArea);
 		editorArea.setText(text);
 		editorArea.setTabSize(4);
+		editorArea.addKeyListener(new KeyboardListener(this));
 	}
 
 	private void initLineNumbersArea(String text) {
@@ -119,6 +127,7 @@ public class Gui {
 		editorArea.setText(resource.getText());
 		setMainFrameTitle(resource.getFileName());
 		setStatusBarText(resource.getPath());
+		resourceUnderEdit = resource;
 	}
 
 	private void show() {
@@ -129,6 +138,7 @@ public class Gui {
 		new Gui().show();
 	}
 
+	
 	public static void startNewGui(EditableFile resource) throws IOException {
 		Gui gui = new Gui();
 		gui.loadResource(resource);
