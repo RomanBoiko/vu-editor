@@ -28,13 +28,11 @@ public class Gui {
 	private JTextArea lineNumbers;
 	private JScrollPane scrollPane;
 	
-	private EditableFile resourceUnderEdit;
-
 	public Gui() throws IOException {
-		initMainFrame();
+		createMainFrame();
 		initStatusBar();
-		initEditorArea(createTextForEditor());
-		initLineNumbersArea(linesNumbersText());
+		initEditorArea();
+		initLineNumbersArea();
 		initEditorAndLineNumbersPanel(editorArea, lineNumbers);
 		mainFrame.getContentPane().add(scrollPane);
 		mainFrame.getContentPane().add(statusBar, BorderLayout.PAGE_END);
@@ -45,26 +43,35 @@ public class Gui {
 		});
 	}
 
-	public void saveCurrentText() throws IOException {
-		resourceUnderEdit.saveText(editorArea.getText());
+	public String getCurrentText() {
+		return editorArea.getText();
 	}
 	
-	private void setMainFrameTitle(String resourceUnderEdit){
+	public void setCurrentText(String text) {
+		editorArea.setText(text);
+	}
+	
+	public void setLineNumbers(String lineNumbers) {
+		this.lineNumbers.setText(lineNumbers);
+	}
+	
+	public void setMainFrameTitle(String resourceUnderEdit){
 		mainFrame.setTitle("vu" + (null == resourceUnderEdit? "":"-"+resourceUnderEdit));
 	}
 
-	private void setStatusBarText(String text) {
+	public void setStatusBarText(String text) {
 		statusBar.setText(text);
 	}
 
-	private void initMainFrame() throws IOException {
-		mainFrame = new JFrame();
+	private void createMainFrame() throws IOException {
+		JFrame mainFrame = new JFrame();
 		mainFrame.setIconImage(ImageIO.read(this.getClass().getClassLoader().getResourceAsStream(VU_ICON_IMAGE)));
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		mainFrame.setBounds(0, 0, screenSize.width, screenSize.height);
 		setMainFrameTitle(null);
 		mainFrame.setUndecorated(true);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		return mainFrame;
 	}
 
 	private void initStatusBar() {
@@ -83,12 +90,11 @@ public class Gui {
 	}
 
 
-	private void initEditorArea(String text) {
+	private void initEditorArea() {
 		editorArea = new JTextArea();
 		editorArea.setSelectionColor(Color.GRAY);
 		editorArea.setEditable(true);
 		setTextAreaColors(editorArea);
-		editorArea.setText(text);
 		editorArea.setTabSize(4);
 	}
 	
@@ -96,9 +102,8 @@ public class Gui {
 		editorArea.addKeyListener(keyListener);
 	}
 
-	private void initLineNumbersArea(String text) {
+	private void initLineNumbersArea() {
 		lineNumbers = new JTextArea(100, 3);
-		lineNumbers.setText(text);
 		lineNumbers.setEditable(false);
 		lineNumbers.setFocusable(false);
 		lineNumbers.setBackground(Color.BLACK);
@@ -109,29 +114,6 @@ public class Gui {
 		textArea.setBackground(Color.BLACK);
 		textArea.setForeground(Color.WHITE);
 		textArea.setCaretColor(Color.WHITE);
-	}
-
-	private String createTextForEditor() {
-		String text = "";
-		for (int i = 0; i < 100; i++) {
-			text += "asd" + i + "\n";
-		}
-		return text;
-	}
-
-	private String linesNumbersText() {
-		String text = "";
-		for (int i = 1; i < 101; i++) {
-			text += "" + i + "\n";
-		}
-		return text;
-	}
-
-	public void loadResource(EditableFile resource) throws IOException {
-		editorArea.setText(resource.getText());
-		setMainFrameTitle(resource.getFileName());
-		setStatusBarText(resource.getPath());
-		resourceUnderEdit = resource;
 	}
 
 	public void show() {

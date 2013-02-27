@@ -17,7 +17,7 @@ public class Launcher {
 					gui.setKeyListener(keyListener);
 					
 					if(args.length == 1) {
-						gui.loadResource(new EditableFile(args[0]));
+						driver.loadResource(new EditableFile(args[0]));
 					}
 
 					gui.show();
