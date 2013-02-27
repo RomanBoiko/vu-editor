@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class Gui {
 	
 	private EditableFile resourceUnderEdit;
 
-	private Gui() throws IOException {
+	public Gui() throws IOException {
 		initMainFrame();
 		initStatusBar();
 		initEditorArea(createTextForEditor());
@@ -89,7 +90,10 @@ public class Gui {
 		setTextAreaColors(editorArea);
 		editorArea.setText(text);
 		editorArea.setTabSize(4);
-		editorArea.addKeyListener(new KeyboardListener(this));
+	}
+	
+	public void setKeyListener(KeyListener keyListener) {
+		editorArea.addKeyListener(keyListener);
 	}
 
 	private void initLineNumbersArea(String text) {
@@ -123,26 +127,14 @@ public class Gui {
 		return text;
 	}
 
-	private void loadResource(EditableFile resource) throws IOException {
+	public void loadResource(EditableFile resource) throws IOException {
 		editorArea.setText(resource.getText());
 		setMainFrameTitle(resource.getFileName());
 		setStatusBarText(resource.getPath());
 		resourceUnderEdit = resource;
 	}
 
-	private void show() {
+	public void show() {
 		mainFrame.setVisible(true);
 	}
-
-	public static void startNewGui() throws IOException {
-		new Gui().show();
-	}
-
-	
-	public static void startNewGui(EditableFile resource) throws IOException {
-		Gui gui = new Gui();
-		gui.loadResource(resource);
-		gui.show();
-	}
-
 }

@@ -4,20 +4,19 @@ import static java.lang.String.format;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 public class KeyboardListener implements KeyListener{
 
-	private final Gui gui;
+	private final Driver driver;
 	
-	Set<Integer> pushedKeys = new HashSet<Integer>();
+	private Set<Integer> pushedKeys = new HashSet<Integer>();
 
-	public KeyboardListener(Gui gui) {
-		this.gui = gui;
+	public KeyboardListener(Driver driver) {
+		this.driver = driver;
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent pressedKeyEvent) {
 		pushedKeys.add(pressedKeyEvent.getKeyCode());
@@ -28,11 +27,7 @@ public class KeyboardListener implements KeyListener{
 		System.out.println(
 				format("=>active keys: %s", pushedKeys.toString()));
 		if(pushedKeys.contains(17) && pushedKeys.contains(83)) {
-			try {
-				gui.saveCurrentText();
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
+			driver.save();
 		}
 	}
 
