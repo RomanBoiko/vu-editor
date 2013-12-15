@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>boikoro</groupId>
+	<groupId>vu</groupId>
 	<artifactId>vu-editor</artifactId>
 	<packaging>jar</packaging>
 	<name>vu-editor</name>
@@ -15,9 +15,21 @@
 			<url>http://www.mvnrepository.com/artifacts</url>
 		</repository>
 	</repositories>
+	<properties>
+		<exec.mainClass>vu.editor.Launcher</exec.mainClass>
+	</properties>
 
 	<dependencies>
-		
+		<dependency>
+			<groupId>com.googlecode.lanterna</groupId>
+			<artifactId>lanterna</artifactId>
+			<version>2.1.6</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>15.0</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -59,7 +71,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>boikoro.vu.editor.Launcher</mainClass>
+							<mainClass>${exec.mainClass}</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -84,7 +96,7 @@
 						<phase>install</phase>
 						<configuration>
 							<target>
-								<property name="executable" value="${project.build.directory}/vu"/>
+								<property name="executable" value="${project.build.directory}/vue"/>
 								<exec executable="cat" output="${executable}">
 									<arg value="${basedir}/vu.sh.template"/>
 									<arg value="${project.build.directory}/${project.artifactId}-${project.version}-jar-with-dependencies.jar"/>

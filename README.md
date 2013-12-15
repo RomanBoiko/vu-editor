@@ -1,8 +1,10 @@
 vu-editor
 =========
 
-Minimalistic editor for pragmatic programmers.
-Written in the bus 344
+Editor
+
+* start in dev mode: mvn compile exec:java -Djava.awt.headless=true
+* create executable: mvn install -DskipTests (executable will be created as ./target/vue)
 
 Features:
 ---------
@@ -10,7 +12,7 @@ Features:
 (+) - ready
 (-) - not ready
 
-* (+)full editor packaged into single shell file
+* (-)full editor packaged into single shell file
 * (-)open with file from command line
 * (-)save file
 * (-)open stream from command line (use in pipe)
@@ -30,5 +32,8 @@ Features:
 * (-)copy current file path/name into clipboard
 * (-)file explorer
 * (-)search in folder results in separate mode
+* (-)split view
+* (-)autocomplete
+
 
 "!http://api.coderwall.com/romanboiko/endorsecount.png!":http://coderwall.com/romanboiko
