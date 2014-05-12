@@ -17,7 +17,6 @@
 	</repositories>
 
 	<dependencies>
-		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -59,7 +58,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>boikoro.vu.editor.Launcher</mainClass>
+							<mainClass>vu.editor.Launcher</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

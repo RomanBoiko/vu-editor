@@ -1,7 +1,6 @@
-package boikoro.vu.editor;
+package vu.editor;
 
 import java.awt.event.KeyListener;
-import java.io.IOException;
 
 import javax.swing.SwingUtilities;
 
@@ -10,7 +9,6 @@ public class Launcher {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
 					Gui gui = new Gui();
 					Driver driver = new Driver(gui);
 					KeyListener keyListener = new KeyboardListener(driver);
@@ -21,8 +19,8 @@ public class Launcher {
 					}
 
 					gui.show();
-				} catch (IOException e) {
-					throw new RuntimeException(e);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		});

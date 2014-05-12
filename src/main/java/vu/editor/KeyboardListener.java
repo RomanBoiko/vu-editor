@@ -1,4 +1,4 @@
-package boikoro.vu.editor;
+package vu.editor;
 
 import static java.lang.String.format;
 
