@@ -1,25 +1,19 @@
-package vu.editor;
-
-import static java.lang.String.format;
+package boikoro.vu.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
 
@@ -33,20 +27,8 @@ public class Gui {
 	private JTextArea editorArea;
 	private JTextArea lineNumbers;
 	private JScrollPane scrollPane;
-
-	public static void main(final String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				Gui gui = new Gui();
-				Driver driver = new Driver(gui);
-				KeyListener keyListener = new KeyboardListener(driver);
-				gui.setKeyListener(keyListener);
-				gui.show();
-			}
-		});
-	}
-
-	public Gui() {
+	
+	public Gui() throws IOException {
 		createMainFrame();
 		initStatusBar();
 		initEditorArea();
@@ -81,18 +63,15 @@ public class Gui {
 		statusBar.setText(text);
 	}
 
-	private void createMainFrame() {
+	private void createMainFrame() throws IOException {
 		JFrame mainFrame = new JFrame();
-		try {
-			mainFrame.setIconImage(ImageIO.read(this.getClass().getClassLoader().getResourceAsStream(VU_ICON_IMAGE)));
-		} catch (IOException e) {
-			throw new RuntimeException();
-		}
+		mainFrame.setIconImage(ImageIO.read(this.getClass().getClassLoader().getResourceAsStream(VU_ICON_IMAGE)));
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		mainFrame.setBounds(0, 0, screenSize.width, screenSize.height);
 		setMainFrameTitle(null);
 		mainFrame.setUndecorated(true);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		return mainFrame;
 	}
 
 	private void initStatusBar() {
@@ -139,84 +118,5 @@ public class Gui {
 
 	public void show() {
 		mainFrame.setVisible(true);
-	}
-}
-
-class KeyboardListener implements KeyListener{
-
-	private final Driver driver;
-	
-	private Set<Integer> pushedKeys = new HashSet<Integer>();
-
-	public KeyboardListener(Driver driver) {
-		this.driver = driver;
-	}
-
-	@Override
-	public void keyPressed(KeyEvent pressedKeyEvent) {
-		pushedKeys.add(pressedKeyEvent.getKeyCode());
-		System.out.println(
-				format("=>key pressed, char='%s', code='%d')",
-						pressedKeyEvent.getKeyChar(),
-						pressedKeyEvent.getKeyCode()));
-		System.out.println(
-				format("=>active keys: %s", pushedKeys.toString()));
-		if(pushedKeys.contains(17) && pushedKeys.contains(83)) {
-			driver.save();
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent releasedKeyEvent) {
-		pushedKeys.remove(releasedKeyEvent.getKeyCode());
-	}
-
-	@Override
-	public void keyTyped(KeyEvent typedKeyEvent) {
-		// TODO Auto-generated method stub
-		
-	}
-}
-
-class Driver {
-	private final Gui gui;
-
-	public Driver(Gui gui) {
-		this.gui = gui;
-		this.gui.setCurrentText(createTextForEditor());
-		this.gui.setLineNumbers(linesNumbersText());
-	}
-
-	public void save() {
-		try {
-			resourceUnderEdit.saveText(gui.getCurrentText());
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	
-	private String linesNumbersText() {
-		String text = "";
-		for (int i = 1; i < 101; i++) {
-			text += "" + i + "\n";
-		}
-		return text;
-	}
-	
-	private String createTextForEditor() {
-		String text = "";
-		for (int i = 0; i < 100; i++) {
-			text += "asd" + i + "\n";
-		}
-		return text;
-	}
-	
-	private EditableFile resourceUnderEdit;
-	
-	public void loadResource(EditableFile resource) {
-		gui.setCurrentText(resource.getText());
-		gui.setMainFrameTitle(resource.getFileName());
-		gui.setStatusBarText(resource.getPath());
-		resourceUnderEdit = resource;
 	}
 }
