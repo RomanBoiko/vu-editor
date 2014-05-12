@@ -64,14 +64,13 @@ public class Gui {
 	}
 
 	private void createMainFrame() throws IOException {
-		JFrame mainFrame = new JFrame();
+		mainFrame = new JFrame();
 		mainFrame.setIconImage(ImageIO.read(this.getClass().getClassLoader().getResourceAsStream(VU_ICON_IMAGE)));
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		mainFrame.setBounds(0, 0, screenSize.width, screenSize.height);
 		setMainFrameTitle(null);
 		mainFrame.setUndecorated(true);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		return mainFrame;
 	}
 
 	private void initStatusBar() {
