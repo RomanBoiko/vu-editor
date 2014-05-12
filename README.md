@@ -45,5 +45,12 @@ Features:
 * (-)tab width configurable
 * (-)line wrapping
 * (-)outlines(list of functions, paragraphs)
+* (-)license
+* (-)undo
+* (-)redo
+* (-)highlight words similar to the one under cursor
+* (-)goto occurences of the word under cursor
+
+
 
 "!http://api.coderwall.com/romanboiko/endorsecount.png!":http://coderwall.com/romanboiko
