@@ -13,8 +13,9 @@ Features:
 * (-)full editor in executable jar(Windows package)
 * (+)no third-party libs, core java
 * (+)show line numbers
-* (-)open with file from command line
-* (-)save file
+* (+)XML formatting
+* (+)open with file from command line
+* (+)save file
 * (-)open stream from command line (use in pipe)
 * (-)search in file
 * (-)replace in file
@@ -35,7 +36,6 @@ Features:
 * (-)multiple buffers/documents
 * (-)switch between buffers
 * (-)Matching Bracket highlight
-* (-)XML formatting
 * (-)Syntax highlight(config)
 * (-)auto-refactoring
 * (-)vertical edit
