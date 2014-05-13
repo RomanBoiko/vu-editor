@@ -34,10 +34,15 @@ public class EditableFile {
 		return stringBuilder.toString();
 	}
 
-	public void saveText(String text) throws IOException {
-		FileWriter writer = new FileWriter(file);
-		writer.write(text);
-		writer.close();
+	public void saveText(String text) {
+		FileWriter writer;
+		try {
+			writer = new FileWriter(file);
+			writer.write(text);
+			writer.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public String getFileName() {

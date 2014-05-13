@@ -14,11 +14,10 @@ public class Driver {
 	}
 
 	public void save() {
-		try {
-			resourceUnderEdit.saveText(gui.getCurrentText());
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		resourceUnderEdit.saveText(gui.getCurrentText());
+	}
+	public void formatXml() {
+		gui.setCurrentText(Formatters.formatXml(gui.getCurrentText()));
 	}
 
 	public void loadResource(EditableFile resource) throws IOException {
