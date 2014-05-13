@@ -50,6 +50,8 @@ Features:
 * (-)redo
 * (-)highlight words similar to the one under cursor
 * (-)goto occurences of the word under cursor
+* (-)custom font
+* (-)config
 
 
 

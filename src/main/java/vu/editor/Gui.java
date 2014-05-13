@@ -3,6 +3,7 @@ package vu.editor;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
@@ -79,9 +80,12 @@ public class Gui {
 		}
 	}
 
+	private static final Font INPUT_FONT = new Font(Font.MONOSPACED, Font.PLAIN, 14);
+
 	private static class InputArea extends JTextArea {
 		InputArea() {
 			setSelectionColor(Color.GRAY);
+			setFont(INPUT_FONT);
 			setEditable(true);
 			setupColors();
 			setTabSize(4);
@@ -107,6 +111,7 @@ public class Gui {
 		LineNumbersArea() {
 			super(MAX_BUFFER_SIZE, 4);
 			setupReadOnlyTextElement(this);
+			setFont(INPUT_FONT);
 			setText(linesNumbers());
 		}
 
