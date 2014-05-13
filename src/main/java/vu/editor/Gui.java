@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -25,34 +24,32 @@ public class Gui {
 	private static final String VU_ICON_IMAGE = "vu-icon.png";
 	private static final Border EMPTY_BORDER = javax.swing.BorderFactory.createEmptyBorder();
 	private final BottomStatusBar statusBar = new BottomStatusBar();
-	private final InputArea editorArea = new InputArea();
+	private final InputArea inputArea = new InputArea();
 	private final MainFrame mainFrame = new MainFrame();
 	
-	public Gui() throws IOException {
-		JScrollPane scrollPane = new EditorScrollPane(editorArea, new LineNumbersArea());
+	public Gui(KeyboardListener keyboardListener) {
+		inputArea.addKeyListener(keyboardListener);
+		JScrollPane scrollPane = new EditorScrollPane(inputArea, new LineNumbersArea());
 		mainFrame.getContentPane().add(scrollPane);
 		mainFrame.getContentPane().add(statusBar, BorderLayout.PAGE_END);
 		mainFrame.addWindowListener(new WindowAdapter() {
 			public void windowOpened( WindowEvent e){
-				editorArea.requestFocus();
+				inputArea.requestFocus();
 			}
 		});
 	}
 
 	public String getCurrentText() {
-		return editorArea.getText();
+		return inputArea.getText();
 	}
 	public void setCurrentText(String text) {
-		editorArea.setText(text);
+		inputArea.setText(text);
 	}
 	public void setTitle(String resourceUnderEdit){
 		mainFrame.setTitle("vu" + (null == resourceUnderEdit? "":"-"+resourceUnderEdit));
 	}
 	public void setStatusBarText(String text) {
 		statusBar.setText(text);
-	}
-	public void setKeyListener(KeyListener keyListener) {
-		editorArea.addKeyListener(keyListener);
 	}
 
 	private static class MainFrame extends JFrame {

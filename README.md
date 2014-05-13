@@ -52,6 +52,7 @@ Features:
 * (-)goto occurences of the word under cursor
 * (-)custom font
 * (-)config
+* (-)log file
 
 
 

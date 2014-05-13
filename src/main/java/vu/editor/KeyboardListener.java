@@ -11,7 +11,7 @@ public class KeyboardListener implements KeyListener{
 
 	private final Driver driver;
 	
-	private Set<Integer> pushedKeys = new HashSet<Integer>();
+	private final Set<Integer> pushedKeys = new HashSet<Integer>();
 
 	public KeyboardListener(Driver driver) {
 		this.driver = driver;

@@ -4,10 +4,13 @@ import java.io.IOException;
 
 public class Driver {
 	private final Gui gui;
+	private final KeyboardListener keyboardListener;
 	private EditableFile resourceUnderEdit;
 
-	public Driver(Gui gui) {
-		this.gui = gui;
+	public Driver() {
+		this.keyboardListener = new KeyboardListener(this);
+		this.gui = new Gui(keyboardListener);
+		this.gui.show();
 	}
 
 	public void save() {
@@ -25,3 +28,5 @@ public class Driver {
 		resourceUnderEdit = resource;
 	}
 }
+
+
