@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -130,5 +131,10 @@ public class Gui {
 
 	public void show() {
 		mainFrame.setVisible(true);
+	}
+
+	public static void alert(String message) {
+		JOptionPane.showMessageDialog(null,  "[error] " + message);
+		
 	}
 }

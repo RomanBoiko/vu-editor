@@ -13,6 +13,7 @@ public class Launcher {
 						driver.loadResource(new EditableFile(args[0]));
 					}
 				} catch (Exception e) {
+					Gui.alert(e.getMessage());
 					e.printStackTrace();
 				}
 			}
