@@ -13,12 +13,11 @@ public class Launcher {
 					Driver driver = new Driver(gui);
 					KeyListener keyListener = new KeyboardListener(driver);
 					gui.setKeyListener(keyListener);
+					gui.show();
 					
 					if(args.length == 1) {
 						driver.loadResource(new EditableFile(args[0]));
 					}
-
-					gui.show();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
