@@ -29,7 +29,9 @@ public class KeyboardListener implements KeyListener{
 		if(pushedKeys.contains(VK_CONTROL) && pushedKeys.contains(VK_S)) {
 			driver.save();
 		} else if(pushedKeys.contains(VK_CONTROL) && pushedKeys.contains(VK_SHIFT) && pushedKeys.contains(VK_F)) {
-			driver.formatXml();
+			TextActions.formatXml(driver);
+		} else if(pushedKeys.contains(VK_CONTROL) && pushedKeys.contains(VK_D)) {
+			TextActions.deleteLine(driver);
 		}
 	}
 

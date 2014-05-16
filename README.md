@@ -21,7 +21,7 @@ Features:
 * (-)replace in file
 * (-)ESC to return to edit mode
 * (-)line up/down
-* (-)delete line
+* (+)delete line
 * (-)duplicate line
 * (-)select number of whole lines
 * (-)to upper/lower case

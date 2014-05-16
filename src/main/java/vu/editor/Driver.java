@@ -3,9 +3,9 @@ package vu.editor;
 import java.io.IOException;
 
 public class Driver {
-	private final Gui gui;
 	private final KeyboardListener keyboardListener;
 	private EditableFile resourceUnderEdit;
+	private Gui gui;
 
 	public Driver() {
 		this.keyboardListener = new KeyboardListener(this);
@@ -13,18 +13,31 @@ public class Driver {
 		this.gui.show();
 	}
 
-	public void save() {
-		resourceUnderEdit.saveText(gui.getCurrentText());
-	}
-	public void formatXml() {
-		gui.setCurrentText(Formatters.formatXml(gui.getCurrentText()));
+	void save() {
+		resourceUnderEdit.saveText(text());
 	}
 
-	public void loadResource(EditableFile resource) throws IOException {
-		gui.setCurrentText(resource.getText());
-		gui.setTitle(resource.getFileName());
-		gui.setStatusBarText(resource.getPath());
+	void loadResource(EditableFile resource) throws IOException {
+		text(resource.getText());
+		gui.mainFrame.setTitle(resource.getFileName());
+		gui.statusBar.setText(resource.getPath());
 		resourceUnderEdit = resource;
+	}
+
+	void text(String text) {
+		gui.inputArea.setText(text);
+	}
+
+	String text() {
+		return gui.inputArea.getText();
+	}
+
+	int cursor() {
+		return gui.inputArea.getSelectionStart();
+	}
+
+	public void replaceRange(String replacement, int start, int end) {
+		gui.inputArea.replaceRange(replacement, start, end);
 	}
 }
 

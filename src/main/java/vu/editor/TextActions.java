@@ -13,7 +13,15 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 
-public class Formatters {
+public class TextActions {
+	private TextActions() { }
+	private static final String EMPTY_STRING = "";
+	private static final char LINE_SEPARATOR = '\n';
+
+	static void formatXml(Driver driver) {
+		driver.text(formatXml(driver.text()));
+	}
+
 	static String formatXml(String text) {
 		try {
 			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -33,4 +41,15 @@ public class Formatters {
 			throw new RuntimeException(e);
 		}
 	}
+
+	static void deleteLine(Driver driver) {
+		int position = driver.cursor();
+		String currentText = driver.text();
+		int start = currentText.substring(0, position).lastIndexOf('\n') + 1;
+		
+		int distanceFromCursorToLineEndChar = currentText.substring(position).indexOf(LINE_SEPARATOR);
+		int end = distanceFromCursorToLineEndChar < 0 ? currentText.length() : distanceFromCursorToLineEndChar + position + 1;
+		driver.replaceRange(EMPTY_STRING, start, end);
+	}
+
 }

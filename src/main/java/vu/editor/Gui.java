@@ -22,13 +22,12 @@ import javax.swing.text.JTextComponent;
 @SuppressWarnings("serial")
 public class Gui {
 	private static final Dimension ZERO_DIMENSION = new Dimension(0, 0);
-	private static final String VU_ICON_IMAGE = "vu-icon.png";
 	private static final Border EMPTY_BORDER = javax.swing.BorderFactory.createEmptyBorder();
-	private final BottomStatusBar statusBar = new BottomStatusBar();
-	private final InputArea inputArea = new InputArea();
-	private final MainFrame mainFrame = new MainFrame();
+	final JTextField statusBar = new BottomStatusBar();
+	final JTextArea inputArea = new InputArea();
+	final JFrame mainFrame = new MainFrame();
 	
-	public Gui(KeyboardListener keyboardListener) {
+	Gui(KeyboardListener keyboardListener) {
 		inputArea.addKeyListener(keyboardListener);
 		JScrollPane scrollPane = new EditorScrollPane(inputArea, new LineNumbersArea());
 		mainFrame.getContentPane().add(scrollPane);
@@ -40,23 +39,18 @@ public class Gui {
 		});
 	}
 
-	public String getCurrentText() {
-		return inputArea.getText();
+	void show() {
+		mainFrame.setVisible(true);
 	}
-	public void setCurrentText(String text) {
-		inputArea.setText(text);
-	}
-	public void setTitle(String resourceUnderEdit){
-		mainFrame.setTitle("vu" + (null == resourceUnderEdit? "":"-"+resourceUnderEdit));
-	}
-	public void setStatusBarText(String text) {
-		statusBar.setText(text);
+
+	static void alert(String message) {
+		JOptionPane.showMessageDialog(null,  "[error] " + message);
 	}
 
 	private static class MainFrame extends JFrame {
 		public MainFrame() {
 			try {
-				setIconImage(ImageIO.read(this.getClass().getClassLoader().getResourceAsStream(VU_ICON_IMAGE)));
+				setIconImage(ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("vu-icon.png")));
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -127,14 +121,5 @@ public class Gui {
 		textArea.setForeground(Color.GRAY);
 		textArea.setEditable(false);
 		textArea.setFocusable(false);
-	}
-
-	public void show() {
-		mainFrame.setVisible(true);
-	}
-
-	public static void alert(String message) {
-		JOptionPane.showMessageDialog(null,  "[error] " + message);
-		
 	}
 }
