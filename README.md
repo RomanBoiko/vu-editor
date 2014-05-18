@@ -16,12 +16,12 @@ Features:
 * (+)XML formatting
 * (+)open with file from command line
 * (+)save file
+* (+)line up/down
+* (+)delete line
 * (-)open stream from command line (use in pipe)
 * (-)search in file
 * (-)replace in file
 * (-)ESC to return to edit mode
-* (-)line up/down
-* (+)delete line
 * (-)duplicate line
 * (-)select number of whole lines
 * (-)to upper/lower case

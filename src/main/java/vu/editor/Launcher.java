@@ -8,6 +8,7 @@ public class Launcher {
 			public void run() {
 				try {
 					Driver driver = new Driver();
+					driver.showGui();
 					
 					if(args.length == 1) {
 						driver.loadResource(new EditableFile(args[0]));

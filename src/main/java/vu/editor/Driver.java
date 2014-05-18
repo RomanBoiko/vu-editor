@@ -38,9 +38,6 @@ public class Driver {
 		return inputArea().getText();
 	}
 
-	int cursor() {
-		return selectionStart();
-	}
 	int selectionStart() {
 		return inputArea().getSelectionStart();
 	}
@@ -49,16 +46,20 @@ public class Driver {
 		return inputArea().getSelectionEnd();
 	}
 
-	public void replaceRange(String replacement, int start, int end) {
+	void replaceRange(String replacement, int start, int end) {
 		inputArea().replaceRange(replacement, start, end);
 	}
-	public void insert(String textToInsert, int position) {
+	void insert(String textToInsert, int position) {
 		inputArea().insert(textToInsert, position);
+	}
+	void setCursorPosition(int position) {
+		inputArea().setCaretPosition(position);
 	}
 
 	protected JTextArea inputArea() {
 		return gui.inputArea;
 	}
+
 }
 
 

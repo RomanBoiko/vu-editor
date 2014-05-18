@@ -16,7 +16,7 @@ import org.w3c.dom.Document;
 public class TextActions {
 	private TextActions() { }
 	private static final String EMPTY_STRING = "";
-	private static final char LINE_SEPARATOR = '\n';
+	private static final String LINE_SEPARATOR = "\n";
 
 	static void formatXml(Driver driver) {
 		driver.text(formatXml(driver.text()));
@@ -43,31 +43,52 @@ public class TextActions {
 	}
 
 
-	private static int endOfLine(String text, int positionInLine) {
-		int distanceFromCursorToLineEndChar = text.substring(positionInLine).indexOf(LINE_SEPARATOR);
-		return distanceFromCursorToLineEndChar < 0 ? text.length() : distanceFromCursorToLineEndChar + positionInLine + 1;
-	}
-
 	static void deleteLine(Driver driver) {
 		String text = driver.text();
-		int cursorPosition = driver.cursor();
-		driver.replaceRange(
-				EMPTY_STRING,
-				startOfLine(text, cursorPosition),
-				endOfLine(text, cursorPosition));
+		int startOfLineWithoutLineEnd = startOfLineWithoutLineEnd(text, driver.selectionStart());
+		int endOfLineWithoutLineEnd = endOfLineWithoutLineEnd(text, driver.selectionEnd());
+		removeEndOfLineIfExists(driver, text, endOfLineWithoutLineEnd);
+		driver.replaceRange(EMPTY_STRING, startOfLineWithoutLineEnd, endOfLineWithoutLineEnd);
 	}
 
-	private static int startOfLine(String text, int positionInLine) {
+	private static int startOfLineWithoutLineEnd(String text, int positionInLine) {
 		return text.substring(0, positionInLine).lastIndexOf('\n') + 1;
 	}
-
-	public static void moveLinesDown(Driver driver) {
-		// TODO Auto-generated method stub
-		
+	
+	private static int endOfLineWithoutLineEnd(String text, int positionInLine) {
+		int distanceFromCursorToLineEndChar = text.substring(positionInLine).indexOf(LINE_SEPARATOR);
+		return distanceFromCursorToLineEndChar < 0 ? text.length() : distanceFromCursorToLineEndChar + positionInLine;
+	}
+	private static void removeEndOfLineIfExists(Driver driver, String text, int endOfLineWithoutLineEnd) {
+		if (text.length() > endOfLineWithoutLineEnd) {
+			driver.replaceRange(EMPTY_STRING, endOfLineWithoutLineEnd, endOfLineWithoutLineEnd + 1);
+		}
 	}
 
 	public static void moveLinesUp(Driver driver) {
-		// TODO Auto-generated method stub
-		
+		String text = driver.text();
+		int startOfLineWithoutLineEnd = startOfLineWithoutLineEnd(text, driver.selectionStart());
+		int endOfLineWithoutLineEnd = endOfLineWithoutLineEnd(text, driver.selectionEnd());
+		if (startOfLineWithoutLineEnd == 0) { return; }
+		String textToMove = text.substring(startOfLineWithoutLineEnd, endOfLineWithoutLineEnd) + LINE_SEPARATOR;
+		int positionToInsertTextInto = startOfLineWithoutLineEnd(text, startOfLineWithoutLineEnd -1);
+		removeEndOfLineIfExists(driver, text, endOfLineWithoutLineEnd);
+		driver.replaceRange(EMPTY_STRING, startOfLineWithoutLineEnd, endOfLineWithoutLineEnd);
+		driver.insert(textToMove, positionToInsertTextInto);
+		driver.setCursorPosition(positionToInsertTextInto);
+	}
+
+	public static void moveLinesDown(Driver driver) {
+		String text = driver.text();
+		int startOfLineWithoutLineEnd = startOfLineWithoutLineEnd(text, driver.selectionStart());
+		int endOfLineWithoutLineEnd = endOfLineWithoutLineEnd(text, driver.selectionEnd());
+		if (endOfLineWithoutLineEnd == text.length() || 
+			(endOfLineWithoutLineEnd + 1 == text.length() && text.endsWith(LINE_SEPARATOR))) { return; }
+		String textToMove = text.substring(startOfLineWithoutLineEnd, endOfLineWithoutLineEnd) + LINE_SEPARATOR;
+		driver.replaceRange(EMPTY_STRING, startOfLineWithoutLineEnd, endOfLineWithoutLineEnd);
+		removeEndOfLineIfExists(driver, text, startOfLineWithoutLineEnd);
+		int positionToInsertTextInto = endOfLineWithoutLineEnd(text, startOfLineWithoutLineEnd) + 1;
+		driver.insert(textToMove, positionToInsertTextInto);
+		driver.setCursorPosition(positionToInsertTextInto);
 	}
 }
