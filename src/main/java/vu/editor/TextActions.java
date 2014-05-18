@@ -42,14 +42,32 @@ public class TextActions {
 		}
 	}
 
-	static void deleteLine(Driver driver) {
-		int position = driver.cursor();
-		String currentText = driver.text();
-		int start = currentText.substring(0, position).lastIndexOf('\n') + 1;
-		
-		int distanceFromCursorToLineEndChar = currentText.substring(position).indexOf(LINE_SEPARATOR);
-		int end = distanceFromCursorToLineEndChar < 0 ? currentText.length() : distanceFromCursorToLineEndChar + position + 1;
-		driver.replaceRange(EMPTY_STRING, start, end);
+
+	private static int endOfLine(String text, int positionInLine) {
+		int distanceFromCursorToLineEndChar = text.substring(positionInLine).indexOf(LINE_SEPARATOR);
+		return distanceFromCursorToLineEndChar < 0 ? text.length() : distanceFromCursorToLineEndChar + positionInLine + 1;
 	}
 
+	static void deleteLine(Driver driver) {
+		String text = driver.text();
+		int cursorPosition = driver.cursor();
+		driver.replaceRange(
+				EMPTY_STRING,
+				startOfLine(text, cursorPosition),
+				endOfLine(text, cursorPosition));
+	}
+
+	private static int startOfLine(String text, int positionInLine) {
+		return text.substring(0, positionInLine).lastIndexOf('\n') + 1;
+	}
+
+	public static void moveLinesDown(Driver driver) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void moveLinesUp(Driver driver) {
+		// TODO Auto-generated method stub
+		
+	}
 }

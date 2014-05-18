@@ -32,6 +32,10 @@ public class KeyboardListener implements KeyListener{
 			TextActions.formatXml(driver);
 		} else if(pushedKeys.contains(VK_CONTROL) && pushedKeys.contains(VK_D)) {
 			TextActions.deleteLine(driver);
+		} else if(pushedKeys.contains(VK_ALT) && pushedKeys.contains(VK_DOWN)) {
+			TextActions.moveLinesDown(driver);
+		} else if(pushedKeys.contains(VK_ALT) && pushedKeys.contains(VK_UP)) {
+			TextActions.moveLinesUp(driver);
 		}
 	}
 

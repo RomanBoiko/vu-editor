@@ -2,6 +2,8 @@ package vu.editor;
 
 import java.io.IOException;
 
+import javax.swing.JTextArea;
+
 public class Driver {
 	private final KeyboardListener keyboardListener;
 	private EditableFile resourceUnderEdit;
@@ -10,7 +12,11 @@ public class Driver {
 	public Driver() {
 		this.keyboardListener = new KeyboardListener(this);
 		this.gui = new Gui(keyboardListener);
+	}
+
+	void showGui() {
 		this.gui.show();
+		
 	}
 
 	void save() {
@@ -25,19 +31,33 @@ public class Driver {
 	}
 
 	void text(String text) {
-		gui.inputArea.setText(text);
+		inputArea().setText(text);
 	}
 
 	String text() {
-		return gui.inputArea.getText();
+		return inputArea().getText();
 	}
 
 	int cursor() {
-		return gui.inputArea.getSelectionStart();
+		return selectionStart();
+	}
+	int selectionStart() {
+		return inputArea().getSelectionStart();
+	}
+
+	int selectionEnd() {
+		return inputArea().getSelectionEnd();
 	}
 
 	public void replaceRange(String replacement, int start, int end) {
-		gui.inputArea.replaceRange(replacement, start, end);
+		inputArea().replaceRange(replacement, start, end);
+	}
+	public void insert(String textToInsert, int position) {
+		inputArea().insert(textToInsert, position);
+	}
+
+	protected JTextArea inputArea() {
+		return gui.inputArea;
 	}
 }
 
