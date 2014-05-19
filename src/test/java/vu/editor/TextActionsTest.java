@@ -121,10 +121,15 @@ public class TextActionsTest {
 	//testText:
 	//positions:  0 1  2 3  4 5  6 7  8 9
 	//characters:  1 \n 2 \n 3 \n 4 \n 5
-	@Test public void movesLastLineWithEndOfLineDown() {
+	@Test public void doesNotMoveLastLineWithEndOfLineDown() {
 		initialTextWithSelection(testText + "\n", 9, 9);
 		TextActions.moveLinesDown(driver);
 		assertResultedTextIs(testText + "\n");
+	}
+	@Test public void doesMoveLastLineWithFewEndsOfLineDown() {
+		initialTextWithSelection(testText + "5\n\n", 9, 9);
+		TextActions.moveLinesDown(driver);
+		assertResultedTextIs("1\n2\n3\n4\n\n55\n");
 	}
 	@Test public void doesNotMoveLastLineWithoutEndOfLineDown() {
 		initialTextWithSelection(testText, 8, 8);

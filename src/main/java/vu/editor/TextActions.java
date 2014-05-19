@@ -86,8 +86,8 @@ public class TextActions {
 			(endOfLineWithoutLineEnd + 1 == text.length() && text.endsWith(LINE_SEPARATOR))) { return; }
 		String textToMove = text.substring(startOfLineWithoutLineEnd, endOfLineWithoutLineEnd) + LINE_SEPARATOR;
 		driver.replaceRange(EMPTY_STRING, startOfLineWithoutLineEnd, endOfLineWithoutLineEnd);
-		removeEndOfLineIfExists(driver, text, startOfLineWithoutLineEnd);
-		int positionToInsertTextInto = endOfLineWithoutLineEnd(text, startOfLineWithoutLineEnd) + 1;
+		removeEndOfLineIfExists(driver, driver.text(), startOfLineWithoutLineEnd);
+		int positionToInsertTextInto = endOfLineWithoutLineEnd(driver.text(), startOfLineWithoutLineEnd) + 1;
 		driver.insert(textToMove, positionToInsertTextInto);
 		driver.setCursorPosition(positionToInsertTextInto);
 	}
