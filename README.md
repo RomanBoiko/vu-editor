@@ -10,7 +10,7 @@ Features:
 (-) - not ready
 
 * (+)full editor packaged into single shell file(POSIX package)
-* (-)full editor in executable jar(Windows package)
+* (+)full editor in executable jar(Windows package)
 * (+)no third-party libs, core java
 * (+)show line numbers
 * (+)XML formatting

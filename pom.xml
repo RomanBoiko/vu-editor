@@ -75,6 +75,8 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
+					<finalName>vue</finalName>
+					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 				<executions>
 					<execution>
@@ -97,7 +99,7 @@
 								<property name="executable" value="${project.build.directory}/vu"/>
 								<exec executable="cat" output="${executable}">
 									<arg value="${basedir}/vu.sh.template"/>
-									<arg value="${project.build.directory}/${project.artifactId}-${project.version}-jar-with-dependencies.jar"/>
+									<arg value="${project.build.directory}/vue.jar"/>
 								</exec>
 								<chmod file="${executable}" perm="ugo+rx"/>
 								<echo>vu-editor packaged to executable: ${executable}</echo>
