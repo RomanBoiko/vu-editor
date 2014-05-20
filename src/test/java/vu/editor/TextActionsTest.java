@@ -205,6 +205,15 @@ public class TextActionsTest {
 		assertHighlightIsAtPosition(4, 9);
 		assertHighlightIsAtPosition(5, 10);
 	}
+	// removes selection highlight - workaround issue #1(see known bugs)
+	@Test public void removesSelectionHighlightBySettingCursorToSelectionStart() {
+		initialText("aaaa");
+		testArea.setSelectionStart(1);
+		testArea.setSelectionEnd(3);
+		TextActions.showOrHideWhitespacesAndHighlights(driver);
+		assertThat(testArea.getSelectionStart(), is(1));
+		assertThat(testArea.getSelectionEnd(), is(1));
+	}
 
 	private void assertHighlightIsAtPosition(int highlightNumber, int startOffset) {
 		assertThat(testArea.getHighlighter().getHighlights()[highlightNumber].getStartOffset(), is(startOffset));

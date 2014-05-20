@@ -104,6 +104,7 @@ public class TextActions {
 	private final static HighlightPainter SPACE_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
 	private final static HighlightPainter TAB_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE);
 	public static void showOrHideWhitespacesAndHighlights(Driver driver) {
+		driver.setCursorPosition(driver.selectionStart());
 		Highlighter highlighter = driver.inputArea().getHighlighter();
 		Highlight[] highlights = highlighter.getHighlights();
 		if (highlights.length > 0) {

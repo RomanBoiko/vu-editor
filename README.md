@@ -59,7 +59,7 @@ Features:
 
 Known bugs:
 -----------
-* (-)selected text becomes unvisible when switching whitespace highlight off (reported by Samir Talwar)
-* (-)few line numbers appear in the same raw - not reproduced yet, maybe due to font size/resolution (reported by Grzegorz Ligas)
+1. (+)selected text becomes unvisible when switching whitespace highlight off (reported by Samir Talwar)
+2. (-)few line numbers appear in the same raw - not reproduced yet, maybe due to font size/resolution (reported by Grzegorz Ligas)
 
 "!http://api.coderwall.com/romanboiko/endorsecount.png!":http://coderwall.com/romanboiko
