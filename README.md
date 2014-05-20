@@ -5,7 +5,7 @@ Pragmatic programming editor. [![Build Status](https://travis-ci.org/RomanBoiko/
 
 Distributed under [The MIT License](http://roman-boiko.mit-license.org).
 
-[Executable Jar](https://github.com/RomanBoiko/vu-editor/master/vue.jar)
+[Executable Jar](https://github.com/RomanBoiko/vu-editor/blob/master/vue.jar?raw=true)
 
 
 Features:
