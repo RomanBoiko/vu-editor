@@ -1,0 +1,7 @@
+language: java
+install: true
+script: mvn install
+
+notifications:
+  email:
+    - boiko.roman@gmail.com

@@ -1,65 +1,72 @@
 vu-editor
 =========
 
-Pragmatic programming editor.
+Pragmatic programming editor. [![Build Status](https://travis-ci.org/RomanBoiko/vu-editor.png)](https://travis-ci.org/RomanBoiko/vu-editor)
+
+Distributed under [The MIT License](http://roman-boiko.mit-license.org).
+
 
 Features:
 ---------
 
-(+) - ready
-(-) - not ready
+- [x] - ready
+- [ ] - not ready yet
 
-* (+)full editor packaged into single shell file(POSIX package)
-* (+)full editor in executable jar(Windows package)
-* (+)no third-party libs, core java
-* (+)show line numbers
-* (+)XML formatting
-* (+)open with file from command line
-* (+)save file
-* (+)line up/down
-* (+)delete line
-* (+)show whitespaces
-* (-)join lines
-* (-)duplicate line
-* (-)multiline indent
-* (-)multiline unindent
-* (-)open stream from command line (use in pipe)
-* (-)search in file
-* (-)replace in file
-* (-)ESC to return to edit mode
-* (-)select number of whole lines
-* (-)to upper/lower case
-* (-)open file by name(fuzzy)
-* (-)search in folder
-* (-)showing file name under edit in title on alt+tab
-* (-)show opened file path in status bar
-* (-)copy current file path/name into clipboard
-* (-)file explorer(tree)
-* (-)search in folder results in separate mode with navigation to editor
-* (-)multiple buffers/documents
-* (-)switch between buffers
-* (-)Matching Bracket highlight
-* (-)Syntax highlight(config)
-* (-)auto-refactoring
-* (-)vertical edit
-* (-)help system
-* (-)any command menu
-* (-)use spaces instead of tabs
-* (-)tab width configurable
-* (-)line wrapping
-* (-)outlines(list of functions, paragraphs)
-* (-)license
-* (-)undo
-* (-)redo
-* (-)highlight words similar to the one under cursor
-* (-)goto occurences of the word under cursor
-* (-)custom font
-* (-)config
-* (-)log file
+- [x] full editor packaged into single shell file(POSIX package)
+- [x] full editor in executable jar(Windows package)
+- [x] no third-party libs, core java
+- [x] show line numbers
+- [x] XML formatting
+- [x] open with file from command line
+- [x] save file
+- [x] line up/down
+- [x] delete line
+- [x] show whitespaces
+- [ ] join lines
+- [ ] duplicate line
+- [ ] multiline indent
+- [ ] multiline unindent
+- [ ] license
+- [ ] open stream from command line (use in pipe)
+- [ ] search in file
+- [ ] replace in file
+- [ ] ESC to return to edit mode
+- [ ] select number of whole lines
+- [ ] to upper/lower case
+- [ ] open file by name(fuzzy)
+- [ ] search in folder
+- [ ] showing file name under edit in title on alt+tab
+- [ ] show opened file path in status bar
+- [ ] copy current file path/name into clipboard
+- [ ] file explorer(tree)
+- [ ] search in folder results in separate mode with navigation to editor
+- [ ] multiple buffers/documents
+- [ ] switch between buffers
+- [ ] Matching Bracket highlight
+- [ ] Syntax highlight(config)
+- [ ] auto-refactoring
+- [ ] vertical edit
+- [ ] help system
+- [ ] any command menu
+- [ ] use spaces instead of tabs
+- [ ] tab width configurable
+- [ ] line wrapping
+- [ ] outlines(list of functions, paragraphs)
+- [ ] undo
+- [ ] redo
+- [ ] highlight words similar to the one under cursor
+- [ ] goto occurences of the word under cursor
+- [ ] custom font
+- [ ] config
+- [ ] log file
 
 Known bugs:
 -----------
-1. (+)selected text becomes unvisible when switching whitespace highlight off (reported by Samir Talwar)
-2. (-)few line numbers appear in the same raw - not reproduced yet, maybe due to font size/resolution (reported by Grzegorz Ligas)
+
+- [x] fixed
+- [ ] not fixed yet
+
+- [x] 1. Selected text becomes unvisible when switching whitespace highlight off (reported by Samir Talwar)
+- [ ] 2. Few line numbers appear in the same raw - not reproduced yet, maybe due to font size/resolution (reported by Grzegorz Ligas)
 
 "!http://api.coderwall.com/romanboiko/endorsecount.png!":http://coderwall.com/romanboiko
