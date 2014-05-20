@@ -1,6 +1,6 @@
 language: java
 install: true
-script: mvn install
+script: mvn install -DskipTests # Travis can not run tests in headless environment
 
 notifications:
   email:

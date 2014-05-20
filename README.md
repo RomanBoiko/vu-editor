@@ -12,6 +12,8 @@ Features:
 - [x] - ready
 - [ ] - not ready yet
 
+---
+
 - [x] full editor packaged into single shell file(POSIX package)
 - [x] full editor in executable jar(Windows package)
 - [x] no third-party libs, core java
@@ -65,6 +67,8 @@ Known bugs:
 
 - [x] fixed
 - [ ] not fixed yet
+
+---
 
 - [x] 1. Selected text becomes unvisible when switching whitespace highlight off (reported by Samir Talwar)
 - [ ] 2. Few line numbers appear in the same raw - not reproduced yet, maybe due to font size/resolution (reported by Grzegorz Ligas)
