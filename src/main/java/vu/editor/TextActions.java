@@ -23,6 +23,7 @@ public class TextActions {
 	private TextActions() { }
 	private static final String EMPTY_STRING = "";
 	private static final char SPACE = ' ';
+	private static final String SPACE_STR = Character.toString(SPACE);
 	private static final char TAB = '\t';
 	private static final char LINE_SEPARATOR = '\n';
 	private static final String LINE_SEPARATOR_STR = Character.toString(LINE_SEPARATOR);
@@ -74,7 +75,7 @@ public class TextActions {
 		}
 	}
 
-	public static void moveLinesUp(Driver driver) {
+	static void moveLinesUp(Driver driver) {
 		String text = driver.text();
 		int startOfLineWithoutLineEnd = startOfLineWithoutLineEnd(text, driver.selectionStart());
 		int endOfLineWithoutLineEnd = endOfLineWithoutLineEnd(text, driver.selectionEnd());
@@ -87,7 +88,7 @@ public class TextActions {
 		driver.setCursorPosition(positionToInsertTextInto);
 	}
 
-	public static void moveLinesDown(Driver driver) {
+	static void moveLinesDown(Driver driver) {
 		String text = driver.text();
 		int startOfLineWithoutLineEnd = startOfLineWithoutLineEnd(text, driver.selectionStart());
 		int endOfLineWithoutLineEnd = endOfLineWithoutLineEnd(text, driver.selectionEnd());
@@ -103,7 +104,7 @@ public class TextActions {
 
 	private final static HighlightPainter SPACE_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
 	private final static HighlightPainter TAB_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE);
-	public static void showOrHideWhitespacesAndHighlights(Driver driver) {
+	static void showOrHideWhitespacesAndHighlights(Driver driver) {
 		driver.setCursorPosition(driver.selectionStart());
 		Highlighter highlighter = driver.inputArea().getHighlighter();
 		Highlight[] highlights = highlighter.getHighlights();
@@ -160,5 +161,14 @@ public class TextActions {
 				highlighter.addHighlight(i, i + 1, TAB_PAINTER);
 			}
 		} 
+	}
+
+	static void joinLines(Driver driver) {
+		String text = driver.text();
+		int cursorPosition = driver.selectionStart();
+		int lineEndPosition = text.indexOf(LINE_SEPARATOR, cursorPosition);
+		if (lineEndPosition < 0) { return; }
+		driver.replaceRange(SPACE_STR, lineEndPosition, lineEndPosition + 1);
+		driver.setCursorPosition(lineEndPosition);
 	}
 }

@@ -219,4 +219,22 @@ public class TextActionsTest {
 		assertThat(testArea.getHighlighter().getHighlights()[highlightNumber].getStartOffset(), is(startOffset));
 		assertThat(testArea.getHighlighter().getHighlights()[highlightNumber].getEndOffset(), is(startOffset+1));
 	}
+
+	@Test public void joinsCurrentLineAndNextOneOnSpaceAndSetsCursorInJoinPlace() {
+		joinLinesTest("aaa\nbbb", 1, "aaa bbb", 3);
+	}
+	@Test public void joinsCurrentEmptyLineAndNextOneOnSpaceAndSetsCursorInJoinPlace() {
+		joinLinesTest("\n\na", 1, "\n a", 1);
+	}
+	@Test public void doesNotAnythingIfCurrentLineIsTheLast() {
+		joinLinesTest("aaa\nbbb", 5, "aaa\nbbb", 5);
+	}
+	private void joinLinesTest(
+			String initialText, int initialCursorPosition,
+			String expectedText, int expectedCursorPosition) {
+		initialTextWithCursorAt(initialText, initialCursorPosition);
+		TextActions.joinLines(driver);
+		assertResultedTextIs(expectedText);
+		assertThat(testArea.getCaretPosition(), is(expectedCursorPosition));
+	}
 }

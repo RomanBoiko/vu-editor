@@ -38,6 +38,8 @@ public class KeyboardListener implements KeyListener{
 			TextActions.moveLinesUp(driver);
 		} else if(pushedKeys.contains(VK_ALT) && pushedKeys.contains(VK_W)) {
 			TextActions.showOrHideWhitespacesAndHighlights(driver);
+		} else if(pushedKeys.contains(VK_CONTROL) && pushedKeys.contains(VK_J)) {
+			TextActions.joinLines(driver);
 		}
 
 	}

@@ -5,6 +5,8 @@ Pragmatic programming editor. [![Build Status](https://travis-ci.org/RomanBoiko/
 
 Distributed under [The MIT License](http://roman-boiko.mit-license.org).
 
+[Executable Jar](https://github.com/RomanBoiko/vu-editor/master/vue.jar)
+
 
 Features:
 ---------
@@ -24,7 +26,7 @@ Features:
 - [x] line up/down
 - [x] delete line
 - [x] show whitespaces
-- [ ] join lines
+- [x] join lines
 - [ ] duplicate line
 - [ ] multiline indent
 - [ ] multiline unindent
