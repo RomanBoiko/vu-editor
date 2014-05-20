@@ -16,8 +16,8 @@ public class Driver {
 
 	void showGui() {
 		this.gui.show();
-		
 	}
+	
 
 	void save() {
 		resourceUnderEdit.saveText(text());

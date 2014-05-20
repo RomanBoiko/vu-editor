@@ -1,9 +1,15 @@
 package vu.editor;
 
+import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
+import javax.swing.text.Highlighter.Highlight;
+import javax.swing.text.Highlighter.HighlightPainter;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -16,7 +22,10 @@ import org.w3c.dom.Document;
 public class TextActions {
 	private TextActions() { }
 	private static final String EMPTY_STRING = "";
-	private static final String LINE_SEPARATOR = "\n";
+	private static final char SPACE = ' ';
+	private static final char TAB = '\t';
+	private static final char LINE_SEPARATOR = '\n';
+	private static final String LINE_SEPARATOR_STR = Character.toString(LINE_SEPARATOR);
 
 	static void formatXml(Driver driver) {
 		driver.text(formatXml(driver.text()));
@@ -83,12 +92,72 @@ public class TextActions {
 		int startOfLineWithoutLineEnd = startOfLineWithoutLineEnd(text, driver.selectionStart());
 		int endOfLineWithoutLineEnd = endOfLineWithoutLineEnd(text, driver.selectionEnd());
 		if (endOfLineWithoutLineEnd == text.length() || 
-			(endOfLineWithoutLineEnd + 1 == text.length() && text.endsWith(LINE_SEPARATOR))) { return; }
+			(endOfLineWithoutLineEnd + 1 == text.length() && text.endsWith(LINE_SEPARATOR_STR))) { return; }
 		String textToMove = text.substring(startOfLineWithoutLineEnd, endOfLineWithoutLineEnd) + LINE_SEPARATOR;
 		driver.replaceRange(EMPTY_STRING, startOfLineWithoutLineEnd, endOfLineWithoutLineEnd);
 		removeEndOfLineIfExists(driver, driver.text(), startOfLineWithoutLineEnd);
 		int positionToInsertTextInto = endOfLineWithoutLineEnd(driver.text(), startOfLineWithoutLineEnd) + 1;
 		driver.insert(textToMove, positionToInsertTextInto);
 		driver.setCursorPosition(positionToInsertTextInto);
+	}
+
+	private final static HighlightPainter SPACE_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+	private final static HighlightPainter TAB_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE);
+	public static void showOrHideWhitespacesAndHighlights(Driver driver) {
+		Highlighter highlighter = driver.inputArea().getHighlighter();
+		Highlight[] highlights = highlighter.getHighlights();
+		if (highlights.length > 0) {
+			highlighter.removeAllHighlights();
+			return;
+		}
+
+		String text = driver.text();
+		boolean precedingWhitespaces = true;
+		boolean trailingSpaces = false;
+		int startOfTrailingSpaces = 0;
+		try {
+			for (int pos = 0; pos < text.length(); pos++) {
+				char currentChar = text.charAt(pos);
+				if (precedingWhitespaces) {
+					if (currentChar == SPACE) {
+						highlighter.addHighlight(pos, pos + 1, SPACE_PAINTER);
+					} else if (currentChar == TAB) {
+						highlighter.addHighlight(pos, pos + 1, TAB_PAINTER);
+					} else if (currentChar == LINE_SEPARATOR) {
+						trailingSpaces = false;
+					} else {
+						precedingWhitespaces = false;
+					}
+				} else if (currentChar == SPACE || currentChar == TAB) {
+					if (!trailingSpaces) {
+						trailingSpaces = true;
+						startOfTrailingSpaces = pos;
+					}
+				} else if (currentChar == LINE_SEPARATOR) {
+					if (trailingSpaces == true) {
+						highlightWhiteSpaceRange(startOfTrailingSpaces, pos, text, highlighter);
+						trailingSpaces = false;
+					}
+					precedingWhitespaces = true;
+				} else {
+					trailingSpaces = false;
+				}
+			}
+			if (trailingSpaces) {
+				highlightWhiteSpaceRange(startOfTrailingSpaces, text.length(), text, highlighter);
+			}
+		} catch (BadLocationException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static void highlightWhiteSpaceRange(int startOfTrailingSpaces, int endOfTrailingSpaces, String text, Highlighter highlighter) throws BadLocationException {
+		for (int i = startOfTrailingSpaces; i < endOfTrailingSpaces; i++) {
+			if (text.charAt(i) == SPACE) {
+				highlighter.addHighlight(i, i + 1, SPACE_PAINTER);
+			} else {
+				highlighter.addHighlight(i, i + 1, TAB_PAINTER);
+			}
+		} 
 	}
 }

@@ -36,7 +36,10 @@ public class KeyboardListener implements KeyListener{
 			TextActions.moveLinesDown(driver);
 		} else if(pushedKeys.contains(VK_ALT) && pushedKeys.contains(VK_UP)) {
 			TextActions.moveLinesUp(driver);
+		} else if(pushedKeys.contains(VK_ALT) && pushedKeys.contains(VK_W)) {
+			TextActions.showOrHideWhitespacesAndHighlights(driver);
 		}
+
 	}
 
 	@Override public void keyReleased(KeyEvent releasedKeyEvent) {

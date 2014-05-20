@@ -18,14 +18,17 @@ Features:
 * (+)save file
 * (+)line up/down
 * (+)delete line
+* (+)show whitespaces
+* (-)join lines
+* (-)duplicate line
+* (-)multiline indent
+* (-)multiline unindent
 * (-)open stream from command line (use in pipe)
 * (-)search in file
 * (-)replace in file
 * (-)ESC to return to edit mode
-* (-)duplicate line
 * (-)select number of whole lines
 * (-)to upper/lower case
-* (-)show whitespaces
 * (-)open file by name(fuzzy)
 * (-)search in folder
 * (-)showing file name under edit in title on alt+tab

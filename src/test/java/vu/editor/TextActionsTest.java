@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import javax.swing.JTextArea;
+import javax.swing.text.BadLocationException;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -23,6 +24,7 @@ public class TextActionsTest {
 	public void after() {
 		initialTextWithSelection("", 0, 0);
 		initialTextWithCursorAt("", 0);
+		testArea.getHighlighter().removeAllHighlights();
 	}
 	
 	private void initialText(String text) {
@@ -165,5 +167,47 @@ public class TextActionsTest {
 		initialTextWithSelection(testText, 5, 5);
 		TextActions.moveLinesDown(driver);
 		assertCursorPsotionIs(6);
+	}
+
+	@Test public void removesAllHighlightsIfThereAreAny() throws BadLocationException {
+		initialText("aaaaa");
+		testArea.getHighlighter().addHighlight(0, 1, null);
+		TextActions.showOrHideWhitespacesAndHighlights(driver);
+		assertThat(testArea.getHighlighter().getHighlights().length, is(0));
+	}
+	@Test public void highlightsPrecedingAndTrailingWhitespaces() throws BadLocationException {
+		//                      10          20
+		//           01        901    56           5678
+		initialText("  av asd\n   as\n  \nas \t s\n    ");
+		TextActions.showOrHideWhitespacesAndHighlights(driver);
+		assertThat(testArea.getHighlighter().getHighlights().length, is(11));
+		assertHighlightIsAtPosition(0, 0);
+		assertHighlightIsAtPosition(1, 1);
+		assertHighlightIsAtPosition(2, 9);
+		assertHighlightIsAtPosition(3, 10);
+		assertHighlightIsAtPosition(4, 11);
+		assertHighlightIsAtPosition(5, 15);
+		assertHighlightIsAtPosition(6, 16);
+		assertHighlightIsAtPosition(7, 25);
+		assertHighlightIsAtPosition(8, 26);
+		assertHighlightIsAtPosition(9, 27);
+		assertHighlightIsAtPosition(10, 28);
+	}
+	@Test public void highlightsTrailingWhitespaces() throws BadLocationException {
+		//             234     8910
+		initialText("as  \t\nas  \t");
+		TextActions.showOrHideWhitespacesAndHighlights(driver);
+		assertThat(testArea.getHighlighter().getHighlights().length, is(6));
+		assertHighlightIsAtPosition(0, 2);
+		assertHighlightIsAtPosition(1, 3);
+		assertHighlightIsAtPosition(2, 4);
+		assertHighlightIsAtPosition(3, 8);
+		assertHighlightIsAtPosition(4, 9);
+		assertHighlightIsAtPosition(5, 10);
+	}
+
+	private void assertHighlightIsAtPosition(int highlightNumber, int startOffset) {
+		assertThat(testArea.getHighlighter().getHighlights()[highlightNumber].getStartOffset(), is(startOffset));
+		assertThat(testArea.getHighlighter().getHighlights()[highlightNumber].getEndOffset(), is(startOffset+1));
 	}
 }
