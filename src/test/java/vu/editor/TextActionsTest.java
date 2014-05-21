@@ -6,10 +6,14 @@ import static org.junit.Assert.assertThat;
 import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
 
+import net.java.openjdk.cacio.ctc.junit.CacioTestRunner;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(CacioTestRunner.class)
 public class TextActionsTest {
 
 	private final String testText = "1\n2\n3\n4\n5";
