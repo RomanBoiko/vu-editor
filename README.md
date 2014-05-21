@@ -5,7 +5,7 @@ Pragmatic programming editor. [![Build Status](https://travis-ci.org/RomanBoiko/
 
 Distributed under [The MIT License](http://roman-boiko.mit-license.org).
 
-[Executable Jar](https://github.com/RomanBoiko/vu-editor/blob/master/vue.jar?raw=true)
+[Executable Jar](https://github.com/RomanBoiko/vu-editor/blob/master/vue.jar?raw=true) [![endorse](https://api.coderwall.com/romanboiko/endorsecount.png)](https://coderwall.com/romanboiko)
 
 
 Features:
@@ -74,5 +74,3 @@ Known bugs:
 
 - [x] 1. Selected text becomes unvisible when switching whitespace highlight off (reported by Samir Talwar)
 - [ ] 2. Few line numbers appear in the same raw - not reproduced yet, maybe due to font size/resolution (reported by Grzegorz Ligas)
-
-"!http://api.coderwall.com/romanboiko/endorsecount.png!":http://coderwall.com/romanboiko
