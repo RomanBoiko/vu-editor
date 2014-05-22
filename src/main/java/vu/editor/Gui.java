@@ -26,9 +26,15 @@ public class Gui {
 	final JTextField statusBar = new BottomStatusBar();
 	final JTextArea inputArea = new InputArea();
 	final JFrame mainFrame = new MainFrame();
+	private KeyboardListener inputAreaKeyListener = defaultKeyListener();
+
+	private KeyboardListener defaultKeyListener() {
+		return new KeyboardListener(null) {
+			@Override protected void actionOnKeyPressed() { }
+		};
+	}
 	
-	Gui(KeyboardListener keyboardListener) {
-		inputArea.addKeyListener(keyboardListener);
+	Gui() {
 		JScrollPane scrollPane = new EditorScrollPane(inputArea, new LineNumbersArea());
 		mainFrame.getContentPane().add(scrollPane);
 		mainFrame.getContentPane().add(statusBar, BorderLayout.PAGE_END);
@@ -37,6 +43,13 @@ public class Gui {
 				inputArea.requestFocus();
 			}
 		});
+	}
+	
+	void replaceInputAreaKeyboardListenerWith(KeyboardListener keyboardListener) {
+		inputAreaKeyListener.reset();
+		inputArea.removeKeyListener(inputAreaKeyListener);
+		this.inputAreaKeyListener = keyboardListener;
+		inputArea.addKeyListener(keyboardListener);
 	}
 
 	void show() {

@@ -12,6 +12,8 @@ public class Launcher {
 					
 					if(args.length == 1) {
 						driver.loadResource(new EditableFile(args[0]));
+					} else {
+						driver.loadResource(new NewEmptyFile());
 					}
 				} catch (Exception e) {
 					Gui.alert(e.getMessage());

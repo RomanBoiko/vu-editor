@@ -27,6 +27,8 @@ Features:
 - [x] delete line
 - [x] show whitespaces
 - [x] join lines
+- [x] help system
+- [x] ESC to return to edit mode
 - [ ] duplicate line
 - [ ] multiline indent
 - [ ] multiline unindent
@@ -34,7 +36,6 @@ Features:
 - [ ] open stream from command line (use in pipe)
 - [ ] search in file
 - [ ] replace in file
-- [ ] ESC to return to edit mode
 - [ ] select number of whole lines
 - [ ] to upper/lower case
 - [ ] open file by name(fuzzy)
@@ -50,7 +51,6 @@ Features:
 - [ ] Syntax highlight(config)
 - [ ] auto-refactoring
 - [ ] vertical edit
-- [ ] help system
 - [ ] any command menu
 - [ ] use spaces instead of tabs
 - [ ] tab width configurable

@@ -1,0 +1,15 @@
+Help
+====
+
+Shortcuts:
+----------
+
+Alt+H        - display Help/shortcuts
+Esc          - return to edit mode
+Ctrl+D       - delete current line/lines from selected range
+Ctrl+J       - join current line and next line
+Ctrl+S       - Save file
+Alt+W        - highlight/unhighlight preceidng and trailing whitespaces
+Alt+Up       - move lines up
+Alt+Down     - move lines down
+Ctrl+Shift+F - format XML
