@@ -11,7 +11,7 @@ import static java.awt.event.KeyEvent.VK_SHIFT;
 import static java.awt.event.KeyEvent.VK_UP;
 import static java.awt.event.KeyEvent.VK_W;
 
-public class EditorPerspective {
+public class EditorPerspective extends Perspective {
 
 	private final Driver driver;
 	private EditableFile resourceUnderEdit;
@@ -41,11 +41,11 @@ public class EditorPerspective {
 	}
 	
 	void loadResource(EditableFile resource) {
-		driver.inputArea().setEditable(true);
-		driver.gui().replaceInputAreaKeyboardListenerWith(keyListener);
-		driver.text(resource.getText());
-		driver.gui().mainFrame.setTitle(resource.getFileName());
-		driver.gui().statusBar.setText(resource.getPath());
+		driver.makeInputAreaEditable(true);
+		driver.setInputAreaKeyListener(keyListener);
+		driver.setText(resource.getText());
+		driver.setTitle(resource.getFileName());
+		driver.setStatusBarText(resource.getPath());
 		resourceUnderEdit = resource;
 	}
 	void loadPreviousEditableResource() {
@@ -54,5 +54,8 @@ public class EditorPerspective {
 	private void save() {
 		resourceUnderEdit.saveText(driver.text());
 	}
-
+	
+	@Override void actionOnExitFromPerspective() {
+		resourceUnderEdit.setText(driver.text());
+	}
 }

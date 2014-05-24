@@ -1,33 +1,36 @@
 package vu.editor;
 
 import javax.swing.JTextArea;
+import javax.swing.text.Highlighter;
 
 public class Driver {
-	private Gui gui;
-	private final HelpPerspective helpPerspective;
-	private final EditorPerspective editorPerspective;
-
-	public Driver() {
-		this.helpPerspective = new HelpPerspective(this);
-		this.editorPerspective = new EditorPerspective(this);
-		this.gui = new Gui();
-	}
+	private final Gui gui = new Gui();
+	private final HelpPerspective helpPerspective = new HelpPerspective(this);
+	private final EditorPerspective editorPerspective = new EditorPerspective(this);
+	private Perspective currentPerspective = new Perspective() { };
 
 	void showGui() {
 		this.gui.show();
 	}
 
 	void loadEditorView(EditableFile resource) {
+		setCurrentPerspective(editorPerspective);
 		editorPerspective.loadResource(resource);
 	}
 	void loadEditorView() {
+		setCurrentPerspective(editorPerspective);
 		editorPerspective.loadPreviousEditableResource();
 	}
 	void loadHelpView() {
+		setCurrentPerspective(helpPerspective);
 		this.helpPerspective.loadHelpView();
 	}
+	private void setCurrentPerspective(Perspective newPerspective) {
+		currentPerspective.actionOnExitFromPerspective();
+		currentPerspective = newPerspective;
+	}
 
-	void text(String text) {
+	void setText(String text) {
 		inputArea().setText(text);
 	}
 
@@ -52,13 +55,28 @@ public class Driver {
 	void setCursorPosition(int position) {
 		inputArea().setCaretPosition(position);
 	}
+	
+	void setTitle(String title) {
+		gui.mainFrame.setTitle(title);
+	}
+	
+	void setStatusBarText(String message) {
+		gui.statusBar.setText(message);
+	}
+
+	void makeInputAreaEditable(boolean editable) {
+		inputArea().setEditable(editable);
+	}
+
+	void setInputAreaKeyListener(KeyboardListener keyListener) {
+		gui.setInputAreaKeyListener(keyListener);
+	}
+
+	Highlighter inputAreaHighlighter() {
+		return inputArea().getHighlighter();
+	}
 
 	protected JTextArea inputArea() {
 		return gui.inputArea;
 	}
-
-	Gui gui() {
-		return gui;
-	}
-
 }

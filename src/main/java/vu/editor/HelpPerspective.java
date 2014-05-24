@@ -2,7 +2,7 @@ package vu.editor;
 
 import java.awt.event.KeyEvent;
 
-public class HelpPerspective {
+public class HelpPerspective extends Perspective {
 
 	private final KeyboardListener keyListener;
 	private final Driver driver;
@@ -21,11 +21,11 @@ public class HelpPerspective {
 	}
 
 	void loadHelpView() {
-		driver.inputArea().setEditable(false);
-		driver.gui().replaceInputAreaKeyboardListenerWith(keyListener);
+		driver.makeInputAreaEditable(false);
+		driver.setInputAreaKeyListener(keyListener);
 		helpText = helpText == null ? Streams.streamToString(this.getClass().getClassLoader().getResourceAsStream("help.txt")) : helpText;
-		driver.text(helpText);
-		driver.gui().mainFrame.setTitle("Help");
-		driver.gui().statusBar.setText("Help");
+		driver.setText(helpText);
+		driver.setTitle("Help");
+		driver.setStatusBarText("Help");
 	}
 }

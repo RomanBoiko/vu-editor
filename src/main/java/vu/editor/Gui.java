@@ -45,7 +45,7 @@ public class Gui {
 		});
 	}
 	
-	void replaceInputAreaKeyboardListenerWith(KeyboardListener keyboardListener) {
+	void setInputAreaKeyListener(KeyboardListener keyboardListener) {
 		inputAreaKeyListener.reset();
 		inputArea.removeKeyListener(inputAreaKeyListener);
 		this.inputAreaKeyListener = keyboardListener;

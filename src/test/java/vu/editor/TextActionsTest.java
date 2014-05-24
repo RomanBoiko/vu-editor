@@ -19,11 +19,11 @@ public class TextActionsTest {
 	private final String testText = "1\n2\n3\n4\n5";
 	private final JTextArea testArea = new JTextArea();
 	private final Driver driver = new Driver() {
-		protected JTextArea inputArea() {
+		@Override protected JTextArea inputArea() {
 			return testArea;
 		}
 	};
-	
+
 	@After
 	public void after() {
 		initialTextWithSelection("", 0, 0);

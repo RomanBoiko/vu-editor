@@ -9,7 +9,9 @@ import java.io.InputStreamReader;
 
 public class EditableFile {
 	private static final String DEFAULT_PATH = "newEmptyFile.txt";
+	private static final String DEFAULT_TEXT = "defaultText";
 	private final File file;
+	private String currentText = DEFAULT_TEXT;
 
 	public EditableFile(String pathToFile) {
 		this.file = new File(pathToFile);
@@ -22,7 +24,14 @@ public class EditableFile {
 		return file.getAbsolutePath();
 	}
 
+	public void setText(String text) {
+		this.currentText = text;
+		
+	}
 	public String getText() {
+		if (!DEFAULT_TEXT.equals(currentText)) {
+			return currentText;
+		}
 		if (!file.exists()) { return ""; }
 		try {
 			StringBuilder stringBuilder = new StringBuilder();

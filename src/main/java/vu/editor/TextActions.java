@@ -29,7 +29,7 @@ public class TextActions {
 	private static final String LINE_SEPARATOR_STR = Character.toString(LINE_SEPARATOR);
 
 	static void formatXml(Driver driver) {
-		driver.text(formatXml(driver.text()));
+		driver.setText(formatXml(driver.text()));
 	}
 
 	static String formatXml(String text) {
@@ -106,7 +106,7 @@ public class TextActions {
 	private final static HighlightPainter TAB_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE);
 	static void showOrHideWhitespacesAndHighlights(Driver driver) {
 		driver.setCursorPosition(driver.selectionStart());
-		Highlighter highlighter = driver.inputArea().getHighlighter();
+		Highlighter highlighter = driver.inputAreaHighlighter();
 		Highlight[] highlights = highlighter.getHighlights();
 		if (highlights.length > 0) {
 			highlighter.removeAllHighlights();
