@@ -13,3 +13,5 @@ Alt+W        - highlight/unhighlight preceidng and trailing whitespaces
 Alt+Up       - move lines up
 Alt+Down     - move lines down
 Ctrl+Shift+F - format XML
+
+Alt+Q        - quit editor (shutdown)

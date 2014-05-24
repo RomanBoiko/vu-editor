@@ -29,10 +29,13 @@ Features:
 - [x] join lines
 - [x] help system
 - [x] ESC to return to edit mode
+- [x] license
+- [x] log file
+- [x] handling(logging) all exceptions/errors
+- [x] exit from editor shortcut(not dependant on window manager's abilities)
 - [ ] duplicate line
 - [ ] multiline indent
 - [ ] multiline unindent
-- [ ] license
 - [ ] open stream from command line (use in pipe)
 - [ ] search in file
 - [ ] replace in file
@@ -62,7 +65,6 @@ Features:
 - [ ] goto occurences of the word under cursor
 - [ ] custom font
 - [ ] config
-- [ ] log file
 
 Known bugs:
 -----------
@@ -74,3 +76,4 @@ Known bugs:
 
 - [x] 1. Selected text becomes unvisible when switching whitespace highlight off (reported by Samir Talwar)
 - [ ] 2. Few line numbers appear in the same raw - not reproduced yet, maybe due to font size/resolution (reported by Grzegorz Ligas)
+- [ ] 3. After switching from help back to edit area file is reloaded and because of that not saved changes are lost

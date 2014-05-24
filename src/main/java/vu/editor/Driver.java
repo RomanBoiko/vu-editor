@@ -38,16 +38,20 @@ public class Driver {
 		loadResource(resourceUnderEdit);
 	}
 
+	private String helpText;
 	void loadHelpView() {
 		readOnlyState();
-		text(streamToString(this.getClass().getClassLoader().getResourceAsStream("help.txt")));
+		helpText = helpText == null ? streamToString(this.getClass().getClassLoader().getResourceAsStream("help.txt")) : helpText;
+		text(helpText);
 		gui.mainFrame.setTitle("Help");
 		gui.statusBar.setText("Help");
 	}
 	
-	static String streamToString(InputStream stream) {
+	private static String streamToString(InputStream stream) {
 		Scanner scanner = new Scanner(stream).useDelimiter("\\A");
-		return scanner.hasNext() ? scanner.next() : "";
+		String result = scanner.hasNext() ? scanner.next() : "";
+		scanner.close();
+		return result;
 	}
 	
 	private void editableState() {

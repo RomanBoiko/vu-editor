@@ -8,10 +8,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class EditableFile {
+	private static final String DEFAULT_PATH = "newEmptyFile.txt";
 	private final File file;
 
 	public EditableFile(String pathToFile) {
 		this.file = new File(pathToFile);
+	}
+	public EditableFile() {
+		this.file = new File(DEFAULT_PATH);
 	}
 
 	public String getPath() {
@@ -19,6 +23,7 @@ public class EditableFile {
 	}
 
 	public String getText() {
+		if (!file.exists()) { return ""; }
 		try {
 			StringBuilder stringBuilder = new StringBuilder();
 			FileInputStream fileInputStream;
@@ -51,30 +56,5 @@ public class EditableFile {
 
 	public String getFileName() {
 		return file.getName();
-	}
-}
-
-class NewEmptyFile extends EditableFile {
-	private static final String DEFAULT_PATH = "newEmptyFile.txt";
-
-	private boolean alreadySaved = false;
-
-	public NewEmptyFile(String pathToFile) {
-		super(pathToFile);
-	}
-	public NewEmptyFile() {
-		super(DEFAULT_PATH);
-	}
-
-	public String getText() {
-		return fileNotExistsYet() ? "" : super.getText();
-	}
-	private boolean fileNotExistsYet() {
-		return DEFAULT_PATH.equals(getFileName()) && !alreadySaved;
-	}
-
-	public void saveText(String text) {
-		alreadySaved = true;
-		super.saveText(text);
 	}
 }

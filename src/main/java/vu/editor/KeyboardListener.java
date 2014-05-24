@@ -1,5 +1,7 @@
 package vu.editor;
 
+import static java.awt.event.KeyEvent.VK_ALT;
+import static java.awt.event.KeyEvent.VK_Q;
 import static java.lang.String.format;
 
 import java.awt.event.KeyEvent;
@@ -23,12 +25,11 @@ public abstract class KeyboardListener implements KeyListener {
 
 	@Override public void keyPressed(KeyEvent pressedKeyEvent) {
 		pushedKeys.add(pressedKeyEvent.getKeyCode());
-		System.out.println(
-				format("=>key pressed, char='%s', code='%d')",
-						pressedKeyEvent.getKeyChar(),
-						pressedKeyEvent.getKeyCode()));
-		System.out.println(
-				format("=>active keys: %s", pushedKeys.toString()));
+		Editor.log(format("=>key pressed: char='%s', code='%d')", pressedKeyEvent.getKeyChar(), pressedKeyEvent.getKeyCode()));
+		Editor.log(format("=>active keys: %s", pushedKeys.toString()));
+		if(pushedKeys.contains(VK_ALT) && pushedKeys.contains(VK_Q)) {
+			System.exit(0);
+		}
 		actionOnKeyPressed();
 	}
 
