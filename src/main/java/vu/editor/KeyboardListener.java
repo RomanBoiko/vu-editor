@@ -1,6 +1,7 @@
 package vu.editor;
 
 import static java.awt.event.KeyEvent.VK_ALT;
+import static java.awt.event.KeyEvent.VK_H;
 import static java.awt.event.KeyEvent.VK_Q;
 import static java.lang.String.format;
 
@@ -29,6 +30,8 @@ public abstract class KeyboardListener implements KeyListener {
 		Editor.log(format("=>active keys: %s", pushedKeys.toString()));
 		if(pushedKeys.contains(VK_ALT) && pushedKeys.contains(VK_Q)) {
 			System.exit(0);
+		} else if(pushedKeys.contains(VK_ALT) && pushedKeys.contains(VK_H)) {
+			driver.loadHelpView();
 		}
 		actionOnKeyPressed();
 	}

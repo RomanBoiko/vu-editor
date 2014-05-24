@@ -22,9 +22,9 @@ public class Editor {
 				driver.showGui();
 				
 				if(args.length == 1) {
-					driver.loadResource(new EditableFile(args[0]));
+					driver.loadEditorView(new EditableFile(args[0]));
 				} else {
-					driver.loadResource(new EditableFile());
+					driver.loadEditorView(new EditableFile());
 				}
 			}
 		});

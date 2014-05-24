@@ -1,66 +1,30 @@
 package vu.editor;
 
-import java.io.InputStream;
-import java.util.Scanner;
-
 import javax.swing.JTextArea;
 
 public class Driver {
-	private EditableFile resourceUnderEdit;
 	private Gui gui;
+	private final HelpPerspective helpPerspective;
+	private final EditorPerspective editorPerspective;
 
-	private final KeyboardListener editableAreaKeyListener;
-	private final KeyboardListener readOnlyAreaKeyListener;
-	
 	public Driver() {
-		this.editableAreaKeyListener = new EditableAreaKeyboardListener(this);
-		this.readOnlyAreaKeyListener = new ReadOnlyKeyboardListener(this);
+		this.helpPerspective = new HelpPerspective(this);
+		this.editorPerspective = new EditorPerspective(this);
 		this.gui = new Gui();
-		editableState();
 	}
 
 	void showGui() {
 		this.gui.show();
 	}
 
-	void save() {
-		resourceUnderEdit.saveText(text());
+	void loadEditorView(EditableFile resource) {
+		editorPerspective.loadResource(resource);
 	}
-
-	void loadResource(EditableFile resource) {
-		editableState();
-		text(resource.getText());
-		gui.mainFrame.setTitle(resource.getFileName());
-		gui.statusBar.setText(resource.getPath());
-		resourceUnderEdit = resource;
+	void loadEditorView() {
+		editorPerspective.loadPreviousEditableResource();
 	}
-	void loadPreviousEditableResource() {
-		loadResource(resourceUnderEdit);
-	}
-
-	private String helpText;
 	void loadHelpView() {
-		readOnlyState();
-		helpText = helpText == null ? streamToString(this.getClass().getClassLoader().getResourceAsStream("help.txt")) : helpText;
-		text(helpText);
-		gui.mainFrame.setTitle("Help");
-		gui.statusBar.setText("Help");
-	}
-	
-	private static String streamToString(InputStream stream) {
-		Scanner scanner = new Scanner(stream).useDelimiter("\\A");
-		String result = scanner.hasNext() ? scanner.next() : "";
-		scanner.close();
-		return result;
-	}
-	
-	private void editableState() {
-		inputArea().setEditable(true);
-		gui.replaceInputAreaKeyboardListenerWith(editableAreaKeyListener);
-	}
-	private void readOnlyState() {
-		inputArea().setEditable(false);
-		gui.replaceInputAreaKeyboardListenerWith(readOnlyAreaKeyListener);
+		this.helpPerspective.loadHelpView();
 	}
 
 	void text(String text) {
@@ -92,4 +56,9 @@ public class Driver {
 	protected JTextArea inputArea() {
 		return gui.inputArea;
 	}
+
+	Gui gui() {
+		return gui;
+	}
+
 }
