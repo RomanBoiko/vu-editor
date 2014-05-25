@@ -21,12 +21,12 @@ import org.w3c.dom.Document;
 
 public class TextActions {
 	private TextActions() { }
-	private static final String EMPTY_STRING = "";
-	private static final char SPACE = ' ';
-	private static final String SPACE_STR = Character.toString(SPACE);
-	private static final char TAB = '\t';
-	private static final char LINE_SEPARATOR = '\n';
-	private static final String LINE_SEPARATOR_STR = Character.toString(LINE_SEPARATOR);
+	static final String EMPTY_STRING = "";
+	static final char SPACE = ' ';
+	static final String SPACE_STR = Character.toString(SPACE);
+	static final char TAB = '\t';
+	static final char LINE_SEPARATOR = '\n';
+	static final String LINE_SEPARATOR_STR = Character.toString(LINE_SEPARATOR);
 
 	static void formatXml(Driver driver) {
 		driver.setText(formatXml(driver.text()));
@@ -73,6 +73,21 @@ public class TextActions {
 		if (text.length() > endOfLineWithoutLineEnd) {
 			driver.replaceRange(EMPTY_STRING, endOfLineWithoutLineEnd, endOfLineWithoutLineEnd + 1);
 		}
+	}
+	
+	static void replaceContentOfCurrentRow(Driver driver, String textToInsert) {
+		String text = driver.text();
+		int position = driver.selectionStart();
+		driver.replaceRange(textToInsert, startOfLineWithoutLineEnd(text, position), endOfLineWithoutLineEnd(text, position));
+	}
+	static void replaceContentOfCurrentAndNextRows(Driver driver, int numberOfRowsToRemoveAfterwards, String textToInsert) {
+		String text = driver.text();
+		int position = driver.selectionStart();
+		int endOfRange = endOfLineWithoutLineEnd(text, position);
+		for (int i = 0; i < numberOfRowsToRemoveAfterwards; i++) {
+			endOfRange = endOfLineWithoutLineEnd(text, endOfRange + 1);
+		}
+		driver.replaceRange(textToInsert, startOfLineWithoutLineEnd(text, position), endOfRange);
 	}
 
 	static void moveLinesUp(Driver driver) {
@@ -188,5 +203,24 @@ public class TextActions {
 		if (selectionStart == selectionEnd) { return; }
 		String replacement = text.substring(selectionStart, selectionEnd).toLowerCase();
 		driver.replaceRange(replacement, selectionStart, selectionEnd);
+	}
+
+	private final static HighlightPainter MARKER_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.DARK_GRAY);
+	static void highlightCurrentLine(Driver driver) {
+		String text = driver.text();
+		int startOfLineWithoutLineEnd = startOfLineWithoutLineEnd(text, driver.selectionStart());
+		int endOfLineWithoutLineEnd = endOfLineWithoutLineEnd(text, driver.selectionStart());
+
+		Highlighter highlighter = driver.inputAreaHighlighter();
+		highlighter.removeAllHighlights();
+		try {
+			highlighter.addHighlight(startOfLineWithoutLineEnd, endOfLineWithoutLineEnd, MARKER_PAINTER);
+		} catch (BadLocationException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	static int currentRow(Driver driver) {
+		return driver.text().substring(0, driver.selectionStart()).split(LINE_SEPARATOR_STR).length;
 	}
 }

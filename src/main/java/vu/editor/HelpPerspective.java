@@ -23,6 +23,7 @@ public class HelpPerspective extends Perspective {
 	void loadHelpView() {
 		driver.makeInputAreaEditable(false);
 		driver.setInputAreaKeyListener(keyListener);
+		driver.removeInputAreaCaretListener();
 		helpText = helpText == null ? Streams.streamToString(this.getClass().getClassLoader().getResourceAsStream("help.txt")) : helpText;
 		driver.setText(helpText);
 		driver.setTitle("Help");

@@ -1,6 +1,7 @@
 package vu.editor;
 
 import javax.swing.JTextArea;
+import javax.swing.event.CaretListener;
 import javax.swing.text.Highlighter;
 
 public class Driver {
@@ -72,7 +73,7 @@ public class Driver {
 
 	void makeInputAreaEditable(boolean editable) {
 		inputArea().setEditable(editable);
-		inputArea().getCaret().setVisible(true);//to fix bug #4
+		inputArea().getCaret().setVisible(editable);//to fix bug #4
 	}
 
 	void setInputAreaKeyListener(KeyboardListener keyListener) {
@@ -81,6 +82,14 @@ public class Driver {
 
 	Highlighter inputAreaHighlighter() {
 		return inputArea().getHighlighter();
+	}
+	
+	void setInputAreaCaretListener(CaretListener caretListener) {
+		gui.setInputAreaCaretListener(caretListener);
+	}
+
+	void removeInputAreaCaretListener() {
+		gui.removeInputAreaCaretListener();
 	}
 
 	protected JTextArea inputArea() {

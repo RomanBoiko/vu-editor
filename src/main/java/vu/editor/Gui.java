@@ -16,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
+import javax.swing.event.CaretListener;
 import javax.swing.text.JTextComponent;
 
 
@@ -27,6 +28,7 @@ public class Gui {
 	final JTextArea inputArea = new InputArea();
 	final JFrame mainFrame = new MainFrame();
 	private KeyboardListener inputAreaKeyListener = defaultKeyListener();
+	private CaretListener inputAreaCaretListener;
 
 	private KeyboardListener defaultKeyListener() {
 		return new KeyboardListener(null) {
@@ -50,6 +52,15 @@ public class Gui {
 		inputArea.removeKeyListener(inputAreaKeyListener);
 		this.inputAreaKeyListener = keyboardListener;
 		inputArea.addKeyListener(keyboardListener);
+	}
+	void setInputAreaCaretListener(CaretListener caretListener) {
+		removeInputAreaCaretListener();
+		this.inputAreaCaretListener = caretListener;
+		inputArea.addCaretListener(caretListener);
+	}
+
+	void removeInputAreaCaretListener() {
+		inputArea.removeCaretListener(inputAreaCaretListener);
 	}
 
 	void show() {

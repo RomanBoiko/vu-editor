@@ -48,6 +48,7 @@ public class EditorPerspective extends Perspective {
 	void loadResource(EditableFile resource) {
 		driver.makeInputAreaEditable(true);
 		driver.setInputAreaKeyListener(keyListener);
+		driver.removeInputAreaCaretListener();
 		driver.setText(resource.getText());
 		driver.setTitle(resource.getFileName());
 		driver.setStatusBarText(resource.getPath());
