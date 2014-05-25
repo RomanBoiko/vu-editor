@@ -29,7 +29,7 @@ public class EditableFile {
 		
 	}
 	public String getText() {
-		if (!DEFAULT_TEXT.equals(currentText)) {
+		if (!DEFAULT_TEXT.equals(currentText)) {//to fix bug #3
 			return currentText;
 		}
 		if (!file.exists()) { return ""; }

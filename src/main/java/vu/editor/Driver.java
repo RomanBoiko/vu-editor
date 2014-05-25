@@ -72,6 +72,7 @@ public class Driver {
 
 	void makeInputAreaEditable(boolean editable) {
 		inputArea().setEditable(editable);
+		inputArea().getCaret().setVisible(true);//to fix bug #4
 	}
 
 	void setInputAreaKeyListener(KeyboardListener keyListener) {
