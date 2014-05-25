@@ -241,4 +241,15 @@ public class TextActionsTest {
 		assertResultedTextIs(expectedText);
 		assertThat(testArea.getCaretPosition(), is(expectedCursorPosition));
 	}
+	
+	@Test public void convertsSelectedTextIntoUpperCase() {
+		initialTextWithSelection("abto3Dode", 2, 7);
+		TextActions.toUpperCase(driver);
+		assertResultedTextIs("abTO3DOde");
+	}
+	@Test public void convertsSelectedTextIntoLowerCase() {
+		initialTextWithSelection("ABTo3DODE", 2, 7);
+		TextActions.toLowerCase(driver);
+		assertResultedTextIs("ABto3doDE");
+	}
 }

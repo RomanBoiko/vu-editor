@@ -7,6 +7,7 @@ import static java.lang.String.format;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,5 +45,9 @@ public abstract class KeyboardListener implements KeyListener {
 
 	@Override public void keyTyped(KeyEvent typedKeyEvent) {
 		//if character created as a result
+	}
+	
+	protected boolean shortcutDetected(Integer... keys) {
+		return keys.length == pushedKeys.size() && pushedKeys.containsAll(Arrays.asList(keys));
 	}
 }

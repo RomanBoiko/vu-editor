@@ -171,4 +171,22 @@ public class TextActions {
 		driver.replaceRange(SPACE_STR, lineEndPosition, lineEndPosition + 1);
 		driver.setCursorPosition(lineEndPosition);
 	}
+
+	static void toUpperCase(Driver driver) {
+		String text = driver.text();
+		int selectionStart = driver.selectionStart();
+		int selectionEnd = driver.selectionEnd();
+		if (selectionStart == selectionEnd) { return; }
+		String replacement = text.substring(selectionStart, selectionEnd).toUpperCase();
+		driver.replaceRange(replacement, selectionStart, selectionEnd);
+	}
+
+	static void toLowerCase(Driver driver) {
+		String text = driver.text();
+		int selectionStart = driver.selectionStart();
+		int selectionEnd = driver.selectionEnd();
+		if (selectionStart == selectionEnd) { return; }
+		String replacement = text.substring(selectionStart, selectionEnd).toLowerCase();
+		driver.replaceRange(replacement, selectionStart, selectionEnd);
+	}
 }

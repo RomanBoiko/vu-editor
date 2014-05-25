@@ -6,12 +6,18 @@ Shortcuts:
 
 Alt+H        - display Help/shortcuts
 Esc          - return to edit mode
+Ctrl+S       - save current text to file
+
+Ctrl+C       - copy selected text into clipboard
+Ctrl+V       - paste text from clipboard
+Ctrl+Z       - cut text into clipboard
 Ctrl+D       - delete current line/lines from selected range
 Ctrl+J       - join current line and next line
-Ctrl+S       - Save file
 Alt+W        - highlight/unhighlight preceidng and trailing whitespaces
 Alt+Up       - move lines up
 Alt+Down     - move lines down
+Alt+C        - change case of selected text (to upper case)
+Alt+Shift+C  - change case of selected text (to lower case)
 Ctrl+Shift+F - format XML
 
 Alt+Q        - quit editor (shutdown)

@@ -33,6 +33,7 @@ Features:
 - [x] log file
 - [x] handling(logging) all exceptions/errors
 - [x] exit from editor shortcut(not dependant on window manager's abilities)
+- [x] to upper/lower case
 - [ ] duplicate line
 - [ ] multiline indent
 - [ ] multiline unindent
@@ -40,7 +41,6 @@ Features:
 - [ ] search in file
 - [ ] replace in file
 - [ ] select number of whole lines
-- [ ] to upper/lower case
 - [ ] open file by name(fuzzy)
 - [ ] search in folder
 - [ ] showing file name under edit in title on alt+tab
