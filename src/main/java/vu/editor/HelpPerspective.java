@@ -13,7 +13,7 @@ public class HelpPerspective extends Perspective {
 		this.keyListener = new KeyboardListener(driver) {
 			@Override
 			protected void actionOnKeyPressed() {
-				if (pushedKeys.contains(KeyEvent.VK_ESCAPE)) {
+				if (shortcutDetected(KeyEvent.VK_ESCAPE)) {
 					driver.loadEditorView();
 				}
 			}

@@ -5,6 +5,7 @@ Shortcuts:
 ----------
 
 Alt+H        - display Help/shortcuts
+Alt+E        - display File explorer
 Esc          - return to edit mode
 Ctrl+S       - save current text to file
 

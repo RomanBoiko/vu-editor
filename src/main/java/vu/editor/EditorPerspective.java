@@ -22,19 +22,19 @@ public class EditorPerspective extends Perspective {
 		this.driver = driver;
 		this.keyListener = new KeyboardListener(driver) {
 			@Override protected void actionOnKeyPressed() {
-				if (pushedKeys.contains(VK_CONTROL) && pushedKeys.contains(VK_S)) {
+				if (shortcutDetected(VK_CONTROL, VK_S)) {
 					EditorPerspective.this.save();
-				} else if (pushedKeys.contains(VK_CONTROL) && pushedKeys.contains(VK_SHIFT) && pushedKeys.contains(VK_F)) {
+				} else if (shortcutDetected(VK_CONTROL, VK_SHIFT, VK_F)) {
 					TextActions.formatXml(driver);
-				} else if (pushedKeys.contains(VK_CONTROL) && pushedKeys.contains(VK_D)) {
+				} else if (shortcutDetected(VK_CONTROL, VK_D)) {
 					TextActions.deleteLine(driver);
-				} else if (pushedKeys.contains(VK_ALT) && pushedKeys.contains(VK_DOWN)) {
+				} else if (shortcutDetected(VK_ALT, VK_DOWN)) {
 					TextActions.moveLinesDown(driver);
-				} else if (pushedKeys.contains(VK_ALT) && pushedKeys.contains(VK_UP)) {
+				} else if (shortcutDetected(VK_ALT, VK_UP)) {
 					TextActions.moveLinesUp(driver);
-				} else if (pushedKeys.contains(VK_ALT) && pushedKeys.contains(VK_W)) {
+				} else if (shortcutDetected(VK_ALT, VK_W)) {
 					TextActions.showOrHideWhitespacesAndHighlights(driver);
-				} else if (pushedKeys.contains(VK_CONTROL) && pushedKeys.contains(VK_J)) {
+				} else if (shortcutDetected(VK_CONTROL, VK_J)) {
 					TextActions.joinLines(driver);
 				} else if (shortcutDetected(VK_ALT, VK_C)) {
 					TextActions.toUpperCase(driver);

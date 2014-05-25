@@ -7,6 +7,7 @@ public class Driver {
 	private final Gui gui = new Gui();
 	private final HelpPerspective helpPerspective = new HelpPerspective(this);
 	private final EditorPerspective editorPerspective = new EditorPerspective(this);
+	private final FileExplorerPerspective fileExplorerPerspective = new FileExplorerPerspective(this);
 	private Perspective currentPerspective = new Perspective() { };
 
 	void showGui() {
@@ -25,10 +26,15 @@ public class Driver {
 		setCurrentPerspective(helpPerspective);
 		this.helpPerspective.loadHelpView();
 	}
+	void loadFileExplorerView() {
+		setCurrentPerspective(fileExplorerPerspective);
+		this.fileExplorerPerspective.loadExplorerView();
+	}
 	private void setCurrentPerspective(Perspective newPerspective) {
 		currentPerspective.actionOnExitFromPerspective();
 		currentPerspective = newPerspective;
 	}
+
 
 	void setText(String text) {
 		inputArea().setText(text);

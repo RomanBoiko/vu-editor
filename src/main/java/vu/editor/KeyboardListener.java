@@ -2,6 +2,7 @@ package vu.editor;
 
 import static java.awt.event.KeyEvent.VK_ALT;
 import static java.awt.event.KeyEvent.VK_H;
+import static java.awt.event.KeyEvent.VK_E;
 import static java.awt.event.KeyEvent.VK_Q;
 import static java.lang.String.format;
 
@@ -29,10 +30,12 @@ public abstract class KeyboardListener implements KeyListener {
 		pushedKeys.add(pressedKeyEvent.getKeyCode());
 		Editor.log(format("=>key pressed: char='%s', code='%d')", pressedKeyEvent.getKeyChar(), pressedKeyEvent.getKeyCode()));
 		Editor.log(format("=>active keys: %s", pushedKeys.toString()));
-		if(pushedKeys.contains(VK_ALT) && pushedKeys.contains(VK_Q)) {
+		if (shortcutDetected(VK_ALT, VK_Q)) {
 			System.exit(0);
-		} else if(pushedKeys.contains(VK_ALT) && pushedKeys.contains(VK_H)) {
+		} else if (shortcutDetected(VK_ALT, VK_H)) {
 			driver.loadHelpView();
+		} else if (shortcutDetected(VK_ALT, VK_E)) {
+			driver.loadFileExplorerView();
 		}
 		actionOnKeyPressed();
 	}
