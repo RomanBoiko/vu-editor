@@ -1,0 +1,8 @@
+http://stackoverflow.com/questions/19575665/store-a-file-inside-of-a-batch-file
+http://stackoverflow.com/questions/2622062/run-jar-from-batch-file
+
+;;;===,,,@echo off
+;;;===,,,echo line2
+;;;===,,,findstr /v "^;;;===,,," "%~f0" > vue.jar
+;;;===,,,start javaw -jar %~dp0vue.jar %*
+;;;===,,,exit /b

@@ -106,13 +106,18 @@
 						<phase>install</phase>
 						<configuration>
 							<target>
-								<property name="executable" value="${project.build.directory}/vu"/>
+								<property name="executable" value="${project.build.directory}/vue"/>
 								<exec executable="cat" output="${executable}">
 									<arg value="${basedir}/vu.sh.template"/>
 									<arg value="${project.build.directory}/vue.jar"/>
 								</exec>
 								<chmod file="${executable}" perm="ugo+rx"/>
 								<echo>vu-editor packaged to executable: ${executable}</echo>
+								
+								<exec executable="cmd" osfamily="windows">
+									<arg line="/c copy /a vu.bat.template + /b target\\vue.jar /b target\\vue.bat"/>
+								</exec>
+
 							</target>
 						</configuration>
 						<goals>
