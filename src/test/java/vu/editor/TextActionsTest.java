@@ -252,4 +252,11 @@ public class TextActionsTest {
 		TextActions.toLowerCase(driver);
 		assertResultedTextIs("ABto3doDE");
 	}
+
+	@Test public void identifiesRowNumber() {
+		initialTextWithCursorAt("0\n2\n4", 4);
+		assertThat(TextActions.currentRow(driver), is(3));
+		initialTextWithCursorAt("0\n2\n45", 5);
+		assertThat(TextActions.currentRow(driver), is(3));
+	}
 }

@@ -221,6 +221,11 @@ public class TextActions {
 	}
 
 	static int currentRow(Driver driver) {
-		return driver.text().substring(0, driver.selectionStart()).split(LINE_SEPARATOR_STR).length;
+		return (driver.text().substring(0, driver.selectionStart()) + "extratext").split(LINE_SEPARATOR_STR).length;
+	}
+
+	static int secondPositionInCurrentRow(Driver driver) {
+		String text = driver.text();
+		return text.substring(0, driver.selectionStart()).lastIndexOf(LINE_SEPARATOR) + 2;
 	}
 }

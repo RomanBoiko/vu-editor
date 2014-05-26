@@ -34,6 +34,7 @@ Features:
 - [x] handling(logging) all exceptions/errors
 - [x] exit from editor shortcut(not dependant on window manager's abilities)
 - [x] to upper/lower case
+- [x] file explorer(tree)
 - [ ] duplicate line
 - [ ] multiline indent
 - [ ] multiline unindent
@@ -46,7 +47,6 @@ Features:
 - [ ] showing file name under edit in title on alt+tab
 - [ ] show opened file path in status bar
 - [ ] copy current file path/name into clipboard
-- [ ] file explorer(tree)
 - [ ] search in folder results in separate mode with navigation to editor
 - [ ] multiple buffers/documents
 - [ ] switch between buffers
@@ -78,4 +78,5 @@ Known bugs:
 - [ ] 2. Few line numbers appear in the same raw - not reproduced yet, maybe due to font size/resolution (reported by Grzegorz Ligas)
 - [x] 3. After switching from help back to edit area file is reloaded and because of that not saved changes are lost
 - [x] 4. If we are in read-only perspective(i.e. Help), and doing Alt+Tab, and than coming back to Editor - cursor is not visible any more, even if to come back to EditorPerspective(with Esc). Workaround: after switching to EditorPerspective - do Alt+Tab twice 
+- [ ] 5. after folder is opened in FileExplorer - cursor jumps to last child of this folder 
 
