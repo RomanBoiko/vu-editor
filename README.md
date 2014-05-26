@@ -7,6 +7,14 @@ Distributed under [The MIT License](http://roman-boiko.mit-license.org).
 
 [Executable Jar](https://github.com/RomanBoiko/vu-editor/blob/master/vue.jar?raw=true) [![endorse](https://api.coderwall.com/romanboiko/endorsecount.png)](https://coderwall.com/romanboiko)
 
+Usage
+-----
+
+- Download [editor jar](https://github.com/RomanBoiko/vu-editor/blob/master/vue.jar?raw=true)
+- In most cases (depends on OS setup) you can start it by double clicking on downloaded file.
+- As an alternative - in console: ```java -jar <path to downloaded vue.jar> [path to file to edit]```
+- To see editor shortcuts - please use ```Alt+H``` while in editor
+
 
 Features:
 ---------
