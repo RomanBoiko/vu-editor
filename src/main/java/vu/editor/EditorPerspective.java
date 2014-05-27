@@ -53,6 +53,7 @@ public class EditorPerspective extends Perspective {
 		driver.setTitle(resource.getFileName());
 		driver.setStatusBarText(resource.getPath());
 		resourceUnderEdit = resource;
+		driver.setCursorPosition(0);
 	}
 	void loadPreviousEditableResource() {
 		loadResource(resourceUnderEdit);

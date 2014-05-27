@@ -166,7 +166,7 @@ public class TextActionsTest {
 		initialTextWithSelection(testText, 2, 4);
 		TextActions.moveLinesDown(driver);
 		assertResultedTextIs("1\n4\n2\n3\n5");
-	} 
+	}
 	@Test public void putsCursorIntoStartOfMovedDownLine() {
 		initialTextWithSelection(testText, 5, 5);
 		TextActions.moveLinesDown(driver);

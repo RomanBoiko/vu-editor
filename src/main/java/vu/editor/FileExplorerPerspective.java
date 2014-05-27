@@ -15,17 +15,23 @@ public class FileExplorerPerspective extends Perspective {
 	private final Driver driver;
 	private final ExploredItems exploredItems;
 
+	private int lastPositionInExplorer = 0;
+
 	FileExplorerPerspective(Driver driver) {
 		this.driver = driver;
 		this.exploredItems = new ExploredItems();
 		this.keyListener = new KeyboardListener(driver) {
 			@Override protected void actionOnKeyPressed() {
+				lastPositionInExplorer = driver.selectionStart();
 				if (shortcutDetected(KeyEvent.VK_ESCAPE)) {
 					driver.loadEditorView();
 				} else if (shortcutDetected(KeyEvent.VK_RIGHT)) {
 					openItem(driver);
 				} else if (shortcutDetected(KeyEvent.VK_LEFT)) {
 					closeItem(driver);
+				} else if (shortcutDetected(KeyEvent.VK_ENTER)) {
+					loadEditorWithFile();
+					stopLastKeyPressedEventPropagation(); //prevents editor from adding new line after resource is loaded
 				}
 			}
 		};
@@ -45,6 +51,7 @@ public class FileExplorerPerspective extends Perspective {
 		driver.setCursorPosition(TextActions.secondPositionInCurrentRow(driver));
 		driver.setTitle("FileExplorer");
 		driver.setStatusBarText("FileExplorer: " + workingDir().getAbsolutePath());
+		driver.setCursorPosition(lastPositionInExplorer);
 		highlightCurrentItem();
 	}
 
@@ -52,7 +59,13 @@ public class FileExplorerPerspective extends Perspective {
 		TextActions.highlightCurrentLine(driver);
 	}
 
-	
+	private void loadEditorWithFile() {
+		ExploredItem currentItem = exploredItems.item(TextActions.currentRow(driver));
+		if (currentItem.file.isFile()) {
+			driver.loadEditorView(new EditableFile(currentItem.file.getAbsolutePath()));
+		}
+	}
+
 	private void openItem(Driver driver) {
 		int positionBeforeOpen = driver.selectionStart();
 		int currentRow = TextActions.currentRow(driver);

@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class KeyboardListener implements KeyListener {
+	private KeyEvent lastKeyPressedEvent = null;
 	protected final Driver driver;
 	
 	protected final Set<Integer> pushedKeys = new HashSet<Integer>();
@@ -27,6 +28,7 @@ public abstract class KeyboardListener implements KeyListener {
 	}
 
 	@Override public void keyPressed(KeyEvent pressedKeyEvent) {
+		lastKeyPressedEvent = pressedKeyEvent;
 		pushedKeys.add(pressedKeyEvent.getKeyCode());
 		Editor.log(format("=>key pressed: char='%s', code='%d')", pressedKeyEvent.getKeyChar(), pressedKeyEvent.getKeyCode()));
 		Editor.log(format("=>active keys: %s", pushedKeys.toString()));
@@ -41,6 +43,10 @@ public abstract class KeyboardListener implements KeyListener {
 	}
 
 	protected abstract void actionOnKeyPressed();
+
+	protected final void stopLastKeyPressedEventPropagation() {
+		lastKeyPressedEvent.consume();
+	}
 
 	@Override public void keyReleased(KeyEvent releasedKeyEvent) {
 		pushedKeys.remove(releasedKeyEvent.getKeyCode());
