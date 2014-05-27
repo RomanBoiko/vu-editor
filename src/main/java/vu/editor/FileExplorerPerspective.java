@@ -24,10 +24,8 @@ public class FileExplorerPerspective extends Perspective {
 					driver.loadEditorView();
 				} else if (shortcutDetected(KeyEvent.VK_RIGHT)) {
 					openItem(driver);
-					driver.setCursorPosition(TextActions.secondPositionInCurrentRow(driver));
 				} else if (shortcutDetected(KeyEvent.VK_LEFT)) {
 					closeItem(driver);
-					driver.setCursorPosition(TextActions.secondPositionInCurrentRow(driver));
 				}
 			}
 		};
@@ -54,7 +52,32 @@ public class FileExplorerPerspective extends Perspective {
 		TextActions.highlightCurrentLine(driver);
 	}
 
-	private static class ExploredItem {
+	
+	private void openItem(Driver driver) {
+		int positionBeforeOpen = driver.selectionStart();
+		int currentRow = TextActions.currentRow(driver);
+		if (exploredItems.item(currentRow).canBeOpened()) {
+			TextActions.replaceContentOfCurrentRow(driver, exploredItems.openItem(currentRow));
+		}
+		driver.setCursorPosition(positionBeforeOpen);
+	}
+	private void closeItem(Driver driver) {
+		int currentRow = TextActions.currentRow(driver);
+		ExploredItem item = exploredItems.item(currentRow);
+		if (item.canBeClosed()) {
+			ItemCloseResult closeResult = exploredItems.closeItem(currentRow);
+			TextActions.replaceContentOfCurrentAndNextRows(driver, closeResult.closedChildrenCount, closeResult.newDirContentString);
+		}
+		driver.setCursorPosition(TextActions.secondPositionInCurrentRow(driver));
+	}
+
+	private File workingDir() {
+		String workingDirPath = System.getProperty("user.dir");
+		return new File(workingDirPath);
+	}
+
+
+	private class ExploredItem {
 		final File file;
 		final int depth;
 		private boolean isOpen = false;
@@ -89,22 +112,15 @@ public class FileExplorerPerspective extends Perspective {
 			return file.isDirectory() && !isOpen;
 		}
 	}
-	
-	private void openItem(Driver driver) {
-		int currentRow = TextActions.currentRow(driver);
-		if (exploredItems.item(currentRow).canBeOpened()) {
-			TextActions.replaceContentOfCurrentRow(driver, exploredItems.openItem(currentRow));
+	private class ItemCloseResult {
+		final String newDirContentString;
+		final int closedChildrenCount;
+		public ItemCloseResult(String newDirContentString, int closedChildrenCount) {
+			this.newDirContentString = newDirContentString;
+			this.closedChildrenCount = closedChildrenCount;
 		}
 	}
-	private void closeItem(Driver driver) {
-		int currentRow = TextActions.currentRow(driver);
-		ExploredItem item = exploredItems.item(currentRow);
-		if (item.canBeClosed()) {
-			vu.editor.FileExplorerPerspective.ExploredItems.ItemCloseResult closeResult = exploredItems.closeItem(currentRow);
-			TextActions.replaceContentOfCurrentAndNextRows(driver, closeResult.closedChildrenCount, closeResult.newDirContentString);
-		}
-	}
-	private static class ExploredItems {
+	private class ExploredItems {
 		private final List<ExploredItem> items = new LinkedList<ExploredItem>();
 		ExploredItems() {
 			items.add(new ExploredItem(workingDir(), 0));
@@ -121,14 +137,6 @@ public class FileExplorerPerspective extends Perspective {
 			return items.get(rowNumber - 1);
 		}
 
-		static class ItemCloseResult {
-			final String newDirContentString;
-			final int closedChildrenCount;
-			public ItemCloseResult(String newDirContentString, int closedChildrenCount) {
-				this.newDirContentString = newDirContentString;
-				this.closedChildrenCount = closedChildrenCount;
-			}
-		}
 		ItemCloseResult closeItem(int rowNumber) {
 			ExploredItem itemToClose = item(rowNumber);
 			int childrenCount = 0;
@@ -167,10 +175,5 @@ public class FileExplorerPerspective extends Perspective {
 			}
 			return buffer.toString();
 		}
-	}
-	
-	private static File workingDir() {
-		String workingDirPath = System.getProperty("user.dir");
-		return new File(workingDirPath);
 	}
 }

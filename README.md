@@ -86,5 +86,5 @@ Known bugs:
 - [ ] 2. Few line numbers appear in the same raw - not reproduced yet, maybe due to font size/resolution (reported by Grzegorz Ligas)
 - [x] 3. After switching from help back to edit area file is reloaded and because of that not saved changes are lost
 - [x] 4. If we are in read-only perspective(i.e. Help), and doing Alt+Tab, and than coming back to Editor - cursor is not visible any more, even if to come back to EditorPerspective(with Esc). Workaround: after switching to EditorPerspective - do Alt+Tab twice 
-- [ ] 5. after folder is opened in FileExplorer - cursor jumps to last child of this folder 
+- [x] 5. after folder is opened in FileExplorer - cursor jumps to last child of this folder 
 
