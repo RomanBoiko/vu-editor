@@ -12,23 +12,27 @@ public class EditableFile {
 	private static final String DEFAULT_TEXT = "defaultText";
 	private final File file;
 	private String currentText = DEFAULT_TEXT;
+	private boolean hasUnsavedChanges = false;
 
-	public EditableFile(String pathToFile) {
+	EditableFile(String pathToFile) {
 		this.file = new File(pathToFile);
 	}
-	public EditableFile() {
+	EditableFile() {
 		this.file = new File(DEFAULT_PATH);
 	}
 
-	public String getPath() {
+	String getPath() {
 		return file.getAbsolutePath();
 	}
 
-	public void setText(String text) {
+	void setText(String text) {
+		if (!text.equals(getText())) {
+			hasUnsavedChanges = true;
+		}
 		this.currentText = text;
 		
 	}
-	public String getText() {
+	String getText() {
 		if (!DEFAULT_TEXT.equals(currentText)) {//to fix bug #3
 			return currentText;
 		}
@@ -53,7 +57,7 @@ public class EditableFile {
 		}
 	}
 
-	public void saveText(String text) {
+	void saveText(String text) {
 		try {
 			FileWriter writer = new FileWriter(file);
 			writer.write(text);
@@ -61,9 +65,15 @@ public class EditableFile {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		this.currentText = text;
+		hasUnsavedChanges = false;
 	}
 
 	public String getFileName() {
 		return file.getName();
+	}
+
+	boolean hasUnsavedChanges() {
+		return hasUnsavedChanges;
 	}
 }

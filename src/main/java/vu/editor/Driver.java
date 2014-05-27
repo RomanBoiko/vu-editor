@@ -9,6 +9,7 @@ public class Driver {
 	private final HelpPerspective helpPerspective = new HelpPerspective(this);
 	private final EditorPerspective editorPerspective = new EditorPerspective(this);
 	private final FileExplorerPerspective fileExplorerPerspective = new FileExplorerPerspective(this);
+	private final BuffersPerspective buffersPerspective = new BuffersPerspective(this);
 	private Perspective currentPerspective = new Perspective() { };
 
 	void showGui() {
@@ -18,10 +19,11 @@ public class Driver {
 	void loadEditorView(EditableFile resource) {
 		setCurrentPerspective(editorPerspective);
 		editorPerspective.loadResource(resource);
+		buffersPerspective.addCurrentBuffer(resource);
 	}
 	void loadEditorView() {
 		setCurrentPerspective(editorPerspective);
-		editorPerspective.loadPreviousEditableResource();
+		editorPerspective.loadResource(buffersPerspective.currentBuffer());
 	}
 	void loadHelpView() {
 		setCurrentPerspective(helpPerspective);
@@ -31,9 +33,19 @@ public class Driver {
 		setCurrentPerspective(fileExplorerPerspective);
 		this.fileExplorerPerspective.loadExplorerView();
 	}
+	void loadBuffersView() {
+		setCurrentPerspective(buffersPerspective);
+		this.buffersPerspective.loadBuffersView();
+	}
 	private void setCurrentPerspective(Perspective newPerspective) {
 		currentPerspective.actionOnExitFromPerspective();
 		currentPerspective = newPerspective;
+	}
+	void setCurrentBufferText() {
+		buffersPerspective.currentBuffer().setText(text());
+	}
+	void saveCurrentBuffer() {
+		buffersPerspective.currentBuffer().saveText(text());
 	}
 
 

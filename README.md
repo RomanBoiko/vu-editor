@@ -43,6 +43,9 @@ Features:
 - [x] exit from editor shortcut(not dependant on window manager's abilities)
 - [x] to upper/lower case
 - [x] file explorer(tree)
+- [x] multiple buffers/documents, switch between them
+- [ ] close current buffer (close file under edit)
+- [ ] mark file with unsaved changes. Propose to save unsaved file before close 
 - [ ] duplicate line
 - [ ] multiline indent
 - [ ] multiline unindent
@@ -56,10 +59,9 @@ Features:
 - [ ] show opened file path in status bar
 - [ ] copy current file path/name into clipboard
 - [ ] search in folder results in separate mode with navigation to editor
-- [ ] multiple buffers/documents
 - [ ] switch between buffers
-- [ ] Matching Bracket highlight
-- [ ] Syntax highlight(config)
+- [ ] matching Bracket highlight
+- [ ] syntax highlight(config)
 - [ ] auto-refactoring
 - [ ] vertical edit
 - [ ] any command menu
@@ -87,4 +89,4 @@ Known bugs:
 - [x] 3. After switching from help back to edit area file is reloaded and because of that not saved changes are lost
 - [x] 4. If we are in read-only perspective(i.e. Help), and doing Alt+Tab, and than coming back to Editor - cursor is not visible any more, even if to come back to EditorPerspective(with Esc). Workaround: after switching to EditorPerspective - do Alt+Tab twice 
 - [x] 5. after folder is opened in FileExplorer - cursor jumps to last child of this folder 
-
+- [ ] 6. CTRL+SHIFT+TAB removes focus from text area and removes key listener 

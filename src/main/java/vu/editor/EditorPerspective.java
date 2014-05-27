@@ -1,9 +1,10 @@
 package vu.editor;
 
+import static java.awt.event.KeyEvent.VK_A;
 import static java.awt.event.KeyEvent.VK_ALT;
+import static java.awt.event.KeyEvent.VK_C;
 import static java.awt.event.KeyEvent.VK_CONTROL;
 import static java.awt.event.KeyEvent.VK_D;
-import static java.awt.event.KeyEvent.VK_C;
 import static java.awt.event.KeyEvent.VK_DOWN;
 import static java.awt.event.KeyEvent.VK_F;
 import static java.awt.event.KeyEvent.VK_J;
@@ -15,7 +16,6 @@ import static java.awt.event.KeyEvent.VK_W;
 public class EditorPerspective extends Perspective {
 
 	private final Driver driver;
-	private EditableFile resourceUnderEdit;
 	private final KeyboardListener keyListener;
 
 	public EditorPerspective(Driver driver) {
@@ -23,7 +23,7 @@ public class EditorPerspective extends Perspective {
 		this.keyListener = new KeyboardListener(driver) {
 			@Override protected void actionOnKeyPressed() {
 				if (shortcutDetected(VK_CONTROL, VK_S)) {
-					EditorPerspective.this.save();
+					driver.saveCurrentBuffer();
 				} else if (shortcutDetected(VK_CONTROL, VK_SHIFT, VK_F)) {
 					TextActions.formatXml(driver);
 				} else if (shortcutDetected(VK_CONTROL, VK_D)) {
@@ -40,11 +40,13 @@ public class EditorPerspective extends Perspective {
 					TextActions.toUpperCase(driver);
 				} else if (shortcutDetected(VK_ALT, VK_SHIFT, VK_C)) {
 					TextActions.toLowerCase(driver);
+				} else if (shortcutDetected(VK_ALT, VK_A)) {
+					driver.loadBuffersView();
 				}
 			}
 		};
 	}
-	
+
 	void loadResource(EditableFile resource) {
 		driver.makeInputAreaEditable(true);
 		driver.setInputAreaKeyListener(keyListener);
@@ -52,17 +54,10 @@ public class EditorPerspective extends Perspective {
 		driver.setText(resource.getText());
 		driver.setTitle(resource.getFileName());
 		driver.setStatusBarText(resource.getPath());
-		resourceUnderEdit = resource;
 		driver.setCursorPosition(0);
 	}
-	void loadPreviousEditableResource() {
-		loadResource(resourceUnderEdit);
-	}
-	private void save() {
-		resourceUnderEdit.saveText(driver.text());
-	}
-	
+
 	@Override void actionOnExitFromPerspective() {
-		resourceUnderEdit.setText(driver.text());
+		driver.setCurrentBufferText();
 	}
 }

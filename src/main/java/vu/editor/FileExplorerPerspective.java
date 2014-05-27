@@ -40,7 +40,6 @@ public class FileExplorerPerspective extends Perspective {
 				highlightCurrentItem();
 			}
 		};
-		
 	}
 
 	void loadExplorerView() {
