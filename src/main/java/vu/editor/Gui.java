@@ -43,6 +43,7 @@ public class Gui {
 		mainFrame.addWindowListener(new WindowAdapter() {
 			public void windowOpened( WindowEvent e){
 				inputArea.requestFocus();
+				inputArea.setFocusTraversalKeysEnabled(false);// to fix bug #6
 			}
 		});
 	}
