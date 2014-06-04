@@ -47,6 +47,11 @@ public class Driver {
 	void saveCurrentBuffer() {
 		buffersPerspective.currentBuffer().saveText(text());
 	}
+	void closeCurrentBuffer() {
+		buffersPerspective.closeCurrentBuffer();
+		editorPerspective.loadResource(buffersPerspective.currentBuffer());
+	}
+
 
 
 	void setText(String text) {

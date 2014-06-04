@@ -42,6 +42,8 @@ public class EditorPerspective extends Perspective {
 					TextActions.toLowerCase(driver);
 				} else if (shortcutDetected(VK_CONTROL, VK_TAB)) {
 					driver.loadBuffersView();
+				} else if (shortcutDetected(VK_CONTROL, VK_W)) {
+					driver.closeCurrentBuffer();
 				}
 			}
 		};

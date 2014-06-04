@@ -50,6 +50,9 @@ public class BuffersPerspective extends Perspective {
 	void addCurrentBuffer(EditableFile buffer) {
 		buffers.addCurrentBuffer(buffer);
 	}
+	public void closeCurrentBuffer() {
+		buffers.closeCurrentBuffer();
+	}
 	void loadBuffersView() {
 		driver.makeInputAreaEditable(false);
 		driver.setInputAreaKeyListener(keyListener);
@@ -77,6 +80,12 @@ public class BuffersPerspective extends Perspective {
 		EditableFile currentBuffer() {
 			return buffers.peek();
 		}
+		void closeCurrentBuffer() {
+			if (buffers.size() > 1) {
+				buffers.pop();
+			}
+		}
+
 		EditableFile selectBufferAsCurrent(int currentRow) {
 			EditableFile newCurrentBuffer = buffers.remove(buffers.size()-currentRow);
 			buffers.push(newCurrentBuffer);

@@ -44,7 +44,7 @@ Features:
 - [x] to upper/lower case
 - [x] file explorer(tree)
 - [x] multiple buffers/documents, switch between them
-- [ ] close current buffer (close file under edit)
+- [x] close current buffer (close file under edit)
 - [ ] mark file with unsaved changes. Propose to save unsaved file before close 
 - [ ] duplicate line
 - [ ] multiline indent

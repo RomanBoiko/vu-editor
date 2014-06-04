@@ -8,7 +8,8 @@ Alt+H        - display Help/Shortcuts
 Alt+E        - display FileExplorer
 Esc          - return to edit mode
 Ctrl+S       - save current text to file
-Ctrl+Tab     - select file to edit from open ones (show active buffers)
+Ctrl+Tab     - switch to other open file (buffer)
+Ctrl+W       - close current file (buffer)
 
 Ctrl+C       - copy selected text into clipboard
 Ctrl+V       - paste text from clipboard
