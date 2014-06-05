@@ -49,7 +49,7 @@ public class EditorPerspective extends Perspective {
 		};
 	}
 
-	void loadResource(EditableFile resource) {
+	void loadResource(Buffer resource) {
 		driver.makeInputAreaEditable(true);
 		driver.setInputAreaKeyListener(keyListener);
 		driver.removeInputAreaCaretListener();

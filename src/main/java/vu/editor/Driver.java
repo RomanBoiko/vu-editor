@@ -10,20 +10,25 @@ public class Driver {
 	private final EditorPerspective editorPerspective = new EditorPerspective(this);
 	private final FileExplorerPerspective fileExplorerPerspective = new FileExplorerPerspective(this);
 	private final BuffersPerspective buffersPerspective = new BuffersPerspective(this);
+	private final Buffers buffers = new Buffers();
 	private Perspective currentPerspective = new Perspective() { };
 
 	void showGui() {
 		this.gui.show();
 	}
 
-	void loadEditorView(EditableFile resource) {
+	private void setCurrentPerspective(Perspective newPerspective) {
+		currentPerspective.actionOnExitFromPerspective();
+		currentPerspective = newPerspective;
+	}
+	void loadEditorView(Buffer resource) {
 		setCurrentPerspective(editorPerspective);
 		editorPerspective.loadResource(resource);
-		buffersPerspective.addCurrentBuffer(resource);
+		buffers.addCurrentBuffer(resource);
 	}
 	void loadEditorView() {
 		setCurrentPerspective(editorPerspective);
-		editorPerspective.loadResource(buffersPerspective.currentBuffer());
+		editorPerspective.loadResource(buffers.currentBuffer());
 	}
 	void loadHelpView() {
 		setCurrentPerspective(helpPerspective);
@@ -37,22 +42,6 @@ public class Driver {
 		setCurrentPerspective(buffersPerspective);
 		this.buffersPerspective.loadBuffersView();
 	}
-	private void setCurrentPerspective(Perspective newPerspective) {
-		currentPerspective.actionOnExitFromPerspective();
-		currentPerspective = newPerspective;
-	}
-	void setCurrentBufferText() {
-		buffersPerspective.currentBuffer().setText(text());
-	}
-	void saveCurrentBuffer() {
-		buffersPerspective.currentBuffer().saveText(text());
-	}
-	void closeCurrentBuffer() {
-		buffersPerspective.closeCurrentBuffer();
-		editorPerspective.loadResource(buffersPerspective.currentBuffer());
-	}
-
-
 
 	void setText(String text) {
 		inputArea().setText(text);
@@ -111,5 +100,28 @@ public class Driver {
 
 	protected JTextArea inputArea() {
 		return gui.inputArea;
+	}
+
+	//Buffers
+	String buffersAsString() {
+		return buffers.asString();
+	}
+	void setCurrentBufferText() {
+		buffers.setCurrentBufferText(text());
+	}
+	void saveCurrentBuffer() {
+		buffers.saveCurrentBuffer(text());
+	}
+
+	void loadBufferIntoEditor() {
+		Buffer buffer = buffers.selectBufferAsCurrent(TextActions.currentRow(this));
+		loadEditorView(buffer);
+	}
+	void addCurrentBuffer(Buffer buffer) {
+		buffers.addCurrentBuffer(buffer);
+	}
+	void closeCurrentBuffer() {
+		buffers.closeCurrentBuffer();
+		editorPerspective.loadResource(buffers.currentBuffer());
 	}
 }

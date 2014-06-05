@@ -7,17 +7,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class EditableFile {
+public class Buffer {
 	private static final String DEFAULT_PATH = "newEmptyFile.txt";
 	private static final String DEFAULT_TEXT = "defaultText";
 	private final File file;
 	private String currentText = DEFAULT_TEXT;
 	private boolean hasUnsavedChanges = false;
 
-	EditableFile(String pathToFile) {
+	Buffer(String pathToFile) {
 		this.file = new File(pathToFile);
 	}
-	EditableFile() {
+	Buffer() {
 		this.file = new File(DEFAULT_PATH);
 	}
 
