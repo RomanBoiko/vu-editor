@@ -45,6 +45,7 @@ Features:
 - [x] file explorer(tree)
 - [x] multiple buffers/documents, switch between them
 - [x] close current buffer (close file under edit)
+- [x] matching Bracket highlight
 - [ ] mark file with unsaved changes. Propose to save unsaved file before close 
 - [ ] duplicate line
 - [ ] multiline indent
@@ -60,7 +61,6 @@ Features:
 - [ ] copy current file path/name into clipboard
 - [ ] search in folder results in separate mode with navigation to editor
 - [ ] switch between buffers
-- [ ] matching Bracket highlight
 - [ ] syntax highlight(config)
 - [ ] auto-refactoring
 - [ ] vertical edit

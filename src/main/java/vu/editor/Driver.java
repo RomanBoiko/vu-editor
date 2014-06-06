@@ -86,16 +86,16 @@ public class Driver {
 		gui.setInputAreaKeyListener(keyListener);
 	}
 
-	Highlighter inputAreaHighlighter() {
-		return inputArea().getHighlighter();
-	}
-	
 	void setInputAreaCaretListener(CaretListener caretListener) {
 		gui.setInputAreaCaretListener(caretListener);
 	}
 
 	void removeInputAreaCaretListener() {
 		gui.removeInputAreaCaretListener();
+	}
+
+	Highlighter inputAreaHighlighter() {
+		return inputArea().getHighlighter();
 	}
 
 	protected JTextArea inputArea() {

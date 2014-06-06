@@ -4,6 +4,11 @@ import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
@@ -117,63 +122,61 @@ public class TextActions {
 		driver.setCursorPosition(positionToInsertTextInto);
 	}
 
-	private final static HighlightPainter SPACE_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
-	private final static HighlightPainter TAB_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE);
+	public final static HighlightPainter SPACE_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
+	public final static HighlightPainter TAB_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE);
 	static void showOrHideWhitespacesAndHighlights(Driver driver) {
 		driver.setCursorPosition(driver.selectionStart());//to fix bug #1
 		Highlighter highlighter = driver.inputAreaHighlighter();
-		Highlight[] highlights = highlighter.getHighlights();
-		if (highlights.length > 0) {
-			highlighter.removeAllHighlights();
-			return;
+		for (Highlight highlight : highlighter.getHighlights()) {
+			if (highlight.getPainter().equals(SPACE_PAINTER) || highlight.getPainter().equals(TAB_PAINTER)) {
+				removeSimilarHighlights(highlighter, SPACE_PAINTER);
+				removeSimilarHighlights(highlighter, TAB_PAINTER);
+				return;
+			}
 		}
 
 		String text = driver.text();
 		boolean precedingWhitespaces = true;
 		boolean trailingSpaces = false;
 		int startOfTrailingSpaces = 0;
-		try {
-			for (int pos = 0; pos < text.length(); pos++) {
-				char currentChar = text.charAt(pos);
-				if (precedingWhitespaces) {
-					if (currentChar == SPACE) {
-						highlighter.addHighlight(pos, pos + 1, SPACE_PAINTER);
-					} else if (currentChar == TAB) {
-						highlighter.addHighlight(pos, pos + 1, TAB_PAINTER);
-					} else if (currentChar == LINE_SEPARATOR) {
-						trailingSpaces = false;
-					} else {
-						precedingWhitespaces = false;
-					}
-				} else if (currentChar == SPACE || currentChar == TAB) {
-					if (!trailingSpaces) {
-						trailingSpaces = true;
-						startOfTrailingSpaces = pos;
-					}
+		for (int pos = 0; pos < text.length(); pos++) {
+			char currentChar = text.charAt(pos);
+			if (precedingWhitespaces) {
+				if (currentChar == SPACE) {
+					highlightChar(pos, highlighter, SPACE_PAINTER);
+				} else if (currentChar == TAB) {
+					highlightChar(pos, highlighter, TAB_PAINTER);
 				} else if (currentChar == LINE_SEPARATOR) {
-					if (trailingSpaces == true) {
-						highlightWhiteSpaceRange(startOfTrailingSpaces, pos, text, highlighter);
-						trailingSpaces = false;
-					}
-					precedingWhitespaces = true;
+					trailingSpaces = false;
 				} else {
+					precedingWhitespaces = false;
+				}
+			} else if (currentChar == SPACE || currentChar == TAB) {
+				if (!trailingSpaces) {
+					trailingSpaces = true;
+					startOfTrailingSpaces = pos;
+				}
+			} else if (currentChar == LINE_SEPARATOR) {
+				if (trailingSpaces == true) {
+					highlightWhiteSpaceRange(startOfTrailingSpaces, pos, text, highlighter);
 					trailingSpaces = false;
 				}
+				precedingWhitespaces = true;
+			} else {
+				trailingSpaces = false;
 			}
-			if (trailingSpaces) {
-				highlightWhiteSpaceRange(startOfTrailingSpaces, text.length(), text, highlighter);
-			}
-		} catch (BadLocationException e) {
-			throw new RuntimeException(e);
+		}
+		if (trailingSpaces) {
+			highlightWhiteSpaceRange(startOfTrailingSpaces, text.length(), text, highlighter);
 		}
 	}
 
-	private static void highlightWhiteSpaceRange(int startOfTrailingSpaces, int endOfTrailingSpaces, String text, Highlighter highlighter) throws BadLocationException {
+	private static void highlightWhiteSpaceRange(int startOfTrailingSpaces, int endOfTrailingSpaces, String text, Highlighter highlighter) {
 		for (int i = startOfTrailingSpaces; i < endOfTrailingSpaces; i++) {
 			if (text.charAt(i) == SPACE) {
-				highlighter.addHighlight(i, i + 1, SPACE_PAINTER);
+				highlightChar(i, highlighter, SPACE_PAINTER);
 			} else {
-				highlighter.addHighlight(i, i + 1, TAB_PAINTER);
+				highlightChar(i, highlighter, TAB_PAINTER);
 			}
 		} 
 	}
@@ -205,19 +208,107 @@ public class TextActions {
 		driver.replaceRange(replacement, selectionStart, selectionEnd);
 	}
 
-	private final static HighlightPainter MARKER_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.DARK_GRAY);
+	private final static HighlightPainter CURRENT_LINE_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.DARK_GRAY);
 	static void highlightCurrentLine(Driver driver) {
 		String text = driver.text();
 		int startOfLineWithoutLineEnd = startOfLineWithoutLineEnd(text, driver.selectionStart());
 		int endOfLineWithoutLineEnd = endOfLineWithoutLineEnd(text, driver.selectionStart());
 
 		Highlighter highlighter = driver.inputAreaHighlighter();
-		highlighter.removeAllHighlights();
+		removeSimilarHighlights(highlighter, CURRENT_LINE_PAINTER);
+		highlightText(startOfLineWithoutLineEnd, endOfLineWithoutLineEnd, highlighter, CURRENT_LINE_PAINTER);
+	}
+
+	public static final HighlightPainter MATCHING_BRACKET_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(new Color(0, 51, 0));//dark green
+	private static final Map<Character, Character> START_BRACKET_TO_END_BRACKET = new HashMap<Character, Character>() {private static final long serialVersionUID = 1L;{
+		put('(', ')');
+		put('[', ']');
+		put('{', '}');
+	}};
+	private static final Map<Character, Character> END_BRACKET_TO_START_BRACKET = new HashMap<Character, Character>() {private static final long serialVersionUID = 1L;{
+		for (Map.Entry<Character, Character> startToEndBracket : START_BRACKET_TO_END_BRACKET.entrySet()) {
+			put(startToEndBracket.getValue(), startToEndBracket.getKey());
+		}
+	}};
+	private static final Set<Character> BRACKETS = new HashSet<Character>() {private static final long serialVersionUID = 1L;{
+		addAll(START_BRACKET_TO_END_BRACKET.keySet());
+		addAll(START_BRACKET_TO_END_BRACKET.values());
+	}};
+	static void highlightMatchingBrackets(Driver driver) {
+		Highlighter highlighter = driver.inputAreaHighlighter();
+		removeSimilarHighlights(highlighter, MATCHING_BRACKET_PAINTER);
+
+		String text = driver.text();
+		int currentPosition = driver.selectionStart();
+
+		if (currentPosition != text.length() && BRACKETS.contains(text.charAt(currentPosition))) {
+			highlightMatchingBrackets(currentPosition, text, highlighter);
+		} else if (currentPosition != 0 && BRACKETS.contains(text.charAt(currentPosition - 1))) {
+			highlightMatchingBrackets(currentPosition - 1, text, highlighter);
+		}
+	}
+	private static void highlightMatchingBrackets(int bracketPosition, String text, Highlighter highlighter) {
+		Stack<Character> expectedBracketsOnTheWay = new Stack<Character>();
+		char bracket = text.charAt(bracketPosition);
+		if (START_BRACKET_TO_END_BRACKET.containsKey(bracket)) {
+			expectedBracketsOnTheWay.push(START_BRACKET_TO_END_BRACKET.get(bracket));
+			for (int i = bracketPosition + 1; i < text.length(); i++) {
+				char currentChar = text.charAt(i);
+				if (BRACKETS.contains(currentChar)) {
+					if (expectedBracketsOnTheWay.peek() == currentChar) {
+						expectedBracketsOnTheWay.pop();
+					} else if (START_BRACKET_TO_END_BRACKET.containsKey(currentChar)) {
+						expectedBracketsOnTheWay.push(START_BRACKET_TO_END_BRACKET.get(currentChar));
+					} else {
+						return;
+					}
+				}
+				if (expectedBracketsOnTheWay.isEmpty()) {
+					int matchingBracketPosition = i;
+					highlightChar(bracketPosition, highlighter, MATCHING_BRACKET_PAINTER);
+					highlightChar(matchingBracketPosition, highlighter, MATCHING_BRACKET_PAINTER);
+					return;
+				} 
+			}
+		} else {
+			expectedBracketsOnTheWay.push(END_BRACKET_TO_START_BRACKET.get(bracket));
+			for (int i = bracketPosition - 1; i >= 0; i--) {
+				char currentChar = text.charAt(i);
+				if (BRACKETS.contains(currentChar)) {
+					if (expectedBracketsOnTheWay.peek() == currentChar) {
+						expectedBracketsOnTheWay.pop();
+					} else if (END_BRACKET_TO_START_BRACKET.containsKey(currentChar)) {
+						expectedBracketsOnTheWay.push(END_BRACKET_TO_START_BRACKET.get(currentChar));
+					} else {
+						return;
+					}
+				}
+				if (expectedBracketsOnTheWay.isEmpty()) {
+					int matchingBracketPosition = i;
+					highlightChar(bracketPosition, highlighter, MATCHING_BRACKET_PAINTER);
+					highlightChar(matchingBracketPosition, highlighter, MATCHING_BRACKET_PAINTER);
+					return;
+				}
+			}
+		}
+	}
+
+	private static void removeSimilarHighlights(Highlighter highlighter, HighlightPainter painter) {
+		for (Highlight highlight : highlighter.getHighlights()) {
+			if (highlight.getPainter().equals(painter)) {
+				highlighter.removeHighlight(highlight);
+			}
+		}
+	}
+	private static void highlightText(int startOfRange, int endOfRange, Highlighter highlighter, HighlightPainter painter) {
 		try {
-			highlighter.addHighlight(startOfLineWithoutLineEnd, endOfLineWithoutLineEnd, MARKER_PAINTER);
+			highlighter.addHighlight(startOfRange, endOfRange, painter);
 		} catch (BadLocationException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	private static void highlightChar(int charPosition, Highlighter highlighter, HighlightPainter painter) {
+		highlightText(charPosition, charPosition + 1, highlighter, painter);
 	}
 
 	static int currentRow(Driver driver) {
@@ -228,4 +319,5 @@ public class TextActions {
 		String text = driver.text();
 		return text.substring(0, driver.selectionStart()).lastIndexOf(LINE_SEPARATOR) + 2;
 	}
+
 }

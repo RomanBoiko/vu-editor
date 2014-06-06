@@ -13,10 +13,14 @@ import static java.awt.event.KeyEvent.VK_TAB;
 import static java.awt.event.KeyEvent.VK_UP;
 import static java.awt.event.KeyEvent.VK_W;
 
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+
 public class EditorPerspective extends Perspective {
 
 	private final Driver driver;
 	private final KeyboardListener keyListener;
+	private final CaretListener caretListener;
 
 	public EditorPerspective(Driver driver) {
 		this.driver = driver;
@@ -47,12 +51,27 @@ public class EditorPerspective extends Perspective {
 				}
 			}
 		};
+		this.caretListener = new CaretListener() {
+			@Override public void caretUpdate(CaretEvent event) {
+				highlightMatchingBrackets();
+				highlightCurrentLine();
+			}
+
+		};
+	}
+
+	private void highlightMatchingBrackets() {
+		TextActions.highlightMatchingBrackets(driver);
+	}
+
+	private void highlightCurrentLine() {
+		TextActions.highlightCurrentLine(driver);
 	}
 
 	void loadResource(Buffer resource) {
 		driver.makeInputAreaEditable(true);
 		driver.setInputAreaKeyListener(keyListener);
-		driver.removeInputAreaCaretListener();
+		driver.setInputAreaCaretListener(caretListener);
 		driver.setText(resource.getText());
 		driver.setTitle(resource.getFileName());
 		driver.setStatusBarText(resource.getPath());

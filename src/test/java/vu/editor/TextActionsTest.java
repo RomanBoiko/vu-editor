@@ -1,5 +1,7 @@
 package vu.editor;
 
+import static java.lang.Boolean.parseBoolean;
+import static java.lang.Integer.parseInt;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -173,13 +175,13 @@ public class TextActionsTest {
 		assertCursorPsotionIs(6);
 	}
 
-	@Test public void removesAllHighlightsIfThereAreAny() throws BadLocationException {
+	@Test public void removesWhitespaceHighlightsIfThereAreAny() throws BadLocationException {
 		initialText("aaaaa");
-		testArea.getHighlighter().addHighlight(0, 1, null);
+		testArea.getHighlighter().addHighlight(0, 1, TextActions.SPACE_PAINTER);
 		TextActions.showOrHideWhitespacesAndHighlights(driver);
 		assertThat(testArea.getHighlighter().getHighlights().length, is(0));
 	}
-	@Test public void highlightsPrecedingAndTrailingWhitespaces() throws BadLocationException {
+	@Test public void highlightsPrecedingAndTrailingWhitespaces() {
 		//                      10          20
 		//           01        901    56           5678
 		initialText("  av asd\n   as\n  \nas \t s\n    ");
@@ -197,7 +199,7 @@ public class TextActionsTest {
 		assertHighlightIsAtPosition(9, 27);
 		assertHighlightIsAtPosition(10, 28);
 	}
-	@Test public void highlightsTrailingWhitespaces() throws BadLocationException {
+	@Test public void highlightsTrailingWhitespaces() {
 		//             234     8910
 		initialText("as  \t\nas  \t");
 		TextActions.showOrHideWhitespacesAndHighlights(driver);
@@ -220,8 +222,11 @@ public class TextActionsTest {
 	}
 
 	private void assertHighlightIsAtPosition(int highlightNumber, int startOffset) {
-		assertThat(testArea.getHighlighter().getHighlights()[highlightNumber].getStartOffset(), is(startOffset));
-		assertThat(testArea.getHighlighter().getHighlights()[highlightNumber].getEndOffset(), is(startOffset+1));
+		assertHighlightIsAtPosition(highlightNumber, startOffset, "highlight position is wrong");
+	}
+	private void assertHighlightIsAtPosition(int highlightNumber, int startOffset, String assertionMessage) {
+		assertThat(assertionMessage, testArea.getHighlighter().getHighlights()[highlightNumber].getStartOffset(), is(startOffset));
+		assertThat(assertionMessage, testArea.getHighlighter().getHighlights()[highlightNumber].getEndOffset(), is(startOffset+1));
 	}
 
 	@Test public void joinsCurrentLineAndNextOneOnSpaceAndSetsCursorInJoinPlace() {
@@ -258,5 +263,54 @@ public class TextActionsTest {
 		assertThat(TextActions.currentRow(driver), is(3));
 		initialTextWithCursorAt("0\n2\n45", 5);
 		assertThat(TextActions.currentRow(driver), is(3));
+	}
+	
+
+	@Test public void removesPreviousBracketHighlights() throws BadLocationException {
+		initialTextWithCursorAt("s", 0);
+		testArea.getHighlighter().addHighlight(0, 1, TextActions.MATCHING_BRACKET_PAINTER);
+		TextActions.highlightMatchingBrackets(driver);
+		assertThat(testArea.getHighlighter().getHighlights().length, is(0));
+	}
+
+	@Test public void highlightsMatchingBrackets() {
+		Object[][] testCases = new Object[][] {
+				{"",       0, false},
+				{"(s",     0, false},
+				{"()",     0, true,  0, 1},
+				{"())",    0, true,  0, 1},
+				{"(s)",    0, true,  0, 2},
+				{"s(s)",   0, false},
+				{"(s)",    1, true,  0, 2},
+				{"((s)",   1, true,  1, 3},
+				{"[s]",    0, true,  0, 2},
+				{"{s}",    0, true,  0, 2},
+				{"[s)",    0, false},
+				{"(s)",    2, true,  2, 0},
+				{")s(",    2, false},
+				{"([)",    0, false},
+				{"(][)",   0, false},
+				{"(][)",   3, false},
+				{"([]{})", 0, true, 0, 5},
+				{"([{}])", 0, true, 0, 5},
+				{"([{}])", 5, true, 5, 0},
+		};
+		for (Object[] testCase : testCases) {
+			String text = (String) testCase[0];
+			int cursorPosition = parseInt(testCase[1].toString());
+			boolean shouldHighlight = parseBoolean(testCase[2].toString());
+			initialTextWithCursorAt(text, cursorPosition);
+
+			TextActions.highlightMatchingBrackets(driver);
+
+			String testCaseDescription = text + " with cursor at " + cursorPosition;
+			if (shouldHighlight) {
+				assertThat(testCaseDescription + " should produce highlights", testArea.getHighlighter().getHighlights().length, is(2));
+				assertHighlightIsAtPosition(0, parseInt(testCase[3].toString()), testCaseDescription + " highlight start position is wrong");
+				assertHighlightIsAtPosition(1, parseInt(testCase[4].toString()), testCaseDescription + " highlight end position is wrong");
+			} else {
+				assertThat(testCaseDescription + " should not produce highlights", testArea.getHighlighter().getHighlights().length, is(0));
+			}
+		}
 	}
 }
