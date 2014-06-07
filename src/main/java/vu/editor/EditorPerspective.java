@@ -12,6 +12,9 @@ import static java.awt.event.KeyEvent.VK_SHIFT;
 import static java.awt.event.KeyEvent.VK_TAB;
 import static java.awt.event.KeyEvent.VK_UP;
 import static java.awt.event.KeyEvent.VK_W;
+import static java.awt.event.KeyEvent.VK_Z;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -22,6 +25,7 @@ public class EditorPerspective extends Perspective {
 	private final KeyboardListener keyListener;
 	private final CaretListener caretListener;
 
+	private AtomicBoolean toRecordStateChange = new AtomicBoolean(true);
 	public EditorPerspective(Driver driver) {
 		this.driver = driver;
 		this.keyListener = new KeyboardListener(driver) {
@@ -48,6 +52,10 @@ public class EditorPerspective extends Perspective {
 					driver.loadBuffersView();
 				} else if (shortcutDetected(VK_CONTROL, VK_W)) {
 					driver.closeCurrentBuffer();
+				} else if (shortcutDetected(VK_CONTROL, VK_Z)) {
+					undo();
+				} else if (shortcutDetected(VK_CONTROL, VK_SHIFT, VK_Z)) {
+					redo();
 				}
 			}
 		};
@@ -55,15 +63,27 @@ public class EditorPerspective extends Perspective {
 			@Override public void caretUpdate(CaretEvent event) {
 				highlightMatchingBrackets();
 				highlightCurrentLine();
+				recordNewBufferState();
 			}
-
 		};
 	}
 
+	private void undo() {
+		toRecordStateChange.set(false);
+		driver.undo();
+	}
+	private void redo() {
+		toRecordStateChange.set(false);
+		driver.redo();
+	}
+	private void recordNewBufferState() {
+		if (toRecordStateChange.getAndSet(true)) {
+			driver.recordNewBufferState();
+		}
+	}
 	private void highlightMatchingBrackets() {
 		TextActions.highlightMatchingBrackets(driver);
 	}
-
 	private void highlightCurrentLine() {
 		TextActions.highlightCurrentLine(driver);
 	}
@@ -81,4 +101,5 @@ public class EditorPerspective extends Perspective {
 	@Override void actionOnExitFromPerspective() {
 		driver.setCurrentBufferText();
 	}
+
 }

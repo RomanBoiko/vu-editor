@@ -11,9 +11,11 @@ Ctrl+S       - save current text to file
 Ctrl+Tab     - switch to other open file (buffer)
 Ctrl+W       - close current file (buffer)
 
+Ctrl+Z       - undo
+Ctrl+Shift+Z - redo
 Ctrl+C       - copy selected text into clipboard
 Ctrl+V       - paste text from clipboard
-Ctrl+Z       - cut text into clipboard
+Ctrl+X       - cut text into clipboard
 Ctrl+D       - delete current line/lines from selected range
 Ctrl+J       - join current line and next line
 Alt+W        - highlight/unhighlight preceidng and trailing whitespaces

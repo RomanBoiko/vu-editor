@@ -4,6 +4,8 @@ import javax.swing.JTextArea;
 import javax.swing.event.CaretListener;
 import javax.swing.text.Highlighter;
 
+import vu.editor.Buffer.BufferState;
+
 public class Driver {
 	private final Gui gui = new Gui();
 	private final HelpPerspective helpPerspective = new HelpPerspective(this);
@@ -123,5 +125,23 @@ public class Driver {
 	void closeCurrentBuffer() {
 		buffers.closeCurrentBuffer();
 		editorPerspective.loadResource(buffers.currentBuffer());
+	}
+
+	void undo() {
+		BufferState state = buffers.currentBuffer().rollbackToPreviousState();
+		setText(state.text);
+		setCursorPosition(state.caretPosition);
+	}
+	void redo() {
+		BufferState state = buffers.currentBuffer().forwardToUndoneChange();
+		setText(state.text);
+		setCursorPosition(state.caretPosition);
+	}
+
+	void recordNewBufferState() {
+		String text = text();
+		if (!buffers.currentBuffer().isStateUpToDate(text)) {
+			buffers.currentBuffer().recordNewState(text, selectionStart());
+		}
 	}
 }

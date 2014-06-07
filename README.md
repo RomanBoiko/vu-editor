@@ -46,35 +46,33 @@ Features:
 - [x] multiple buffers/documents, switch between them
 - [x] close current buffer (close file under edit)
 - [x] matching Bracket highlight
-- [ ] mark file with unsaved changes. Propose to save unsaved file before close 
-- [ ] duplicate line
+- [x] showing file name under edit in title on alt+tab
+- [x] show opened file path in status bar
+- [x] undo
+- [x] redo
 - [ ] multiline indent
 - [ ] multiline unindent
+- [ ] mark file with unsaved changes. Propose to save unsaved file before close 
+- [ ] duplicate line
 - [ ] open stream from command line (use in pipe)
 - [ ] search in file
 - [ ] replace in file
 - [ ] select number of whole lines
 - [ ] open file by name(fuzzy)
-- [ ] search in folder
-- [ ] showing file name under edit in title on alt+tab
-- [ ] show opened file path in status bar
 - [ ] copy current file path/name into clipboard
 - [ ] search in folder results in separate mode with navigation to editor
-- [ ] switch between buffers
 - [ ] syntax highlight(config)
 - [ ] auto-refactoring
 - [ ] vertical edit
 - [ ] any command menu
 - [ ] use spaces instead of tabs
-- [ ] tab width configurable
 - [ ] line wrapping
 - [ ] outlines(list of functions, paragraphs)
-- [ ] undo
-- [ ] redo
 - [ ] highlight words similar to the one under cursor
 - [ ] goto occurences of the word under cursor
 - [ ] custom font
 - [ ] config
+- [ ] change root folder in explorer
 
 Known bugs:
 -----------
