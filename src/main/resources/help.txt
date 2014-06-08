@@ -13,9 +13,14 @@ Ctrl+W       - close current file (buffer)
 
 Ctrl+Z       - undo
 Ctrl+Shift+Z - redo
+
+Tab          - indent selected lines
+Shift+Tab    - unindent selected lines
+
 Ctrl+C       - copy selected text into clipboard
 Ctrl+V       - paste text from clipboard
 Ctrl+X       - cut text into clipboard
+
 Ctrl+D       - delete current line/lines from selected range
 Ctrl+J       - join current line and next line
 Alt+W        - highlight/unhighlight preceidng and trailing whitespaces

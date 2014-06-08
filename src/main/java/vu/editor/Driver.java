@@ -70,6 +70,12 @@ public class Driver {
 	void setCursorPosition(int position) {
 		inputArea().setCaretPosition(position);
 	}
+	void setSelectionStart(int position) {
+		inputArea().setSelectionStart(position);
+	}
+	void setSelectionEnd(int position) {
+		inputArea().setSelectionEnd(position);
+	}
 	
 	void setTitle(String title) {
 		gui.mainFrame.setTitle(title);

@@ -30,6 +30,7 @@ public class Texts {
 	static final char SPACE = ' ';
 	static final String SPACE_STR = Character.toString(SPACE);
 	static final char TAB = '\t';
+	static final String TAB_STR = Character.toString(TAB);
 	static final char LINE_SEPARATOR = '\n';
 	static final String LINE_SEPARATOR_STR = Character.toString(LINE_SEPARATOR);
 
@@ -320,4 +321,54 @@ public class Texts {
 		return text.substring(0, driver.selectionStart()).lastIndexOf(LINE_SEPARATOR) + 2;
 	}
 
+	private static interface LineTransformer {
+		String transform(String source);
+	}
+	private static final LineTransformer INDENT = new LineTransformer() {
+		@Override public String transform(String source) {
+			return TAB_STR + source;
+		}
+	};
+	private static final LineTransformer UNINDENT = new LineTransformer() {
+		@Override public String transform(String source) {
+			if (source.startsWith(TAB_STR)) {
+				return source.substring(1);
+			} else {
+				int charactersToRemove = 0;
+				for (int i = 0; i < 4 && i < source.length(); i++) {
+					if (source.charAt(i) != SPACE) {
+						break;
+					}
+					charactersToRemove++;
+				}
+				return source.substring(charactersToRemove);
+			}
+		}
+	};
+	private static void processSelectedLines(Driver driver, LineTransformer transformer) {
+		String text = driver.text();
+		int firstRowStart = startOfLineWithoutLineEnd(text, driver.selectionStart());
+		int lastRowEnd = endOfLineWithoutLineEnd(text, driver.selectionEnd());
+		String[] selectedLines = text.substring(firstRowStart, lastRowEnd).split(LINE_SEPARATOR_STR);
+		StringBuffer indentedBlock = new StringBuffer();
+		for (int i = 0; i < selectedLines.length-1; i++) {
+			indentedBlock.append(transformer.transform(selectedLines[i])).append(LINE_SEPARATOR);
+		}
+		indentedBlock.append(transformer.transform(selectedLines[selectedLines.length-1]));
+		String indentedBlockString = indentedBlock.toString();
+		driver.replaceRange(indentedBlockString, firstRowStart, lastRowEnd);
+		driver.setSelectionStart(firstRowStart);
+		driver.setSelectionEnd(firstRowStart + indentedBlockString.length());
+	} 
+
+	static void indent(Driver driver) {
+		processSelectedLines(driver, INDENT);
+	}
+	static void unindent(Driver driver) {
+		processSelectedLines(driver, UNINDENT);
+	}
+	
+	static boolean selectionContainsMultipleRows(Driver driver) {
+		return driver.text().substring(driver.selectionStart(), driver.selectionEnd()).contains(LINE_SEPARATOR_STR);
+	}
 }

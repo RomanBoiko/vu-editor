@@ -50,8 +50,8 @@ Features:
 - [x] show opened file path in status bar
 - [x] undo
 - [x] redo
-- [ ] multiline indent
-- [ ] multiline unindent
+- [x] multiline indent
+- [x] multiline unindent
 - [ ] mark file with unsaved changes. Propose to save unsaved file before close 
 - [ ] duplicate line
 - [ ] open stream from command line (use in pipe)

@@ -56,6 +56,14 @@ public class EditorPerspective extends Perspective {
 					undo();
 				} else if (shortcutDetected(VK_CONTROL, VK_SHIFT, VK_Z)) {
 					redo();
+				} else if (shortcutDetected(VK_TAB)) {
+					if (Texts.selectionContainsMultipleRows(driver)) {
+						Texts.indent(driver);
+						stopLastKeyPressedEventPropagation(); //prevents editor from adding new tab at cursor place
+					}
+				} else if (shortcutDetected(VK_SHIFT, VK_TAB)) {
+					Texts.unindent(driver);
+					stopLastKeyPressedEventPropagation(); //prevents editor from adding new tab at cursor place
 				}
 			}
 		};

@@ -313,4 +313,24 @@ public class TextsTest {
 			}
 		}
 	}
+	@Test public void indicatesWhetherSelectionContainsMultipleRows() {
+		Object[][] testCases = new Object[][] {
+				{"",        0, 0, false},
+				{"a",       0, 1, false},
+				{"\n",      0, 1, true},
+				{"s\na",    1, 2, true},
+				{"s\na\nb", 0, 4, true},
+				{"s\n\n",   0, 3, true},
+		};
+		for (Object[] testCase : testCases) {
+			String text = (String) testCase[0];
+			int selectionStart = parseInt(testCase[1].toString());
+			int selectionEnd = parseInt(testCase[2].toString());
+			boolean shouldContainMultipleRows = parseBoolean(testCase[3].toString());
+			initialTextWithSelection(text, selectionStart, selectionEnd);
+			
+			Texts.highlightMatchingBrackets(driver);
+			assertThat(text + " with selection at " + selectionStart + " and " + selectionEnd + " failed assertion", Texts.selectionContainsMultipleRows(driver), is(shouldContainMultipleRows));
+		}
+	}
 }
