@@ -93,17 +93,18 @@ public class EditorPerspective extends Perspective {
 		Texts.highlightMatchingBrackets(driver);
 	}
 	private void highlightCurrentLine() {
-		Texts.highlightCurrentLine(driver);
+		Texts.highlightCurrentLineInEditor(driver);
 	}
 
 	void loadResource(Buffer resource) {
 		driver.makeInputAreaEditable(true);
-		driver.setInputAreaKeyListener(keyListener);
-		driver.setInputAreaCaretListener(caretListener);
 		driver.setText(resource.getText());
 		driver.setTitle(resource.getFileName());
 		driver.setStatusBarText(resource.getPath());
 		driver.setCursorPosition(0);
+		driver.inputAreaHighlighter().removeAllHighlights();
+		driver.setInputAreaKeyListener(keyListener);
+		driver.setInputAreaCaretListener(caretListener);
 	}
 
 	@Override void actionOnExitFromPerspective() {

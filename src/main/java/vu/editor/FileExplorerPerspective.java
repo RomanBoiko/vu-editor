@@ -55,7 +55,7 @@ public class FileExplorerPerspective extends Perspective {
 	}
 
 	private void highlightCurrentItem() {
-		Texts.highlightCurrentLine(driver);
+		Texts.markSelectedRow(driver);
 	}
 
 	private void loadEditorWithFile() {

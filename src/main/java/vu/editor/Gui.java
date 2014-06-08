@@ -101,7 +101,8 @@ public class Gui {
 
 	private static class InputArea extends JTextArea {
 		InputArea() {
-			setSelectionColor(Color.GRAY);
+			setSelectionColor(Color.DARK_GRAY);
+			setSelectedTextColor(Color.WHITE);
 			setFont(INPUT_FONT);
 			setEditable(true);
 			setupColors();

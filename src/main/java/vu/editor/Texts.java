@@ -209,18 +209,26 @@ public class Texts {
 		driver.replaceRange(replacement, selectionStart, selectionEnd);
 	}
 
-	private final static HighlightPainter CURRENT_LINE_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.DARK_GRAY);
-	static void highlightCurrentLine(Driver driver) {
+	private final static HighlightPainter CURRENT_LINE_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(new Color(16, 16, 16));
+	static void highlightCurrentLineInEditor(Driver driver) {
+		highlightCurrentLine(driver, CURRENT_LINE_PAINTER);
+	}
+	private final static HighlightPainter SELECTION_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.DARK_GRAY);
+	static void markSelectedRow(Driver driver) {
+		highlightCurrentLine(driver, SELECTION_PAINTER);
+	}
+
+	private static void highlightCurrentLine(Driver driver, HighlightPainter painter) {
 		String text = driver.text();
 		int startOfLineWithoutLineEnd = startOfLineWithoutLineEnd(text, driver.selectionStart());
 		int endOfLineWithoutLineEnd = endOfLineWithoutLineEnd(text, driver.selectionStart());
 
 		Highlighter highlighter = driver.inputAreaHighlighter();
-		removeSimilarHighlights(highlighter, CURRENT_LINE_PAINTER);
-		highlightText(startOfLineWithoutLineEnd, endOfLineWithoutLineEnd, highlighter, CURRENT_LINE_PAINTER);
+		removeSimilarHighlights(highlighter, painter);
+		highlightText(startOfLineWithoutLineEnd, endOfLineWithoutLineEnd, highlighter, painter);
 	}
 
-	public static final HighlightPainter MATCHING_BRACKET_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(new Color(0, 51, 0));//dark green
+	public static final HighlightPainter MATCHING_BRACKET_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
 	private static final Map<Character, Character> START_BRACKET_TO_END_BRACKET = new HashMap<Character, Character>() {private static final long serialVersionUID = 1L;{
 		put('(', ')');
 		put('[', ']');
