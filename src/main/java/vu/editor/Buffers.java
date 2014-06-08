@@ -38,7 +38,7 @@ class Buffers {
 	String asString() {
 		StringBuffer result = new StringBuffer();
 		for (int i = buffers.size()-1; i >=0; i--) {
-			result.append(bufferToString(buffers.get(i))).append(TextActions.LINE_SEPARATOR);
+			result.append(bufferToString(buffers.get(i))).append(Texts.LINE_SEPARATOR);
 		}
 		return result.toString().trim();
 	}

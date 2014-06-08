@@ -24,8 +24,8 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 
-public class TextActions {
-	private TextActions() { }
+public class Texts {
+	private Texts() { }
 	static final String EMPTY_STRING = "";
 	static final char SPACE = ' ';
 	static final String SPACE_STR = Character.toString(SPACE);

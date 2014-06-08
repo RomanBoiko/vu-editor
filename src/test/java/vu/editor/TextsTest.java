@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(CacioTestRunner.class)
-public class TextActionsTest {
+public class TextsTest {
 
 	private final String testText = "1\n2\n3\n4\n5";
 	private final JTextArea testArea = new JTextArea();
@@ -47,8 +47,8 @@ public class TextActionsTest {
 	}
 	
 	@Test public void formatsXml() {
-		Assert.assertEquals("<a xmlns:a=\"http\">\n<b>c</b>\n</a>\n", TextActions.formatXml("<a xmlns:a=\"http\"><b>c</b></a>"));
-		Assert.assertEquals("<?XML?>\n<a/>\n", TextActions.formatXml("<?XML?><a/>"));
+		Assert.assertEquals("<a xmlns:a=\"http\">\n<b>c</b>\n</a>\n", Texts.formatXml("<a xmlns:a=\"http\"><b>c</b></a>"));
+		Assert.assertEquals("<?XML?>\n<a/>\n", Texts.formatXml("<?XML?><a/>"));
 	}
 
 	//testText:
@@ -63,27 +63,27 @@ public class TextActionsTest {
 
 	@Test public void deletesFirstLine() {
 		initialTextWithCursorAt(testText, 1);
-		TextActions.deleteLine(driver);
+		Texts.deleteLine(driver);
 		assertResultedTextIs("2\n3\n4\n5");
 	}
 	@Test public void deletesLineFromTheMiddle() {
 		initialTextWithCursorAt(testText, 2);
-		TextActions.deleteLine(driver);
+		Texts.deleteLine(driver);
 		assertResultedTextIs("1\n3\n4\n5");
 	}
 	@Test public void deletesLastLineWithoutEndOfFile() {
 		initialTextWithCursorAt(testText, 8);
-		TextActions.deleteLine(driver);
+		Texts.deleteLine(driver);
 		assertResultedTextIs("1\n2\n3\n4\n");
 	}
 	@Test public void deletesLastLineBeforeWithEndOfFile() {
 		initialTextWithCursorAt(testText + "\n", 9);
-		TextActions.deleteLine(driver);
+		Texts.deleteLine(driver);
 		assertResultedTextIs("1\n2\n3\n4\n");
 	}
 	@Test public void deletesNothingIfNoText() {
 		initialTextWithCursorAt("", 0);
-		TextActions.deleteLine(driver);
+		Texts.deleteLine(driver);
 		assertResultedTextIs("");
 	}
 
@@ -92,37 +92,37 @@ public class TextActionsTest {
 	//characters:  1 \n 2 \n 3 \n 4 \n 5
 	@Test public void doesNotMoveFirstLineUp() {
 		initialTextWithSelection(testText, 1, 1);
-		TextActions.moveLinesUp(driver);
+		Texts.moveLinesUp(driver);
 		assertResultedTextIs(testText);
 	}
 	@Test public void movesSecondLineUp() {
 		initialTextWithSelection(testText, 2, 2);
-		TextActions.moveLinesUp(driver);
+		Texts.moveLinesUp(driver);
 		assertResultedTextIs("2\n1\n3\n4\n5");
 	}
 	@Test public void movesThirdLineUp() {
 		initialTextWithSelection(testText, 5, 5);
-		TextActions.moveLinesUp(driver);
+		Texts.moveLinesUp(driver);
 		assertResultedTextIs("1\n3\n2\n4\n5");
 	}
 	@Test public void movesLastLineUp() {
 		initialTextWithSelection(testText, 9, 9);
-		TextActions.moveLinesUp(driver);
+		Texts.moveLinesUp(driver);
 		assertResultedTextIs("1\n2\n3\n5\n4\n");
 	}
 	@Test public void movesLastLineWithLineEndUp() {
 		initialTextWithSelection(testText + "\n", 9, 9);
-		TextActions.moveLinesUp(driver);
+		Texts.moveLinesUp(driver);
 		assertResultedTextIs("1\n2\n3\n5\n4\n");
 	}
 	@Test public void movesMultipleLinesUp() {
 		initialTextWithSelection(testText, 4, 6);
-		TextActions.moveLinesUp(driver);
+		Texts.moveLinesUp(driver);
 		assertResultedTextIs("1\n3\n4\n2\n5");
 	}
 	@Test public void putsCursorIntoStartOfMovedUpLine() {
 		initialTextWithSelection(testText, 5, 5);
-		TextActions.moveLinesUp(driver);
+		Texts.moveLinesUp(driver);
 		assertCursorPsotionIs(2);
 	}
 
@@ -131,61 +131,61 @@ public class TextActionsTest {
 	//characters:  1 \n 2 \n 3 \n 4 \n 5
 	@Test public void doesNotMoveLastLineWithEndOfLineDown() {
 		initialTextWithSelection(testText + "\n", 9, 9);
-		TextActions.moveLinesDown(driver);
+		Texts.moveLinesDown(driver);
 		assertResultedTextIs(testText + "\n");
 	}
 	@Test public void doesMoveLastLineWithFewEndsOfLineDown() {
 		initialTextWithSelection(testText + "5\n\n", 9, 9);
-		TextActions.moveLinesDown(driver);
+		Texts.moveLinesDown(driver);
 		assertResultedTextIs("1\n2\n3\n4\n\n55\n");
 	}
 	@Test public void doesNotMoveLastLineWithoutEndOfLineDown() {
 		initialTextWithSelection(testText, 8, 8);
-		TextActions.moveLinesDown(driver);
+		Texts.moveLinesDown(driver);
 		assertResultedTextIs(testText);
 	}
 	@Test public void doesNotMoveLastEndOfLineDown() {
 		initialTextWithSelection(testText + "\n\n", 11, 11);
-		TextActions.moveLinesDown(driver);
+		Texts.moveLinesDown(driver);
 		assertResultedTextIs(testText + "\n\n");
 	}
 	@Test public void movesFirstLineDown() {
 		initialTextWithSelection(testText, 0, 0);
-		TextActions.moveLinesDown(driver);
+		Texts.moveLinesDown(driver);
 		assertResultedTextIs("2\n1\n3\n4\n5");
 	}
 	@Test public void movesSecondLineDown() {
 		initialTextWithSelection(testText, 2, 2);
-		TextActions.moveLinesDown(driver);
+		Texts.moveLinesDown(driver);
 		assertResultedTextIs("1\n3\n2\n4\n5");
 	}
 	@Test public void movesoneBeforeLastLineDown() {
 		initialTextWithSelection(testText, 6, 6);
-		TextActions.moveLinesDown(driver);
+		Texts.moveLinesDown(driver);
 		assertResultedTextIs("1\n2\n3\n5\n4");
 	}
 	@Test public void movesMultipleLinesDown() {
 		initialTextWithSelection(testText, 2, 4);
-		TextActions.moveLinesDown(driver);
+		Texts.moveLinesDown(driver);
 		assertResultedTextIs("1\n4\n2\n3\n5");
 	}
 	@Test public void putsCursorIntoStartOfMovedDownLine() {
 		initialTextWithSelection(testText, 5, 5);
-		TextActions.moveLinesDown(driver);
+		Texts.moveLinesDown(driver);
 		assertCursorPsotionIs(6);
 	}
 
 	@Test public void removesWhitespaceHighlightsIfThereAreAny() throws BadLocationException {
 		initialText("aaaaa");
-		testArea.getHighlighter().addHighlight(0, 1, TextActions.SPACE_PAINTER);
-		TextActions.showOrHideWhitespacesAndHighlights(driver);
+		testArea.getHighlighter().addHighlight(0, 1, Texts.SPACE_PAINTER);
+		Texts.showOrHideWhitespacesAndHighlights(driver);
 		assertThat(testArea.getHighlighter().getHighlights().length, is(0));
 	}
 	@Test public void highlightsPrecedingAndTrailingWhitespaces() {
 		//                      10          20
 		//           01        901    56           5678
 		initialText("  av asd\n   as\n  \nas \t s\n    ");
-		TextActions.showOrHideWhitespacesAndHighlights(driver);
+		Texts.showOrHideWhitespacesAndHighlights(driver);
 		assertThat(testArea.getHighlighter().getHighlights().length, is(11));
 		assertHighlightIsAtPosition(0, 0);
 		assertHighlightIsAtPosition(1, 1);
@@ -202,7 +202,7 @@ public class TextActionsTest {
 	@Test public void highlightsTrailingWhitespaces() {
 		//             234     8910
 		initialText("as  \t\nas  \t");
-		TextActions.showOrHideWhitespacesAndHighlights(driver);
+		Texts.showOrHideWhitespacesAndHighlights(driver);
 		assertThat(testArea.getHighlighter().getHighlights().length, is(6));
 		assertHighlightIsAtPosition(0, 2);
 		assertHighlightIsAtPosition(1, 3);
@@ -216,7 +216,7 @@ public class TextActionsTest {
 		initialText("aaaa");
 		testArea.setSelectionStart(1);
 		testArea.setSelectionEnd(3);
-		TextActions.showOrHideWhitespacesAndHighlights(driver);
+		Texts.showOrHideWhitespacesAndHighlights(driver);
 		assertThat(testArea.getSelectionStart(), is(1));
 		assertThat(testArea.getSelectionEnd(), is(1));
 	}
@@ -242,34 +242,34 @@ public class TextActionsTest {
 			String initialText, int initialCursorPosition,
 			String expectedText, int expectedCursorPosition) {
 		initialTextWithCursorAt(initialText, initialCursorPosition);
-		TextActions.joinLines(driver);
+		Texts.joinLines(driver);
 		assertResultedTextIs(expectedText);
 		assertThat(testArea.getCaretPosition(), is(expectedCursorPosition));
 	}
 	
 	@Test public void convertsSelectedTextIntoUpperCase() {
 		initialTextWithSelection("abto3Dode", 2, 7);
-		TextActions.toUpperCase(driver);
+		Texts.toUpperCase(driver);
 		assertResultedTextIs("abTO3DOde");
 	}
 	@Test public void convertsSelectedTextIntoLowerCase() {
 		initialTextWithSelection("ABTo3DODE", 2, 7);
-		TextActions.toLowerCase(driver);
+		Texts.toLowerCase(driver);
 		assertResultedTextIs("ABto3doDE");
 	}
 
 	@Test public void identifiesRowNumber() {
 		initialTextWithCursorAt("0\n2\n4", 4);
-		assertThat(TextActions.currentRow(driver), is(3));
+		assertThat(Texts.currentRow(driver), is(3));
 		initialTextWithCursorAt("0\n2\n45", 5);
-		assertThat(TextActions.currentRow(driver), is(3));
+		assertThat(Texts.currentRow(driver), is(3));
 	}
 	
 
 	@Test public void removesPreviousBracketHighlights() throws BadLocationException {
 		initialTextWithCursorAt("s", 0);
-		testArea.getHighlighter().addHighlight(0, 1, TextActions.MATCHING_BRACKET_PAINTER);
-		TextActions.highlightMatchingBrackets(driver);
+		testArea.getHighlighter().addHighlight(0, 1, Texts.MATCHING_BRACKET_PAINTER);
+		Texts.highlightMatchingBrackets(driver);
 		assertThat(testArea.getHighlighter().getHighlights().length, is(0));
 	}
 
@@ -301,7 +301,7 @@ public class TextActionsTest {
 			boolean shouldHighlight = parseBoolean(testCase[2].toString());
 			initialTextWithCursorAt(text, cursorPosition);
 
-			TextActions.highlightMatchingBrackets(driver);
+			Texts.highlightMatchingBrackets(driver);
 
 			String testCaseDescription = text + " with cursor at " + cursorPosition;
 			if (shouldHighlight) {

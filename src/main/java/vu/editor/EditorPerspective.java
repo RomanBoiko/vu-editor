@@ -33,21 +33,21 @@ public class EditorPerspective extends Perspective {
 				if (shortcutDetected(VK_CONTROL, VK_S)) {
 					driver.saveCurrentBuffer();
 				} else if (shortcutDetected(VK_CONTROL, VK_SHIFT, VK_F)) {
-					TextActions.formatXml(driver);
+					Texts.formatXml(driver);
 				} else if (shortcutDetected(VK_CONTROL, VK_D)) {
-					TextActions.deleteLine(driver);
+					Texts.deleteLine(driver);
 				} else if (shortcutDetected(VK_ALT, VK_DOWN)) {
-					TextActions.moveLinesDown(driver);
+					Texts.moveLinesDown(driver);
 				} else if (shortcutDetected(VK_ALT, VK_UP)) {
-					TextActions.moveLinesUp(driver);
+					Texts.moveLinesUp(driver);
 				} else if (shortcutDetected(VK_ALT, VK_W)) {
-					TextActions.showOrHideWhitespacesAndHighlights(driver);
+					Texts.showOrHideWhitespacesAndHighlights(driver);
 				} else if (shortcutDetected(VK_CONTROL, VK_J)) {
-					TextActions.joinLines(driver);
+					Texts.joinLines(driver);
 				} else if (shortcutDetected(VK_ALT, VK_C)) {
-					TextActions.toUpperCase(driver);
+					Texts.toUpperCase(driver);
 				} else if (shortcutDetected(VK_ALT, VK_SHIFT, VK_C)) {
-					TextActions.toLowerCase(driver);
+					Texts.toLowerCase(driver);
 				} else if (shortcutDetected(VK_CONTROL, VK_TAB)) {
 					driver.loadBuffersView();
 				} else if (shortcutDetected(VK_CONTROL, VK_W)) {
@@ -82,10 +82,10 @@ public class EditorPerspective extends Perspective {
 		}
 	}
 	private void highlightMatchingBrackets() {
-		TextActions.highlightMatchingBrackets(driver);
+		Texts.highlightMatchingBrackets(driver);
 	}
 	private void highlightCurrentLine() {
-		TextActions.highlightCurrentLine(driver);
+		Texts.highlightCurrentLine(driver);
 	}
 
 	void loadResource(Buffer resource) {

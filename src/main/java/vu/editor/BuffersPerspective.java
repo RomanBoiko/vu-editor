@@ -18,9 +18,9 @@ public class BuffersPerspective extends Perspective {
 				if (shortcutDetected(KeyEvent.VK_ESCAPE)) {
 					driver.loadEditorView();
 				} else if (shortcutDetected(KeyEvent.VK_RIGHT)) {
-					driver.setCursorPosition(TextActions.secondPositionInCurrentRow(driver));
+					driver.setCursorPosition(Texts.secondPositionInCurrentRow(driver));
 				} else if (shortcutDetected(KeyEvent.VK_LEFT)) {
-					driver.setCursorPosition(TextActions.secondPositionInCurrentRow(driver));
+					driver.setCursorPosition(Texts.secondPositionInCurrentRow(driver));
 				} else if (shortcutDetected(KeyEvent.VK_ENTER)) {
 					driver.loadBufferIntoEditor();
 					stopLastKeyPressedEventPropagation(); //prevents editor from adding new line after resource is loaded
@@ -35,7 +35,7 @@ public class BuffersPerspective extends Perspective {
 	}
 
 	private void highlightCurrentItem() {
-		TextActions.highlightCurrentLine(driver);
+		Texts.highlightCurrentLine(driver);
 	}
 	void loadBuffersView() {
 		driver.makeInputAreaEditable(false);

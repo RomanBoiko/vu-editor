@@ -116,7 +116,7 @@ public class Driver {
 	}
 
 	void loadBufferIntoEditor() {
-		Buffer buffer = buffers.selectBufferAsCurrent(TextActions.currentRow(this));
+		Buffer buffer = buffers.selectBufferAsCurrent(Texts.currentRow(this));
 		loadEditorView(buffer);
 	}
 	void addCurrentBuffer(Buffer buffer) {

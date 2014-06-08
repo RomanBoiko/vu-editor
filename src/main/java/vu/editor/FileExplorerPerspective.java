@@ -47,7 +47,7 @@ public class FileExplorerPerspective extends Perspective {
 		driver.setInputAreaKeyListener(keyListener);
 		driver.setInputAreaCaretListener(caretListener);
 		driver.setText(exploredItems.asString());
-		driver.setCursorPosition(TextActions.secondPositionInCurrentRow(driver));
+		driver.setCursorPosition(Texts.secondPositionInCurrentRow(driver));
 		driver.setTitle("FileExplorer");
 		driver.setStatusBarText("FileExplorer: " + workingDir().getAbsolutePath());
 		driver.setCursorPosition(lastPositionInExplorer);
@@ -55,11 +55,11 @@ public class FileExplorerPerspective extends Perspective {
 	}
 
 	private void highlightCurrentItem() {
-		TextActions.highlightCurrentLine(driver);
+		Texts.highlightCurrentLine(driver);
 	}
 
 	private void loadEditorWithFile() {
-		ExploredItem currentItem = exploredItems.item(TextActions.currentRow(driver));
+		ExploredItem currentItem = exploredItems.item(Texts.currentRow(driver));
 		if (currentItem.file.isFile()) {
 			driver.loadEditorView(new Buffer(currentItem.file.getAbsolutePath()));
 		}
@@ -67,20 +67,20 @@ public class FileExplorerPerspective extends Perspective {
 
 	private void openItem(Driver driver) {
 		int positionBeforeOpen = driver.selectionStart();
-		int currentRow = TextActions.currentRow(driver);
+		int currentRow = Texts.currentRow(driver);
 		if (exploredItems.item(currentRow).canBeOpened()) {
-			TextActions.replaceContentOfCurrentRow(driver, exploredItems.openItem(currentRow));
+			Texts.replaceContentOfCurrentRow(driver, exploredItems.openItem(currentRow));
 		}
 		driver.setCursorPosition(positionBeforeOpen);
 	}
 	private void closeItem(Driver driver) {
-		int currentRow = TextActions.currentRow(driver);
+		int currentRow = Texts.currentRow(driver);
 		ExploredItem item = exploredItems.item(currentRow);
 		if (item.canBeClosed()) {
 			ItemCloseResult closeResult = exploredItems.closeItem(currentRow);
-			TextActions.replaceContentOfCurrentAndNextRows(driver, closeResult.closedChildrenCount, closeResult.newDirContentString);
+			Texts.replaceContentOfCurrentAndNextRows(driver, closeResult.closedChildrenCount, closeResult.newDirContentString);
 		}
-		driver.setCursorPosition(TextActions.secondPositionInCurrentRow(driver));
+		driver.setCursorPosition(Texts.secondPositionInCurrentRow(driver));
 	}
 
 	private File workingDir() {
@@ -141,7 +141,7 @@ public class FileExplorerPerspective extends Perspective {
 		String asString() {
 			StringBuffer buffer = new StringBuffer();
 			for (ExploredItem item : items) {
-				buffer.append(item.asString()).append(TextActions.LINE_SEPARATOR);
+				buffer.append(item.asString()).append(Texts.LINE_SEPARATOR);
 			}
 			return buffer.toString().trim();
 		}
@@ -182,7 +182,7 @@ public class FileExplorerPerspective extends Perspective {
 			allChildren.addAll(files);
 			for (File child : allChildren) {
 				ExploredItem item = new ExploredItem(child, itemToOpen.depth + 1);
-				buffer.append(TextActions.LINE_SEPARATOR).append(item.asString());
+				buffer.append(Texts.LINE_SEPARATOR).append(item.asString());
 				items.add(positionToInsertChid++, item);
 			}
 			return buffer.toString();
