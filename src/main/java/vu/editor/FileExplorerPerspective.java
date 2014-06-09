@@ -13,13 +13,13 @@ public class FileExplorerPerspective extends Perspective {
 	private final KeyboardListener keyListener;
 	private final CaretListener caretListener;
 	private final Driver driver;
-	private final ExploredItems exploredItems;
+	private ExploredItems exploredItems;
 
 	private int lastPositionInExplorer = 0;
 
 	FileExplorerPerspective(Driver driver) {
 		this.driver = driver;
-		this.exploredItems = new ExploredItems();
+		this.exploredItems = new ExploredItems(workingDir());
 		this.keyListener = new KeyboardListener(driver) {
 			@Override protected void actionOnKeyPressed() {
 				lastPositionInExplorer = driver.selectionStart();
@@ -29,6 +29,10 @@ public class FileExplorerPerspective extends Perspective {
 					openItem(driver);
 				} else if (shortcutDetected(KeyEvent.VK_LEFT)) {
 					closeItem(driver);
+				} else if (shortcutDetected(KeyEvent.VK_R)) {
+					resetExplorerRoots(File.listRoots());
+				} else if (shortcutDetected(KeyEvent.VK_W)) {
+					resetExplorerRoots(workingDir());
 				} else if (shortcutDetected(KeyEvent.VK_ENTER)) {
 					loadEditorWithFile();
 					stopLastKeyPressedEventPropagation(); //prevents editor from adding new line after resource is loaded
@@ -42,6 +46,12 @@ public class FileExplorerPerspective extends Perspective {
 		};
 	}
 
+	void resetExplorerRoots(File... roots) {
+		exploredItems = new ExploredItems(roots);
+		lastPositionInExplorer = 0;
+		loadExplorerView();
+	}
+
 	void loadExplorerView() {
 		driver.makeInputAreaEditable(false);
 		driver.setInputAreaKeyListener(keyListener);
@@ -49,7 +59,7 @@ public class FileExplorerPerspective extends Perspective {
 		driver.setText(exploredItems.asString());
 		driver.setCursorPosition(Texts.secondPositionInCurrentRow(driver));
 		driver.setTitle("FileExplorer");
-		driver.setStatusBarText("FileExplorer: " + workingDir().getAbsolutePath());
+		driver.setStatusBarText("FileExplorer: 'R' - root, 'W' - working dir (" + workingDir().getAbsolutePath() + ")");
 		driver.setCursorPosition(lastPositionInExplorer);
 		highlightCurrentItem();
 	}
@@ -115,7 +125,10 @@ public class FileExplorerPerspective extends Perspective {
 			} else {
 				buffer.append("+ ");
 			}
-			return buffer.append(file.getName()).toString();
+			return buffer.append(nonEmptyFilePath()).toString();
+		}
+		private String nonEmptyFilePath() {
+			return file.getName().equals("") ? file.getAbsolutePath() : file.getName();
 		}
 		boolean canBeClosed() {
 			return file.isDirectory() && isOpen;
@@ -134,8 +147,10 @@ public class FileExplorerPerspective extends Perspective {
 	}
 	private class ExploredItems {
 		private final List<ExploredItem> items = new LinkedList<ExploredItem>();
-		ExploredItems() {
-			items.add(new ExploredItem(workingDir(), 0));
+		ExploredItems(File...roots) {
+			for (File root : roots) {
+				items.add(new ExploredItem(root, 0));
+			}
 		}
 
 		String asString() {

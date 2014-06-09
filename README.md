@@ -56,6 +56,7 @@ Features:
 - [x] duplicate lines
 - [x] open stream from command line (use in pipe)
 - [x] mark file with unsaved changes. Save unsaved file before close. Save all unsaved files before exit 
+- [x] change root folder in explorer
 - [ ] search in file
 - [ ] replace in file
 - [ ] open file by name(fuzzy)
@@ -71,7 +72,6 @@ Features:
 - [ ] highlight words similar to the one under cursor
 - [ ] goto occurences of the word under cursor
 - [ ] config
-- [ ] change root folder in explorer
 
 Known bugs:
 -----------

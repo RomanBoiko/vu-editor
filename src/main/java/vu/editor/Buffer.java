@@ -57,7 +57,9 @@ public class Buffer {
 			fileInputStream.close();
 			return stringBuilder.toString();
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			Gui.alert("Can't read file " + file.getAbsolutePath() + "\n" + e.getMessage());
+			Editor.log(e);
+			return "";
 		}
 	}
 
@@ -67,7 +69,8 @@ public class Buffer {
 			writer.write(text);
 			writer.close();
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			Gui.alert("Can't save file " + file.getAbsolutePath() + "\n" + e.getMessage());
+			Editor.log(e);
 		}
 		this.currentText = text;
 		hasUnsavedChanges = false;

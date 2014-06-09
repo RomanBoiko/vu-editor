@@ -26,7 +26,9 @@ class Buffers {
 	}
 	void saveAllOpenBuffers() {
 		for (Buffer buffer : buffers) {
-			buffer.saveText(buffer.getText());
+			if (buffer.hasUnsavedChanges()) {
+				buffer.saveText(buffer.getText());
+			}
 		}
 	}
 	void closeCurrentBuffer() {
