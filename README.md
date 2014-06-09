@@ -57,10 +57,10 @@ Features:
 - [x] open stream from command line (use in pipe)
 - [x] mark file with unsaved changes. Save unsaved file before close. Save all unsaved files before exit 
 - [x] change root folder in explorer
+- [x] copy current file path/name into clipboard
 - [ ] search in file
 - [ ] replace in file
 - [ ] open file by name(fuzzy)
-- [ ] copy current file path/name into clipboard
 - [ ] search in folder results in separate mode with navigation to editor
 - [ ] syntax highlight(config)
 - [ ] auto-refactoring

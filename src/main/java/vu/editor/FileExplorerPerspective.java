@@ -1,5 +1,8 @@
 package vu.editor;
 
+import static java.awt.event.KeyEvent.VK_CONTROL;
+import static java.awt.event.KeyEvent.VK_P;
+
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.LinkedList;
@@ -33,11 +36,14 @@ public class FileExplorerPerspective extends Perspective {
 					resetExplorerRoots(File.listRoots());
 				} else if (shortcutDetected(KeyEvent.VK_W)) {
 					resetExplorerRoots(workingDir());
+				} else if (shortcutDetected(VK_CONTROL, VK_P)) {
+					copyCurrentFilePathToClipboard();
 				} else if (shortcutDetected(KeyEvent.VK_ENTER)) {
 					loadEditorWithFile();
 					stopLastKeyPressedEventPropagation(); //prevents editor from adding new line after resource is loaded
 				}
 			}
+
 		};
 		this.caretListener = new CaretListener() {
 			@Override public void caretUpdate(CaretEvent event) {
@@ -46,7 +52,11 @@ public class FileExplorerPerspective extends Perspective {
 		};
 	}
 
-	void resetExplorerRoots(File... roots) {
+	private void copyCurrentFilePathToClipboard() {
+		driver.copyCurrentFilePathToClipboard(currentFile().getAbsolutePath());
+	}
+
+	private void resetExplorerRoots(File... roots) {
 		exploredItems = new ExploredItems(roots);
 		lastPositionInExplorer = 0;
 		loadExplorerView();
@@ -59,7 +69,7 @@ public class FileExplorerPerspective extends Perspective {
 		driver.setText(exploredItems.asString());
 		driver.setCursorPosition(Texts.secondPositionInCurrentRow(driver));
 		driver.setTitle("FileExplorer");
-		driver.setStatusBarText("FileExplorer: 'R' - root, 'W' - working dir (" + workingDir().getAbsolutePath() + ")");
+		driver.setStatusBarText("FileExplorer: 'R' - root, 'W' - working dir (" + workingDir().getAbsolutePath() + "), 'Ctrl+P' - selected file path to clipboard");
 		driver.setCursorPosition(lastPositionInExplorer);
 		highlightCurrentItem();
 	}
@@ -69,10 +79,15 @@ public class FileExplorerPerspective extends Perspective {
 	}
 
 	private void loadEditorWithFile() {
-		ExploredItem currentItem = exploredItems.item(Texts.currentRow(driver));
-		if (currentItem.file.isFile()) {
-			driver.loadEditorView(new Buffer(currentItem.file));
+		File currentFile = currentFile();
+		if (currentFile.isFile()) {
+			driver.loadEditorView(new Buffer(currentFile));
 		}
+	}
+
+	private File currentFile() {
+		ExploredItem currentItem = exploredItems.item(Texts.currentRow(driver));
+		return currentItem.file;
 	}
 
 	private void openItem(Driver driver) {

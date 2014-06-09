@@ -18,6 +18,7 @@ Ctrl+Shift+Z  - redo
 Ctrl+C        - copy selected text into clipboard
 Ctrl+V        - paste text from clipboard
 Ctrl+X        - cut text into clipboard
+Ctrl+P        - copy current file path into clipboard
 
 Tab           - indent selected lines
 Shift+Tab     - unindent selected lines

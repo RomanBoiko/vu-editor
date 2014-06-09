@@ -7,6 +7,7 @@ import static java.awt.event.KeyEvent.VK_D;
 import static java.awt.event.KeyEvent.VK_DOWN;
 import static java.awt.event.KeyEvent.VK_F;
 import static java.awt.event.KeyEvent.VK_J;
+import static java.awt.event.KeyEvent.VK_P;
 import static java.awt.event.KeyEvent.VK_S;
 import static java.awt.event.KeyEvent.VK_SHIFT;
 import static java.awt.event.KeyEvent.VK_TAB;
@@ -56,6 +57,8 @@ public class EditorPerspective extends Perspective {
 					driver.loadBuffersView();
 				} else if (shortcutDetected(VK_CONTROL, VK_W)) {
 					driver.closeCurrentBuffer();
+				} else if (shortcutDetected(VK_CONTROL, VK_P)) {
+					driver.copyCurrentFilePathToClipboard();
 				} else if (shortcutDetected(VK_CONTROL, VK_Z)) {
 					undo();
 				} else if (shortcutDetected(VK_CONTROL, VK_SHIFT, VK_Z)) {

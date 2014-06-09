@@ -38,7 +38,7 @@ class Buffers {
 	}
 
 	Buffer selectBufferAsCurrent(int currentRow) {
-		Buffer newCurrentBuffer = buffers.remove(buffers.size()-currentRow);
+		Buffer newCurrentBuffer = buffers.remove(buffers.size() - currentRow);
 		buffers.push(newCurrentBuffer);
 		return newCurrentBuffer;
 	}

@@ -1,6 +1,9 @@
 package vu.editor;
 
 import java.awt.Color;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 
 import javax.swing.JTextArea;
 import javax.swing.event.CaretListener;
@@ -171,5 +174,15 @@ public class Driver {
 	void exit() {
 		saveAllOpenBuffers();
 		System.exit(0);
+	}
+
+	void copyCurrentFilePathToClipboard() {
+		copyCurrentFilePathToClipboard(buffers.currentBuffer().getPath());
+	}
+
+	void copyCurrentFilePathToClipboard(String currentFilePath) {
+		StringSelection path = new StringSelection(currentFilePath);
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		clipboard.setContents(path, path);
 	}
 }
