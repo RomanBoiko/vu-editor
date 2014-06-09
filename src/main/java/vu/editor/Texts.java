@@ -124,6 +124,16 @@ public class Texts {
 		driver.setSelectionStart(positionToInsertTextInto);
 		driver.setSelectionEnd(positionToInsertTextInto + textToMove.length() - 1);
 	}
+	static void duplicateLines(Driver driver) {
+		String text = driver.text();
+		int startOfLineWithoutLineEnd = startOfLineWithoutLineEnd(text, driver.selectionStart());
+		int endOfLineWithoutLineEnd = endOfLineWithoutLineEnd(text, driver.selectionEnd());
+		String textToMove = LINE_SEPARATOR + text.substring(startOfLineWithoutLineEnd, endOfLineWithoutLineEnd);
+		driver.insert(textToMove, endOfLineWithoutLineEnd);
+		driver.setSelectionStart(endOfLineWithoutLineEnd + 1);
+		driver.setSelectionEnd(endOfLineWithoutLineEnd + textToMove.length());
+	}
+
 
 	public final static HighlightPainter SPACE_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
 	public final static HighlightPainter TAB_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.BLUE);
@@ -373,4 +383,5 @@ public class Texts {
 	static boolean selectionContainsMultipleRows(Driver driver) {
 		return driver.text().substring(driver.selectionStart(), driver.selectionEnd()).contains(LINE_SEPARATOR_STR);
 	}
+
 }

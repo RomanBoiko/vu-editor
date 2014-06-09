@@ -40,6 +40,8 @@ public class EditorPerspective extends Perspective {
 					Texts.moveLinesDown(driver);
 				} else if (shortcutDetected(VK_ALT, VK_UP)) {
 					Texts.moveLinesUp(driver);
+				} else if (shortcutDetected(VK_CONTROL, VK_ALT, VK_DOWN)) {
+					Texts.duplicateLines(driver);
 				} else if (shortcutDetected(VK_ALT, VK_W)) {
 					Texts.showOrHideWhitespacesAndHighlights(driver);
 				} else if (shortcutDetected(VK_CONTROL, VK_J)) {

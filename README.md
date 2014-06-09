@@ -52,7 +52,7 @@ Features:
 - [x] redo
 - [x] multiline indent
 - [x] multiline unindent
-- [ ] duplicate line
+- [x] duplicate lines
 - [ ] mark file with unsaved changes. Propose to save unsaved file before close 
 - [ ] open stream from command line (use in pipe)
 - [ ] search in file

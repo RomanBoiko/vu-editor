@@ -4,30 +4,32 @@ Help
 Shortcuts:
 ----------
 
-Alt+H        - display Help/Shortcuts
-Alt+E        - display FileExplorer
-Esc          - return to edit mode
-Ctrl+S       - save current text to file
-Ctrl+Tab     - switch to other open file (buffer)
-Ctrl+W       - close current file (buffer)
+Alt+H         - display Help/Shortcuts
+Alt+E         - display FileExplorer
+Esc           - return to edit mode
+Ctrl+S        - save current text to file
+Ctrl+Tab      - switch to other open file (buffer)
+Ctrl+W        - close current file (buffer)
 
-Ctrl+Z       - undo
-Ctrl+Shift+Z - redo
+Ctrl+Z        - undo
+Ctrl+Shift+Z  - redo
 
-Tab          - indent selected lines
-Shift+Tab    - unindent selected lines
+Ctrl+C        - copy selected text into clipboard
+Ctrl+V        - paste text from clipboard
+Ctrl+X        - cut text into clipboard
 
-Ctrl+C       - copy selected text into clipboard
-Ctrl+V       - paste text from clipboard
-Ctrl+X       - cut text into clipboard
+Tab           - indent selected lines
+Shift+Tab     - unindent selected lines
+Alt+W         - highlight/unhighlight preceidng and trailing whitespaces
 
-Ctrl+D       - delete current line/lines from selected range
-Ctrl+J       - join current line and next line
-Alt+W        - highlight/unhighlight preceidng and trailing whitespaces
-Alt+Up       - move lines up
-Alt+Down     - move lines down
-Alt+C        - change case of selected text (to upper case)
-Alt+Shift+C  - change case of selected text (to lower case)
-Ctrl+Shift+F - format XML
+Ctrl+D        - delete current line/lines from selected range
+Ctrl+J        - join current line and next line
+Alt+Up        - move lines up
+Alt+Down      - move lines down
+Ctrl+Alt+Down - duplicate selected lines
 
-Alt+Q        - quit editor (shutdown)
+Alt+C         - change case of selected text (to upper case)
+Alt+Shift+C   - change case of selected text (to lower case)
+Ctrl+Shift+F  - format XML
+
+Alt+Q         - quit editor (shutdown)
