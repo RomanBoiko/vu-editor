@@ -53,11 +53,10 @@ Features:
 - [x] multiline indent
 - [x] multiline unindent
 - [x] duplicate lines
+- [x] open stream from command line (use in pipe)
 - [ ] mark file with unsaved changes. Propose to save unsaved file before close 
-- [ ] open stream from command line (use in pipe)
 - [ ] search in file
 - [ ] replace in file
-- [ ] select number of whole lines
 - [ ] open file by name(fuzzy)
 - [ ] copy current file path/name into clipboard
 - [ ] search in folder results in separate mode with navigation to editor

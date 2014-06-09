@@ -16,12 +16,13 @@ public class Buffer {
 	private String currentText = DEFAULT_TEXT;
 	private boolean hasUnsavedChanges = false;
 
-	Buffer(String pathToFile) {
-		this.file = new File(pathToFile);
+	Buffer(File file) {
+		this.file = file;
 		states.addFirst(new BufferState(getText(), 0));
 	}
-	Buffer() {
-		this(DEFAULT_PATH);
+	Buffer(String text) {
+		this(new File(DEFAULT_PATH));
+		setText(text);
 	}
 
 	String getPath() {

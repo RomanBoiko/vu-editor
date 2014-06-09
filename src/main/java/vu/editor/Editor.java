@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Date;
+import java.util.Scanner;
 
 import javax.swing.SwingUtilities;
 
@@ -22,12 +23,28 @@ public class Editor {
 				driver.showGui();
 				
 				if(args.length == 1) {
-					driver.loadEditorView(new Buffer(args[0]));
+					driver.loadEditorView(new Buffer(new File(args[0])));
 				} else {
-					driver.loadEditorView(new Buffer());
+					driver.loadEditorView(new Buffer(Editor.inputStream()));
 				}
 			}
 		});
+	}
+
+	private static String inputStream() {
+		try {
+			StringBuffer inputTextBuffer = new StringBuffer();
+			if (System.in.available() > 0) {
+				Scanner scanner = new Scanner(System.in);
+				while (scanner.hasNextLine()) {
+					inputTextBuffer.append(scanner.nextLine()).append('\n');
+				}
+				scanner.close();
+			}
+			return inputTextBuffer.toString().trim();
+		} catch (IOException e) {
+			throw new RuntimeException();
+		}
 	}
 
 	private static void initGlobalExceptionHandler() {
