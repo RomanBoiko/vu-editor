@@ -32,6 +32,8 @@ public class EditorPerspective extends Perspective {
 			@Override protected void actionOnKeyPressed() {
 				if (shortcutDetected(VK_CONTROL, VK_S)) {
 					driver.saveCurrentBuffer();
+				} else if (shortcutDetected(VK_CONTROL, VK_SHIFT, VK_S)) {
+					driver.saveAllOpenBuffers();
 				} else if (shortcutDetected(VK_CONTROL, VK_SHIFT, VK_F)) {
 					Texts.formatXml(driver);
 				} else if (shortcutDetected(VK_CONTROL, VK_D)) {

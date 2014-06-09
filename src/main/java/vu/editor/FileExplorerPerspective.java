@@ -61,7 +61,7 @@ public class FileExplorerPerspective extends Perspective {
 	private void loadEditorWithFile() {
 		ExploredItem currentItem = exploredItems.item(Texts.currentRow(driver));
 		if (currentItem.file.isFile()) {
-			driver.loadEditorView(new Buffer(currentItem.file.getAbsolutePath()));
+			driver.loadEditorView(new Buffer(currentItem.file));
 		}
 	}
 

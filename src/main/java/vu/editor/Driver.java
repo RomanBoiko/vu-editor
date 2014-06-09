@@ -132,6 +132,10 @@ public class Driver {
 	void saveCurrentBuffer() {
 		buffers.saveCurrentBuffer(text());
 	}
+	void saveAllOpenBuffers() {
+		saveCurrentBuffer();
+		buffers.saveAllOpenBuffers();
+	}
 
 	void loadBufferIntoEditor() {
 		Buffer buffer = buffers.selectBufferAsCurrent(Texts.currentRow(this));

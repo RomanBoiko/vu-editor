@@ -24,6 +24,11 @@ class Buffers {
 	void saveCurrentBuffer(String text) {
 		currentBuffer().saveText(text);
 	}
+	void saveAllOpenBuffers() {
+		for (Buffer buffer : buffers) {
+			buffer.saveText(buffer.getText());
+		}
+	}
 	void closeCurrentBuffer() {
 		if (buffers.size() > 1) {
 			buffers.pop();

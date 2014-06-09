@@ -8,6 +8,7 @@ Alt+H         - display Help/Shortcuts
 Alt+E         - display FileExplorer
 Esc           - return to edit mode
 Ctrl+S        - save current text to file
+Ctrl+Shift+S  - save all open buffers
 Ctrl+Tab      - switch to other open file (buffer)
 Ctrl+W        - close current file (buffer)
 

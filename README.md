@@ -31,6 +31,7 @@ Features:
 - [x] XML formatting
 - [x] open with file from command line
 - [x] save file
+- [x] save all open files
 - [x] line up/down
 - [x] delete line
 - [x] show whitespaces
