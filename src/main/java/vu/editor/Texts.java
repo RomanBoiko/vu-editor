@@ -209,23 +209,15 @@ public class Texts {
 		driver.replaceRange(replacement, selectionStart, selectionEnd);
 	}
 
-	private final static HighlightPainter CURRENT_LINE_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(new Color(16, 16, 16));
-	static void highlightCurrentLineInEditor(Driver driver) {
-		highlightCurrentLine(driver, CURRENT_LINE_PAINTER);
-	}
 	private final static HighlightPainter SELECTION_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.DARK_GRAY);
-	static void markSelectedRow(Driver driver) {
-		highlightCurrentLine(driver, SELECTION_PAINTER);
-	}
-
-	private static void highlightCurrentLine(Driver driver, HighlightPainter painter) {
+	static void highlightCurrentLine(Driver driver) {
 		String text = driver.text();
 		int startOfLineWithoutLineEnd = startOfLineWithoutLineEnd(text, driver.selectionStart());
 		int endOfLineWithoutLineEnd = endOfLineWithoutLineEnd(text, driver.selectionStart());
-
+		
 		Highlighter highlighter = driver.inputAreaHighlighter();
-		removeSimilarHighlights(highlighter, painter);
-		highlightText(startOfLineWithoutLineEnd, endOfLineWithoutLineEnd, highlighter, painter);
+		removeSimilarHighlights(highlighter, SELECTION_PAINTER);
+		highlightText(startOfLineWithoutLineEnd, endOfLineWithoutLineEnd, highlighter, SELECTION_PAINTER);
 	}
 
 	public static final HighlightPainter MATCHING_BRACKET_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);

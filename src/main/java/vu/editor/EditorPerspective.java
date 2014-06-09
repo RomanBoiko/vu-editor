@@ -70,7 +70,6 @@ public class EditorPerspective extends Perspective {
 		this.caretListener = new CaretListener() {
 			@Override public void caretUpdate(CaretEvent event) {
 				highlightMatchingBrackets();
-				highlightCurrentLine();
 				recordNewBufferState();
 			}
 		};
@@ -91,9 +90,6 @@ public class EditorPerspective extends Perspective {
 	}
 	private void highlightMatchingBrackets() {
 		Texts.highlightMatchingBrackets(driver);
-	}
-	private void highlightCurrentLine() {
-		Texts.highlightCurrentLineInEditor(driver);
 	}
 
 	void loadResource(Buffer resource) {

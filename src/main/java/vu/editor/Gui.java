@@ -97,7 +97,7 @@ public class Gui {
 		}
 	}
 
-	private static final Font INPUT_FONT = new Font(Font.MONOSPACED, Font.PLAIN, 14);
+	private static final Font INPUT_FONT = new Font(Font.MONOSPACED, Font.PLAIN, 16);
 
 	private static class InputArea extends JTextArea {
 		InputArea() {
@@ -116,9 +116,11 @@ public class Gui {
 		}
 	}
 
+	private static final Font STATUS_BAR_FONT = new Font(Font.MONOSPACED, Font.PLAIN, 14);
 	private static class BottomStatusBar extends JTextField {
 		BottomStatusBar() {
 			setupReadOnlyTextElement(this);
+			setFont(STATUS_BAR_FONT);
 			setText("status bar");
 			setBorder(EMPTY_BORDER);
 		}

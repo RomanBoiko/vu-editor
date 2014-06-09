@@ -35,7 +35,7 @@ public class BuffersPerspective extends Perspective {
 	}
 
 	private void highlightCurrentItem() {
-		Texts.markSelectedRow(driver);
+		Texts.highlightCurrentLine(driver);
 	}
 	void loadBuffersView() {
 		driver.makeInputAreaEditable(false);
