@@ -57,7 +57,7 @@ public class TextsTest {
 	private void assertResultedTextIs(String expected) {
 		assertThat(testArea.getText(), is(expected));
 	}
-	private void assertCursorPsotionIs(int position) {
+	private void assertCursorPositionIs(int position) {
 		assertThat(testArea.getSelectionStart(), is(position));
 	}
 
@@ -123,7 +123,7 @@ public class TextsTest {
 	@Test public void putsCursorIntoStartOfMovedUpLine() {
 		initialTextWithSelection(testText, 5, 5);
 		Texts.moveLinesUp(driver);
-		assertCursorPsotionIs(2);
+		assertCursorPositionIs(2);
 	}
 
 	//testText:
@@ -172,7 +172,7 @@ public class TextsTest {
 	@Test public void putsCursorIntoStartOfMovedDownLine() {
 		initialTextWithSelection(testText, 5, 5);
 		Texts.moveLinesDown(driver);
-		assertCursorPsotionIs(6);
+		assertCursorPositionIs(6);
 	}
 
 	@Test public void removesWhitespaceHighlightsIfThereAreAny() throws BadLocationException {

@@ -52,8 +52,8 @@ Features:
 - [x] redo
 - [x] multiline indent
 - [x] multiline unindent
-- [ ] mark file with unsaved changes. Propose to save unsaved file before close 
 - [ ] duplicate line
+- [ ] mark file with unsaved changes. Propose to save unsaved file before close 
 - [ ] open stream from command line (use in pipe)
 - [ ] search in file
 - [ ] replace in file

@@ -102,13 +102,11 @@ public class Texts {
 		int endOfLineWithoutLineEnd = endOfLineWithoutLineEnd(text, driver.selectionEnd());
 		if (startOfLineWithoutLineEnd == 0) { return; }
 		String textToMove = text.substring(startOfLineWithoutLineEnd, endOfLineWithoutLineEnd) + LINE_SEPARATOR;
-		int positionToInsertTextInto = startOfLineWithoutLineEnd(text, startOfLineWithoutLineEnd -1);
+		int positionToInsertTextInto = startOfLineWithoutLineEnd(text, startOfLineWithoutLineEnd - 1);
 		removeEndOfLineIfExists(driver, text, endOfLineWithoutLineEnd);
 		driver.replaceRange(EMPTY_STRING, startOfLineWithoutLineEnd, endOfLineWithoutLineEnd);
-		driver.insert(textToMove, positionToInsertTextInto);
-		driver.setCursorPosition(positionToInsertTextInto);
+		moveLinesAndSetSelection(driver, textToMove, positionToInsertTextInto);
 	}
-
 	static void moveLinesDown(Driver driver) {
 		String text = driver.text();
 		int startOfLineWithoutLineEnd = startOfLineWithoutLineEnd(text, driver.selectionStart());
@@ -119,8 +117,12 @@ public class Texts {
 		driver.replaceRange(EMPTY_STRING, startOfLineWithoutLineEnd, endOfLineWithoutLineEnd);
 		removeEndOfLineIfExists(driver, driver.text(), startOfLineWithoutLineEnd);
 		int positionToInsertTextInto = endOfLineWithoutLineEnd(driver.text(), startOfLineWithoutLineEnd) + 1;
+		moveLinesAndSetSelection(driver, textToMove, positionToInsertTextInto);
+	}
+	private static void moveLinesAndSetSelection(Driver driver, String textToMove, int positionToInsertTextInto) {
 		driver.insert(textToMove, positionToInsertTextInto);
-		driver.setCursorPosition(positionToInsertTextInto);
+		driver.setSelectionStart(positionToInsertTextInto);
+		driver.setSelectionEnd(positionToInsertTextInto + textToMove.length() - 1);
 	}
 
 	public final static HighlightPainter SPACE_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW);
