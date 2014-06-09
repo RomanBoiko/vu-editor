@@ -33,13 +33,14 @@ public abstract class KeyboardListener implements KeyListener {
 		Editor.log(format("=>key pressed: char='%s', code='%d')", pressedKeyEvent.getKeyChar(), pressedKeyEvent.getKeyCode()));
 		Editor.log(format("=>active keys: %s", pushedKeys.toString()));
 		if (shortcutDetected(VK_ALT, VK_Q)) {
-			System.exit(0);
+			driver.exit();
 		} else if (shortcutDetected(VK_ALT, VK_H)) {
 			driver.loadHelpView();
 		} else if (shortcutDetected(VK_ALT, VK_E)) {
 			driver.loadFileExplorerView();
+		} else {
+			actionOnKeyPressed();
 		}
-		actionOnKeyPressed();
 	}
 
 	protected abstract void actionOnKeyPressed();

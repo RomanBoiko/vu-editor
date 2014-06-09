@@ -145,6 +145,7 @@ public class Driver {
 		buffers.addCurrentBuffer(buffer);
 	}
 	void closeCurrentBuffer() {
+		saveCurrentBuffer();
 		buffers.closeCurrentBuffer();
 		editorPerspective.loadResource(buffers.currentBuffer());
 	}
@@ -165,5 +166,10 @@ public class Driver {
 		if (!buffers.currentBuffer().isStateUpToDate(text)) {
 			buffers.currentBuffer().recordNewState(text, selectionStart());
 		}
+	}
+
+	void exit() {
+		saveAllOpenBuffers();
+		System.exit(0);
 	}
 }

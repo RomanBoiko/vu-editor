@@ -55,7 +55,7 @@ Features:
 - [x] multiline unindent
 - [x] duplicate lines
 - [x] open stream from command line (use in pipe)
-- [ ] mark file with unsaved changes. Propose to save unsaved file before close 
+- [x] mark file with unsaved changes. Save unsaved file before close. Save all unsaved files before exit 
 - [ ] search in file
 - [ ] replace in file
 - [ ] open file by name(fuzzy)
@@ -70,7 +70,6 @@ Features:
 - [ ] outlines(list of functions, paragraphs)
 - [ ] highlight words similar to the one under cursor
 - [ ] goto occurences of the word under cursor
-- [ ] custom font
 - [ ] config
 - [ ] change root folder in explorer
 
