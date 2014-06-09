@@ -27,6 +27,6 @@ public class HelpPerspective extends Perspective {
 		helpText = helpText == null ? Streams.streamToString(this.getClass().getClassLoader().getResourceAsStream("help.txt")) : helpText;
 		driver.setText(helpText);
 		driver.setTitle("Help");
-		driver.setStatusBarText("Help");
+		driver.setStatusBarText("Press 'Esc' to hide");
 	}
 }
