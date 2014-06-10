@@ -69,7 +69,8 @@ public class Buffer {
 			writer.write(text);
 			writer.close();
 		} catch (IOException e) {
-			Gui.alert("Can't save file " + file.getAbsolutePath() + "\n" + e.getMessage());
+			Gui.alert("Can't save file " + file.getAbsolutePath());
+			Editor.log("Can't save file " + file.getAbsolutePath() + ", see error below");
 			Editor.log(e);
 		}
 		this.currentText = text;

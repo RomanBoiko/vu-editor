@@ -32,19 +32,23 @@ public class Editor {
 	}
 
 	private static String inputStream() {
+		int bytesAvailable = 0;
 		try {
-			StringBuffer inputTextBuffer = new StringBuffer();
-			if (System.in.available() > 0) {
-				Scanner scanner = new Scanner(System.in);
-				while (scanner.hasNextLine()) {
-					inputTextBuffer.append(scanner.nextLine()).append('\n');
-				}
-				scanner.close();
-			}
-			return inputTextBuffer.toString().trim();
+			bytesAvailable = System.in.available();
 		} catch (IOException e) {
-			throw new RuntimeException();
+			log("Can't read input stream, see error below");
+			log(e);
 		}
+		if (bytesAvailable > 0) {
+			StringBuffer inputTextBuffer = new StringBuffer();
+			Scanner scanner = new Scanner(System.in);
+			while (scanner.hasNextLine()) {
+				inputTextBuffer.append(scanner.nextLine()).append('\n');
+			}
+			scanner.close();
+			return inputTextBuffer.toString().trim();
+		}
+		return "";
 	}
 
 	private static void initGlobalExceptionHandler() {
