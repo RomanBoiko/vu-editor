@@ -58,9 +58,7 @@ Features:
 - [x] mark file with unsaved changes. Save unsaved file before close. Save all unsaved files before exit 
 - [x] change root folder in explorer
 - [x] copy current file path/name into clipboard
-- [x] search in file
-- [ ] search in file by regexp
-- [ ] search in file (case sensitive/insensitive)
+- [x] search in file (case sensitive/insensitive/by regexp)
 - [ ] replace in file
 - [ ] open file by name(fuzzy)
 - [ ] search in folder results in separate mode with navigation to editor

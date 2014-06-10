@@ -20,7 +20,7 @@ Ctrl+V        - paste text from clipboard
 Ctrl+X        - cut text into clipboard
 Ctrl+P        - copy current file path into clipboard
 
-Ctrl+F        - find in file
+Ctrl+F        - find in file. Prepend find query with: 's=' for case-sensitive search; 'r=' for RegExp
 
 Tab           - indent selected lines
 Shift+Tab     - unindent selected lines

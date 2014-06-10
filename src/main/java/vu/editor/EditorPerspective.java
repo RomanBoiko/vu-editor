@@ -143,18 +143,54 @@ public class EditorPerspective extends Perspective {
 				previousFindPosition = -1;
 			}
 			Texts.removeAllFindHighlights(driver);
-			int newPosition = driver.text().indexOf(textToFind, previousFindPosition + 1);
+			int newPosition = findAfter(textToFind, previousFindPosition + 1);
 			if (newPosition >= 0 ) {
 				previousFindPosition = newPosition;
-				Texts.highlightFoundText(driver, newPosition, textToFind.length());
+				highlight(textToFind, newPosition);
 			} else if (previousFindPosition >= 0) {//search wrap
-				int firstOccurence = driver.text().indexOf(textToFind);
+				int firstOccurence = findAfter(textToFind, 0);
 				previousFindPosition = firstOccurence;
-				Texts.highlightFoundText(driver, firstOccurence, textToFind.length());
+				highlight(textToFind, firstOccurence);
 			}
 		}
+
+		private void highlight(String textToFind, int firstOccurence) {
+			if (textToFind.startsWith("r=")) {
+				Texts.highlightFoundText(driver, firstOccurence, 1);
+			} else {
+				Texts.highlightFoundText(driver, firstOccurence, findQueryWithoutPrefix(textToFind).length());
+			}
+		}
+		
+		private int findAfter(String textToFind, int startPosition) {
+			if (textToFind.startsWith("s=")) {
+				return driver.text().indexOf(findQueryWithoutPrefix(textToFind), startPosition);
+			} else if(textToFind.startsWith("r=")) {
+				String[] partsSplitByRegexp = driver.text().substring(startPosition).split(findQueryWithoutPrefix(textToFind));
+				return (partsSplitByRegexp.length > 1
+						? (startPosition + partsSplitByRegexp[0].length())
+						: -1);
+			} else {
+				return driver.text().toLowerCase().indexOf(textToFind.toLowerCase(), startPosition);
+			}
+		}
+
+		private String findQueryWithoutPrefix(String textToFind) {
+			int prefixLength = 2;
+			return (textToFind.startsWith("s=") || textToFind.startsWith("r=")) ? textToFind.substring(prefixLength) : textToFind; 
+		}
+		int previousFindTextWithoutPrefixLength() {
+			if (previousFindText().startsWith("r=")) {
+				return 1;
+			} else {
+				return findQueryWithoutPrefix(previousFindText).length();
+			}
+		}
+		String previousFindText() {
+			return previousFindText;
+		}
 	}
-	private static final String FIND_MESSAGE = "FIND=>";
+	private static final String FIND_MESSAGE = "FIND ('s=' case-sensitive, 'r=' regexp) =>";
 	private Finder finder = new Finder();
 
 	private void find() {
@@ -176,7 +212,7 @@ public class EditorPerspective extends Perspective {
 		driver.setStatusBarText("");//path to current file not identified after find
 		if (finder.previousFindPosition >= 0) {
 			driver.setSelectionStart(finder.previousFindPosition);
-			driver.setSelectionEnd(finder.previousFindPosition + finder.previousFindText.length());
+			driver.setSelectionEnd(finder.previousFindPosition + finder.previousFindTextWithoutPrefixLength());
 		} else {
 			driver.setCursorPosition(previousCursorPosition);
 		}
@@ -193,7 +229,7 @@ public class EditorPerspective extends Perspective {
 		driver.statusBar().getHighlighter().removeAllHighlights();
 		driver.statusBar().setEditable(true);
 
-		driver.statusBar().setText(FIND_MESSAGE + finder.previousFindText);
+		driver.statusBar().setText(FIND_MESSAGE + finder.previousFindText());
 		finder = new Finder();
 
 		driver.statusBar().setFocusable(true);
