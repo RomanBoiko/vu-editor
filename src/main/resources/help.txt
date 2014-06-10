@@ -20,6 +20,8 @@ Ctrl+V        - paste text from clipboard
 Ctrl+X        - cut text into clipboard
 Ctrl+P        - copy current file path into clipboard
 
+Ctrl+F        - find in file
+
 Tab           - indent selected lines
 Shift+Tab     - unindent selected lines
 Alt+W         - highlight/unhighlight preceidng and trailing whitespaces

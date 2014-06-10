@@ -384,4 +384,12 @@ public class Texts {
 		return driver.text().substring(driver.selectionStart(), driver.selectionEnd()).contains(LINE_SEPARATOR_STR);
 	}
 
+	public static final HighlightPainter FOUND_PAINTER = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
+	static void removeAllFindHighlights(Driver driver) {
+		removeSimilarHighlights(driver.inputAreaHighlighter(), FOUND_PAINTER);
+	}
+
+	static void highlightFoundText(Driver driver, int startPosition, int length) {
+		highlightText(startPosition, startPosition + length, driver.inputAreaHighlighter(), FOUND_PAINTER);
+	}
 }

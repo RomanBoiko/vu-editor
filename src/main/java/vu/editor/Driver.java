@@ -6,6 +6,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
@@ -184,5 +185,9 @@ public class Driver {
 		StringSelection path = new StringSelection(currentFilePath);
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clipboard.setContents(path, path);
+	}
+
+	JTextField statusBar() {
+		return gui.statusBar;
 	}
 }

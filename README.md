@@ -58,10 +58,13 @@ Features:
 - [x] mark file with unsaved changes. Save unsaved file before close. Save all unsaved files before exit 
 - [x] change root folder in explorer
 - [x] copy current file path/name into clipboard
-- [ ] search in file
+- [x] search in file
+- [ ] search in file by regexp
+- [ ] search in file (case sensitive/insensitive)
 - [ ] replace in file
 - [ ] open file by name(fuzzy)
 - [ ] search in folder results in separate mode with navigation to editor
+- [ ] set working directory as selected dir in FileExplorer
 - [ ] syntax highlight(config)
 - [ ] auto-refactoring
 - [ ] vertical edit

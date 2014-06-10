@@ -15,6 +15,8 @@ import static java.awt.event.KeyEvent.VK_UP;
 import static java.awt.event.KeyEvent.VK_W;
 import static java.awt.event.KeyEvent.VK_Z;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.event.CaretEvent;
@@ -59,6 +61,8 @@ public class EditorPerspective extends Perspective {
 					driver.closeCurrentBuffer();
 				} else if (shortcutDetected(VK_CONTROL, VK_P)) {
 					driver.copyCurrentFilePathToClipboard();
+				} else if (shortcutDetected(VK_CONTROL, VK_F)) {
+					findMode();
 				} else if (shortcutDetected(VK_CONTROL, VK_Z)) {
 					undo();
 				} else if (shortcutDetected(VK_CONTROL, VK_SHIFT, VK_Z)) {
@@ -73,6 +77,7 @@ public class EditorPerspective extends Perspective {
 					stopLastKeyPressedEventPropagation(); //prevents editor from adding new tab at cursor place
 				}
 			}
+
 		};
 		this.caretListener = new CaretListener() {
 			@Override public void caretUpdate(CaretEvent event) {
@@ -114,4 +119,86 @@ public class EditorPerspective extends Perspective {
 		driver.setCurrentBufferText();
 	}
 
+	private final KeyListener findKeyListener = new KeyListener() {
+		@Override public void keyTyped(KeyEvent e) { }
+		@Override public void keyReleased(KeyEvent e) { }
+		@Override public void keyPressed(KeyEvent event) {
+			if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+				find();
+			} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				backToEditMode();
+			}
+		}
+	};
+
+	private class Finder {
+		private String previousFindText = "";
+		private int previousFindPosition = -1;
+		public void find(String textToFind) {
+			if (textToFind.length() == 0) {
+				return;
+			}
+			if (!previousFindText.equals(textToFind)) {
+				previousFindText = textToFind;
+				previousFindPosition = -1;
+			}
+			Texts.removeAllFindHighlights(driver);
+			int newPosition = driver.text().indexOf(textToFind, previousFindPosition + 1);
+			if (newPosition >= 0 ) {
+				previousFindPosition = newPosition;
+				Texts.highlightFoundText(driver, newPosition, textToFind.length());
+			} else if (previousFindPosition >= 0) {//search wrap
+				int firstOccurence = driver.text().indexOf(textToFind);
+				previousFindPosition = firstOccurence;
+				Texts.highlightFoundText(driver, firstOccurence, textToFind.length());
+			}
+		}
+	}
+	private static final String FIND_MESSAGE = "FIND=>";
+	private Finder finder = new Finder();
+
+	private void find() {
+		String textToFind = driver.statusBar().getText();
+		if (textToFind.startsWith(FIND_MESSAGE)) {
+			textToFind = textToFind.substring(FIND_MESSAGE.length());
+		}
+		finder.find(textToFind);
+	}
+	private void backToEditMode() {
+		driver.statusBar().removeKeyListener(findKeyListener);
+		driver.statusBar().setEditable(false);
+		driver.statusBar().setFocusable(false);
+
+		driver.makeInputAreaEditable(true);
+		driver.inputArea().setFocusable(true);
+		driver.inputArea().requestFocus();
+
+		driver.setStatusBarText("");//path to current file not identified after find
+		if (finder.previousFindPosition >= 0) {
+			driver.setSelectionStart(finder.previousFindPosition);
+			driver.setSelectionEnd(finder.previousFindPosition + finder.previousFindText.length());
+		} else {
+			driver.setCursorPosition(previousCursorPosition);
+		}
+		driver.inputAreaHighlighter().removeAllHighlights();
+		driver.setInputAreaKeyListener(keyListener);
+		driver.setInputAreaCaretListener(caretListener);
+	}
+	private int previousCursorPosition = 0;
+	private void findMode() {
+		previousCursorPosition = driver.inputArea().getCaretPosition();
+
+		driver.makeInputAreaEditable(false);
+		driver.inputAreaHighlighter().removeAllHighlights();
+		driver.statusBar().getHighlighter().removeAllHighlights();
+		driver.statusBar().setEditable(true);
+
+		driver.statusBar().setText(FIND_MESSAGE + finder.previousFindText);
+		finder = new Finder();
+
+		driver.statusBar().setFocusable(true);
+		driver.statusBar().requestFocus();
+		driver.inputArea().setFocusable(false);
+		driver.statusBar().addKeyListener(findKeyListener);
+	}
 }
