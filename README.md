@@ -88,3 +88,4 @@ Known bugs:
 - [x] 4. If we are in read-only perspective(i.e. Help), and doing Alt+Tab, and than coming back to Editor - cursor is not visible any more, even if to come back to EditorPerspective(with Esc). Workaround: after switching to EditorPerspective - do Alt+Tab twice 
 - [x] 5. after folder is opened in FileExplorer - cursor jumps to last child of this folder 
 - [x] 6. CTRL+SHIFT+TAB removes focus from text area and removes key listener
+- [ ] 7. Regexp doesn't find if it matches text in the end of file
