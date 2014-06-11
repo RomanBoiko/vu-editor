@@ -16,16 +16,16 @@ public class FileExplorerPerspective extends Perspective {
 	private final KeyboardListener keyListener;
 	private final CaretListener caretListener;
 	private final Driver driver;
+	private final ExploredItems rootExploredItems = new ExploredItems(File.listRoots());
+	private ExploredItems workDirExploredItems = new ExploredItems(new File(System.getProperty("user.dir")));
 	private ExploredItems exploredItems;
-
-	private int lastPositionInExplorer = 0;
 
 	FileExplorerPerspective(Driver driver) {
 		this.driver = driver;
-		this.exploredItems = new ExploredItems(workingDir());
+		this.exploredItems = workDirExploredItems;
 		this.keyListener = new KeyboardListener(driver) {
 			@Override protected void actionOnKeyPressed() {
-				lastPositionInExplorer = driver.selectionStart();
+				exploredItems.lastSelectedRow = driver.selectionStart();
 				if (shortcutDetected(KeyEvent.VK_ESCAPE)) {
 					driver.loadEditorView();
 				} else if (shortcutDetected(KeyEvent.VK_RIGHT)) {
@@ -33,9 +33,9 @@ public class FileExplorerPerspective extends Perspective {
 				} else if (shortcutDetected(KeyEvent.VK_LEFT)) {
 					closeItem(driver);
 				} else if (shortcutDetected(KeyEvent.VK_R)) {
-					resetExplorerRoots(File.listRoots());
+					resetExplorerTo(rootExploredItems);
 				} else if (shortcutDetected(KeyEvent.VK_W)) {
-					resetExplorerRoots(workingDir());
+					resetExplorerTo(workDirExploredItems);
 				} else if (shortcutDetected(VK_CONTROL, VK_P)) {
 					copyCurrentFilePathToClipboard();
 				} else if (shortcutDetected(KeyEvent.VK_ENTER)) {
@@ -43,7 +43,6 @@ public class FileExplorerPerspective extends Perspective {
 					stopLastKeyPressedEventPropagation(); //prevents editor from adding new line after resource is loaded
 				}
 			}
-
 		};
 		this.caretListener = new CaretListener() {
 			@Override public void caretUpdate(CaretEvent event) {
@@ -56,9 +55,8 @@ public class FileExplorerPerspective extends Perspective {
 		driver.copyCurrentFilePathToClipboard(currentFile().getAbsolutePath());
 	}
 
-	private void resetExplorerRoots(File... roots) {
-		exploredItems = new ExploredItems(roots);
-		lastPositionInExplorer = 0;
+	private void resetExplorerTo(ExploredItems exploredItems) {
+		this.exploredItems = exploredItems;
 		loadExplorerView();
 	}
 
@@ -69,8 +67,8 @@ public class FileExplorerPerspective extends Perspective {
 		driver.setText(exploredItems.asString());
 		driver.setCursorPosition(Texts.secondPositionInCurrentRow(driver));
 		driver.setTitle("FileExplorer");
-		driver.setStatusBarText("FileExplorer: 'R' - root, 'W' - working dir (" + workingDir().getAbsolutePath() + "), 'Ctrl+P' - selected file path to clipboard");
-		driver.setCursorPosition(lastPositionInExplorer);
+		driver.setStatusBarText("FileExplorer: 'R' - root, 'W' - working dir (" + workDirExploredItems.pathToRoot() + "), 'Ctrl+P' - selected file path to clipboard");
+		driver.setCursorPosition(exploredItems.lastSelectedRow);
 		highlightCurrentItem();
 	}
 
@@ -86,8 +84,7 @@ public class FileExplorerPerspective extends Perspective {
 	}
 
 	private File currentFile() {
-		ExploredItem currentItem = exploredItems.item(Texts.currentRow(driver));
-		return currentItem.file;
+		return exploredItems.item(Texts.currentRow(driver)).file;
 	}
 
 	private void openItem(Driver driver) {
@@ -107,12 +104,6 @@ public class FileExplorerPerspective extends Perspective {
 		}
 		driver.setCursorPosition(Texts.secondPositionInCurrentRow(driver));
 	}
-
-	private File workingDir() {
-		String workingDirPath = System.getProperty("user.dir");
-		return new File(workingDirPath);
-	}
-
 
 	private class ExploredItem {
 		final File file;
@@ -162,10 +153,15 @@ public class FileExplorerPerspective extends Perspective {
 	}
 	private class ExploredItems {
 		private final List<ExploredItem> items = new LinkedList<ExploredItem>();
+		int lastSelectedRow = 0;
 		ExploredItems(File...roots) {
 			for (File root : roots) {
 				items.add(new ExploredItem(root, 0));
 			}
+		}
+
+		String pathToRoot() {
+			return item(1).file.getAbsolutePath();
 		}
 
 		String asString() {
