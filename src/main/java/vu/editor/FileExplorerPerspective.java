@@ -1,7 +1,13 @@
 package vu.editor;
 
 import static java.awt.event.KeyEvent.VK_CONTROL;
+import static java.awt.event.KeyEvent.VK_ENTER;
+import static java.awt.event.KeyEvent.VK_ESCAPE;
+import static java.awt.event.KeyEvent.VK_LEFT;
 import static java.awt.event.KeyEvent.VK_P;
+import static java.awt.event.KeyEvent.VK_R;
+import static java.awt.event.KeyEvent.VK_RIGHT;
+import static java.awt.event.KeyEvent.VK_W;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -26,19 +32,21 @@ public class FileExplorerPerspective extends Perspective {
 		this.keyListener = new KeyboardListener(driver) {
 			@Override protected void actionOnKeyPressed() {
 				exploredItems.lastSelectedRow = driver.selectionStart();
-				if (shortcutDetected(KeyEvent.VK_ESCAPE)) {
+				if (shortcutDetected(VK_ESCAPE)) {
 					driver.loadEditorView();
-				} else if (shortcutDetected(KeyEvent.VK_RIGHT)) {
+				} else if (shortcutDetected(VK_RIGHT)) {
 					openItem(driver);
-				} else if (shortcutDetected(KeyEvent.VK_LEFT)) {
+				} else if (shortcutDetected(VK_LEFT)) {
 					closeItem(driver);
-				} else if (shortcutDetected(KeyEvent.VK_R)) {
+				} else if (shortcutDetected(VK_R)) {
 					resetExplorerTo(rootExploredItems);
-				} else if (shortcutDetected(KeyEvent.VK_W)) {
+				} else if (shortcutDetected(VK_W)) {
 					resetExplorerTo(workDirExploredItems);
+				} else if (shortcutDetected(VK_CONTROL, VK_W)) {
+					setCurrentDirAsWorkdirAndSwitchToIt();
 				} else if (shortcutDetected(VK_CONTROL, VK_P)) {
 					copyCurrentFilePathToClipboard();
-				} else if (shortcutDetected(KeyEvent.VK_ENTER)) {
+				} else if (shortcutDetected(VK_ENTER)) {
 					loadEditorWithFile();
 					stopLastKeyPressedEventPropagation(); //prevents editor from adding new line after resource is loaded
 				}
@@ -51,6 +59,13 @@ public class FileExplorerPerspective extends Perspective {
 		};
 	}
 
+	private void setCurrentDirAsWorkdirAndSwitchToIt() {
+		File currentDir = currentFile();
+		if (currentDir.isDirectory()) {
+			workDirExploredItems = new ExploredItems(currentDir);
+			resetExplorerTo(workDirExploredItems);
+		}
+	}
 	private void copyCurrentFilePathToClipboard() {
 		driver.copyCurrentFilePathToClipboard(currentFile().getAbsolutePath());
 	}
@@ -67,7 +82,7 @@ public class FileExplorerPerspective extends Perspective {
 		driver.setText(exploredItems.asString());
 		driver.setCursorPosition(Texts.secondPositionInCurrentRow(driver));
 		driver.setTitle("FileExplorer");
-		driver.setStatusBarText("FileExplorer: 'R' - root, 'W' - working dir (" + workDirExploredItems.pathToRoot() + "), 'Ctrl+P' - selected file path to clipboard");
+		driver.setStatusBarText("FileExplorer: 'R' - root, 'W' - working dir (" + workDirExploredItems.pathToRoot() + "), 'Ctrl+P' - selected file path to clipboard, 'Ctrl+W' - set selected dir as workdir");
 		driver.setCursorPosition(exploredItems.lastSelectedRow);
 		highlightCurrentItem();
 	}
