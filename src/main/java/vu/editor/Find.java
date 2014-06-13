@@ -13,7 +13,7 @@ abstract class Find {
 	protected final String text() {
 		return driver.text();
 	}
-	void resetLastGoundPosition() {
+	void resetLastFoundPosition() {
 		previousFindPosition = INITIAL_FOUND_POSITION;
 	}
 

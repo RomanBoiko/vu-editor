@@ -168,7 +168,7 @@ public class EditorPerspective extends Perspective {
 	private int previousCursorPosition = 0;
 	private void findMode(Find newFind) {
 		currentFind = newFind;
-		currentFind.resetLastGoundPosition();
+		currentFind.resetLastFoundPosition();
 		previousCursorPosition = driver.inputArea().getCaretPosition();
 
 		driver.makeInputAreaEditable(false);

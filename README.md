@@ -59,19 +59,19 @@ Features:
 - [x] change root folder in explorer
 - [x] copy current file path/name into clipboard
 - [x] search in file (case sensitive/insensitive/by regexp)
+- [x] set working directory as selected dir in FileExplorer
 - [ ] replace in file
-- [ ] open file by name(fuzzy)
 - [ ] search in folder results in separate mode with navigation to editor
-- [ ] set working directory as selected dir in FileExplorer
-- [ ] syntax highlight(config)
-- [ ] auto-refactoring
 - [ ] vertical edit
+- [ ] highlight words similar to the one under cursor
+- [ ] goto occurences of the word under cursor
+- [ ] open file by name(fuzzy)
+- [ ] outlines(list of functions, paragraphs)
+- [ ] auto-refactoring
 - [ ] any command menu
 - [ ] use spaces instead of tabs
 - [ ] line wrapping
-- [ ] outlines(list of functions, paragraphs)
-- [ ] highlight words similar to the one under cursor
-- [ ] goto occurences of the word under cursor
+- [ ] syntax highlight(config)
 - [ ] config
 
 Known bugs:
