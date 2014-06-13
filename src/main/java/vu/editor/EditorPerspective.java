@@ -27,10 +27,20 @@ public class EditorPerspective extends Perspective {
 	private final Driver driver;
 	private final KeyboardListener keyListener;
 	private final CaretListener caretListener;
+	
+	private final Find caseInsensitiveFinder;
+	private final Find caseSensitiveFinder;
+	private final Find regExpFinder;
+	private Find currentFind;
 
 	private AtomicBoolean toRecordStateChange = new AtomicBoolean(true);
 	public EditorPerspective(Driver driver) {
 		this.driver = driver;
+		this.caseInsensitiveFinder = new FindCaseInsensitive(driver);
+		this.caseSensitiveFinder = new FindCaseSensitive(driver);
+		this.regExpFinder = new FindByRegexp(driver);
+		this.currentFind = caseInsensitiveFinder;
+
 		this.keyListener = new KeyboardListener(driver) {
 			@Override protected void actionOnKeyPressed() {
 				if (shortcutDetected(VK_CONTROL, VK_S)) {
@@ -62,7 +72,11 @@ public class EditorPerspective extends Perspective {
 				} else if (shortcutDetected(VK_CONTROL, VK_P)) {
 					driver.copyCurrentFilePathToClipboard();
 				} else if (shortcutDetected(VK_CONTROL, VK_F)) {
-					findMode();
+					findMode(caseInsensitiveFinder);
+				} else if (shortcutDetected(VK_CONTROL, VK_ALT, VK_F)) {
+					findMode(caseSensitiveFinder);
+				} else if (shortcutDetected(VK_ALT, VK_F)) {
+					findMode(regExpFinder);
 				} else if (shortcutDetected(VK_CONTROL, VK_Z)) {
 					undo();
 				} else if (shortcutDetected(VK_CONTROL, VK_SHIFT, VK_Z)) {
@@ -124,82 +138,13 @@ public class EditorPerspective extends Perspective {
 		@Override public void keyReleased(KeyEvent e) { }
 		@Override public void keyPressed(KeyEvent event) {
 			if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-				find();
+				currentFind.find();
 			} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				backToEditMode();
 			}
 		}
 	};
 
-	private class Finder {
-		private String previousFindText = "";
-		private int previousFindPosition = -1;
-		public void find(String textToFind) {
-			if (textToFind.length() == 0) {
-				return;
-			}
-			if (!previousFindText.equals(textToFind)) {
-				previousFindText = textToFind;
-				previousFindPosition = -1;
-			}
-			Texts.removeAllFindHighlights(driver);
-			int newPosition = findAfter(textToFind, previousFindPosition + 1);
-			if (newPosition >= 0 ) {
-				previousFindPosition = newPosition;
-				highlight(textToFind, newPosition);
-			} else if (previousFindPosition >= 0) {//search wrap
-				int firstOccurence = findAfter(textToFind, 0);
-				previousFindPosition = firstOccurence;
-				highlight(textToFind, firstOccurence);
-			}
-		}
-
-		private void highlight(String textToFind, int firstOccurence) {
-			if (textToFind.startsWith("r=")) {
-				Texts.highlightFoundText(driver, firstOccurence, 1);
-			} else {
-				Texts.highlightFoundText(driver, firstOccurence, findQueryWithoutPrefix(textToFind).length());
-			}
-		}
-		
-		private int findAfter(String textToFind, int startPosition) {
-			if (textToFind.startsWith("s=")) {
-				return driver.text().indexOf(findQueryWithoutPrefix(textToFind), startPosition);
-			} else if(textToFind.startsWith("r=")) {
-				String[] partsSplitByRegexp = driver.text().substring(startPosition).split(findQueryWithoutPrefix(textToFind));
-				return (partsSplitByRegexp.length > 1
-						? (startPosition + partsSplitByRegexp[0].length())
-						: -1);
-			} else {
-				return driver.text().toLowerCase().indexOf(textToFind.toLowerCase(), startPosition);
-			}
-		}
-
-		private String findQueryWithoutPrefix(String textToFind) {
-			int prefixLength = 2;
-			return (textToFind.startsWith("s=") || textToFind.startsWith("r=")) ? textToFind.substring(prefixLength) : textToFind; 
-		}
-		int previousFindTextWithoutPrefixLength() {
-			if (previousFindText().startsWith("r=")) {
-				return 1;
-			} else {
-				return findQueryWithoutPrefix(previousFindText).length();
-			}
-		}
-		String previousFindText() {
-			return previousFindText;
-		}
-	}
-	private static final String FIND_MESSAGE = "FIND ('s=' case-sensitive, 'r=' regexp) =>";
-	private Finder finder = new Finder();
-
-	private void find() {
-		String textToFind = driver.statusBar().getText();
-		if (textToFind.startsWith(FIND_MESSAGE)) {
-			textToFind = textToFind.substring(FIND_MESSAGE.length());
-		}
-		finder.find(textToFind);
-	}
 	private void backToEditMode() {
 		driver.statusBar().removeKeyListener(findKeyListener);
 		driver.statusBar().setEditable(false);
@@ -210,9 +155,9 @@ public class EditorPerspective extends Perspective {
 		driver.inputArea().requestFocus();
 
 		driver.setStatusBarText("");//path to current file not identified after find
-		if (finder.previousFindPosition >= 0) {
-			driver.setSelectionStart(finder.previousFindPosition);
-			driver.setSelectionEnd(finder.previousFindPosition + finder.previousFindTextWithoutPrefixLength());
+		if (currentFind.previousFindPosition() >= 0) {
+			driver.setSelectionStart(currentFind.previousFindPosition());
+			driver.setSelectionEnd(currentFind.previousFindPosition() + currentFind.previousFindTextWithoutPrefixLength());
 		} else {
 			driver.setCursorPosition(previousCursorPosition);
 		}
@@ -221,7 +166,9 @@ public class EditorPerspective extends Perspective {
 		driver.setInputAreaCaretListener(caretListener);
 	}
 	private int previousCursorPosition = 0;
-	private void findMode() {
+	private void findMode(Find newFind) {
+		currentFind = newFind;
+		currentFind.resetLastGoundPosition();
 		previousCursorPosition = driver.inputArea().getCaretPosition();
 
 		driver.makeInputAreaEditable(false);
@@ -229,8 +176,7 @@ public class EditorPerspective extends Perspective {
 		driver.statusBar().getHighlighter().removeAllHighlights();
 		driver.statusBar().setEditable(true);
 
-		driver.statusBar().setText(FIND_MESSAGE + finder.previousFindText());
-		finder = new Finder();
+		driver.statusBar().setText(currentFind.initialFindMessage());
 
 		driver.statusBar().setFocusable(true);
 		driver.statusBar().requestFocus();

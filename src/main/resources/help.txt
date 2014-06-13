@@ -20,11 +20,13 @@ Ctrl+V        - paste text from clipboard
 Ctrl+X        - cut text into clipboard
 Ctrl+P        - copy current file path into clipboard
 
-Ctrl+F        - find in file. Prepend find query with: 's=' for case-sensitive search; 'r=' for RegExp
+Ctrl+F        - find in file (case insensitive)
+Ctrl+Alt+F    - find in file (case sensitive)
+Alt+F         - find in file (by RegExp)
 
 Tab           - indent selected lines
 Shift+Tab     - unindent selected lines
-Alt+W         - highlight/unhighlight preceidng and trailing whitespaces
+Alt+W         - highlight/unhighlight preceding and trailing whitespaces
 
 Ctrl+D        - delete current line/lines from selected range
 Ctrl+J        - join current line and next line

@@ -9,7 +9,6 @@ import static java.awt.event.KeyEvent.VK_R;
 import static java.awt.event.KeyEvent.VK_RIGHT;
 import static java.awt.event.KeyEvent.VK_W;
 
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
