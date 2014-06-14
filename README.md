@@ -60,8 +60,8 @@ Features:
 - [x] copy current file path/name into clipboard
 - [x] search in file (case sensitive/insensitive/by regexp)
 - [x] set working directory as selected dir in FileExplorer
+- [x] search in folder results in separate mode with navigation to editor
 - [ ] replace in file
-- [ ] search in folder results in separate mode with navigation to editor
 - [ ] vertical edit
 - [ ] highlight words similar to the one under cursor
 - [ ] goto occurences of the word under cursor

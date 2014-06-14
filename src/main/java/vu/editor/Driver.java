@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.io.File;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -14,14 +15,18 @@ import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
 import vu.editor.Buffer.BufferState;
+import vu.editor.Search.SearchResult;
 
 public class Driver {
 	private final Gui gui = new Gui();
 	private final HelpPerspective helpPerspective = new HelpPerspective(this);
 	private final EditorPerspective editorPerspective = new EditorPerspective(this);
 	private final FileExplorerPerspective fileExplorerPerspective = new FileExplorerPerspective(this);
+	private final SearchPerspective searchPerspective = new SearchPerspective(this);
 	private final BuffersPerspective buffersPerspective = new BuffersPerspective(this);
 	private final Buffers buffers = new Buffers();
+	private final Search search = new Search();
+	
 	private Perspective currentPerspective = new Perspective() { };
 
 	void showGui() {
@@ -52,6 +57,10 @@ public class Driver {
 	void loadBuffersView() {
 		setCurrentPerspective(buffersPerspective);
 		this.buffersPerspective.loadBuffersView();
+	}
+	void loadSearchView() {
+		setCurrentPerspective(searchPerspective);
+		this.searchPerspective.loadPerspective(search);
 	}
 
 	void setText(String text) {
@@ -145,6 +154,13 @@ public class Driver {
 		Buffer buffer = buffers.selectBufferAsCurrent(Texts.currentRow(this));
 		loadEditorView(buffer);
 	}
+	void loadSearchResultIntoEditor() {
+		SearchResult searchResult = search.getSearchResult(Texts.currentRow(this));
+		Buffer buffer = new Buffer(searchResult.file);
+		loadEditorView(buffer);
+		setSelectionStart(searchResult.positionInFile);
+		setSelectionEnd(searchResult.positionInFile + search.searchText().length());
+	}
 	void addCurrentBuffer(Buffer buffer) {
 		buffers.addCurrentBuffer(buffer);
 	}
@@ -189,5 +205,20 @@ public class Driver {
 
 	JTextField statusBar() {
 		return gui.statusBar;
+	}
+
+	void search(String textToSearch, File rootFile) {
+		search.search(textToSearch, rootFile);
+	}
+
+	String lastSearchText() {
+		return search.searchText();
+	}
+
+	int lastSearchViewPosition() {
+		return search.lastSearchViewPosition();
+	}
+	void updateLatSearchViewPosition(int position) {
+		search.updateLatSearchViewPosition(position);
 	}
 }

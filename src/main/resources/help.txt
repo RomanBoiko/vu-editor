@@ -23,6 +23,8 @@ Ctrl+P        - copy current file path into clipboard
 Ctrl+F        - find in file (case insensitive)
 Ctrl+Alt+F    - find in file (case sensitive)
 Alt+F         - find in file (by RegExp)
+Alt+H         - search in folder(in FileExplorer view) and show search results
+Alt+S         - show previous search results(in Editor view)
 
 Tab           - indent selected lines
 Shift+Tab     - unindent selected lines

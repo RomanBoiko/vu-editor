@@ -58,7 +58,6 @@ public class Texts {
 		}
 	}
 
-
 	static void deleteLine(Driver driver) {
 		String text = driver.text();
 		int startOfLineWithoutLineEnd = startOfLineWithoutLineEnd(text, driver.selectionStart());
@@ -325,7 +324,7 @@ public class Texts {
 	}
 
 	static int currentRow(Driver driver) {
-		return (driver.text().substring(0, driver.selectionStart()) + "extratext").split(LINE_SEPARATOR_STR).length;
+		return rowNumber(driver.text(), driver.selectionStart());
 	}
 
 	static int secondPositionInCurrentRow(Driver driver) {
@@ -391,5 +390,13 @@ public class Texts {
 
 	static void highlightFoundText(Driver driver, int startPosition, int length) {
 		highlightText(startPosition, startPosition + length, driver.inputAreaHighlighter(), FOUND_PAINTER);
+	}
+
+	static String lineContainingPosition(String text, int position) {
+		return text.substring(startOfLineWithoutLineEnd(text, position),
+				endOfLineWithoutLineEnd(text, position));
+	}
+	static int rowNumber(String text, int position) {
+		return (text.substring(0, position) + "extratext").split(LINE_SEPARATOR_STR).length;
 	}
 }

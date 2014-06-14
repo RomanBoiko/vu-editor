@@ -77,6 +77,8 @@ public class EditorPerspective extends Perspective {
 					findMode(caseSensitiveFinder);
 				} else if (shortcutDetected(VK_ALT, VK_F)) {
 					findMode(regExpFinder);
+				} else if (shortcutDetected(VK_ALT, VK_S)) {
+					driver.loadSearchView();
 				} else if (shortcutDetected(VK_CONTROL, VK_Z)) {
 					undo();
 				} else if (shortcutDetected(VK_CONTROL, VK_SHIFT, VK_Z)) {

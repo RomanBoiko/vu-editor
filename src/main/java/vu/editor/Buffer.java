@@ -41,6 +41,10 @@ public class Buffer {
 			return currentText;
 		}
 		if (!file.exists()) { return ""; }
+		return fileText(file);
+	}
+
+	static String fileText(File file) {
 		try {
 			StringBuilder stringBuilder = new StringBuilder();
 			FileInputStream fileInputStream;

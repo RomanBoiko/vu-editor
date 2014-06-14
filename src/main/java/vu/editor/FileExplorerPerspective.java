@@ -3,15 +3,16 @@ package vu.editor;
 import static java.awt.event.KeyEvent.VK_CONTROL;
 import static java.awt.event.KeyEvent.VK_ENTER;
 import static java.awt.event.KeyEvent.VK_ESCAPE;
+import static java.awt.event.KeyEvent.VK_H;
 import static java.awt.event.KeyEvent.VK_LEFT;
 import static java.awt.event.KeyEvent.VK_P;
 import static java.awt.event.KeyEvent.VK_R;
 import static java.awt.event.KeyEvent.VK_RIGHT;
 import static java.awt.event.KeyEvent.VK_W;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -30,7 +31,7 @@ public class FileExplorerPerspective extends Perspective {
 		this.exploredItems = workDirExploredItems;
 		this.keyListener = new KeyboardListener(driver) {
 			@Override protected void actionOnKeyPressed() {
-				exploredItems.lastSelectedRow = driver.selectionStart();
+				exploredItems.lastCaretPosition = driver.selectionStart();
 				if (shortcutDetected(VK_ESCAPE)) {
 					driver.loadEditorView();
 				} else if (shortcutDetected(VK_RIGHT)) {
@@ -45,6 +46,8 @@ public class FileExplorerPerspective extends Perspective {
 					setCurrentDirAsWorkdirAndSwitchToIt();
 				} else if (shortcutDetected(VK_CONTROL, VK_P)) {
 					copyCurrentFilePathToClipboard();
+				} else if (shortcutDetected(VK_CONTROL, VK_H)) {
+					searchMode();
 				} else if (shortcutDetected(VK_ENTER)) {
 					loadEditorWithFile();
 					stopLastKeyPressedEventPropagation(); //prevents editor from adding new line after resource is loaded
@@ -82,7 +85,7 @@ public class FileExplorerPerspective extends Perspective {
 		driver.setCursorPosition(Texts.secondPositionInCurrentRow(driver));
 		driver.setTitle("FileExplorer");
 		driver.setStatusBarText("FileExplorer: 'R' - root, 'W' - working dir (" + workDirExploredItems.pathToRoot() + "), 'Ctrl+P' - selected file path to clipboard, 'Ctrl+W' - set selected dir as workdir");
-		driver.setCursorPosition(exploredItems.lastSelectedRow);
+		driver.setCursorPosition(exploredItems.lastCaretPosition);
 		highlightCurrentItem();
 	}
 
@@ -119,113 +122,50 @@ public class FileExplorerPerspective extends Perspective {
 		driver.setCursorPosition(Texts.secondPositionInCurrentRow(driver));
 	}
 
-	private class ExploredItem {
-		final File file;
-		final int depth;
-		private boolean isOpen = false;
-		ExploredItem(File file, int depth) {
-			this.file = file;
-			this.depth = depth;
-		}
-		void open() {
-			isOpen = true;
-		}
-		void close() {
-			isOpen = false;
-		}
-		String asString() {
-			StringBuffer buffer = new StringBuffer();
-			for (int i = 0; i < depth; i++) {
-				buffer.append("|   ");
+	private void searchMode() {
+		driver.statusBar().getHighlighter().removeAllHighlights();
+		driver.statusBar().setEditable(true);
+		driver.statusBar().setText(driver.lastSearchText());
+		
+		driver.statusBar().setFocusable(true);
+		driver.statusBar().requestFocus();
+		driver.inputArea().setFocusable(false);
+		driver.statusBar().addKeyListener(searchKeyListener);
+	}
+
+	private final KeyListener searchKeyListener = new KeyListener() {
+		@Override public void keyTyped(KeyEvent e) { }
+		@Override public void keyReleased(KeyEvent e) { }
+		@Override public void keyPressed(KeyEvent event) {
+			if (event.getKeyCode() == KeyEvent.VK_ENTER) {
+				search();
+			} else if (event.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				backToFileExplorer();
 			}
-			if (file.isFile()) {
-				buffer.append("= ");
-			} else if (isOpen) {
-				buffer.append("- ");
-			} else {
-				buffer.append("+ ");
-			}
-			return buffer.append(nonEmptyFilePath()).toString();
 		}
-		private String nonEmptyFilePath() {
-			return file.getName().equals("") ? file.getAbsolutePath() : file.getName();
-		}
-		boolean canBeClosed() {
-			return file.isDirectory() && isOpen;
-		}
-		boolean canBeOpened() {
-			return file.isDirectory() && !isOpen;
+	};
+
+	private void search() {
+		String textToSearch = driver.statusBar().getText();
+		if (!"".equals(textToSearch)) {
+			driver.search(textToSearch, currentFile());
+			resetStatusBar();
+			driver.loadSearchView();
 		}
 	}
-	private class ItemCloseResult {
-		final String newDirContentString;
-		final int closedChildrenCount;
-		public ItemCloseResult(String newDirContentString, int closedChildrenCount) {
-			this.newDirContentString = newDirContentString;
-			this.closedChildrenCount = closedChildrenCount;
-		}
+
+	private void backToFileExplorer() {
+		resetStatusBar();
+		driver.inputAreaHighlighter().removeAllHighlights();
+		loadExplorerView();
 	}
-	private class ExploredItems {
-		private final List<ExploredItem> items = new LinkedList<ExploredItem>();
-		int lastSelectedRow = 0;
-		ExploredItems(File...roots) {
-			for (File root : roots) {
-				items.add(new ExploredItem(root, 0));
-			}
-		}
 
-		String pathToRoot() {
-			return item(1).file.getAbsolutePath();
-		}
+	private void resetStatusBar() {
+		driver.statusBar().removeKeyListener(searchKeyListener);
+		driver.statusBar().setEditable(false);
+		driver.statusBar().setFocusable(false);
 
-		String asString() {
-			StringBuffer buffer = new StringBuffer();
-			for (ExploredItem item : items) {
-				buffer.append(item.asString()).append(Texts.LINE_SEPARATOR);
-			}
-			return buffer.toString().trim();
-		}
-		ExploredItem item(int rowNumber) {
-			return items.get(rowNumber - 1);
-		}
-
-		ItemCloseResult closeItem(int rowNumber) {
-			ExploredItem itemToClose = item(rowNumber);
-			int childrenCount = 0;
-			while(items.size() > rowNumber) {
-				ExploredItem itemAfterOneToClose = items.get(rowNumber);
-				if (itemAfterOneToClose.depth > itemToClose.depth) {
-					childrenCount++;
-					items.remove(rowNumber);
-				} else {
-					break;
-				}
-			}
-			itemToClose.close();
-			return new ItemCloseResult(itemToClose.asString(), childrenCount);
-		}
-		String openItem(int rowNumber) {
-			ExploredItem itemToOpen = item(rowNumber);
-			int positionToInsertChid = rowNumber;
-			itemToOpen.open();
-			StringBuffer buffer = new StringBuffer().append(itemToOpen.asString());
-			File[] children = itemToOpen.file.listFiles();
-			List<File> allChildren = new LinkedList<File>();
-			List<File> files = new LinkedList<File>();
-			for (File child : children) {
-				if (child.isDirectory()) {
-					allChildren.add(child);
-				} else {
-					files.add(child);
-				}
-			}
-			allChildren.addAll(files);
-			for (File child : allChildren) {
-				ExploredItem item = new ExploredItem(child, itemToOpen.depth + 1);
-				buffer.append(Texts.LINE_SEPARATOR).append(item.asString());
-				items.add(positionToInsertChid++, item);
-			}
-			return buffer.toString();
-		}
-	}
+		driver.inputArea().setFocusable(true);
+		driver.inputArea().requestFocus();
+	}	
 }
