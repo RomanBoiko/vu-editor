@@ -14,18 +14,15 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
-import vu.editor.Buffer.BufferState;
-import vu.editor.Search.SearchResult;
-
 public class Driver {
 	private final Gui gui = new Gui();
+	private final Search search = new Search();
+	private final Buffers buffers = new Buffers();
 	private final HelpPerspective helpPerspective = new HelpPerspective(this);
 	private final EditorPerspective editorPerspective = new EditorPerspective(this);
 	private final FileExplorerPerspective fileExplorerPerspective = new FileExplorerPerspective(this);
-	private final SearchPerspective searchPerspective = new SearchPerspective(this);
+	private final SearchPerspective searchPerspective = new SearchPerspective(this, search);
 	private final BuffersPerspective buffersPerspective = new BuffersPerspective(this);
-	private final Buffers buffers = new Buffers();
-	private final Search search = new Search();
 	
 	private Perspective currentPerspective = new Perspective() { };
 
@@ -56,11 +53,11 @@ public class Driver {
 	}
 	void loadBuffersView() {
 		setCurrentPerspective(buffersPerspective);
-		this.buffersPerspective.loadBuffersView();
+		this.buffersPerspective.show();
 	}
 	void loadSearchView() {
 		setCurrentPerspective(searchPerspective);
-		this.searchPerspective.loadPerspective(search);
+		this.searchPerspective.show();
 	}
 
 	void setText(String text) {
@@ -220,5 +217,9 @@ public class Driver {
 	}
 	void updateLatSearchViewPosition(int position) {
 		search.updateLatSearchViewPosition(position);
+	}
+
+	void highlightCurrentLine() {
+		Texts.highlightCurrentLine(this);
 	}
 }

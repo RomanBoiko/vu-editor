@@ -14,7 +14,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 
-import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 public class FileExplorerPerspective extends Perspective {
@@ -54,11 +53,7 @@ public class FileExplorerPerspective extends Perspective {
 				}
 			}
 		};
-		this.caretListener = new CaretListener() {
-			@Override public void caretUpdate(CaretEvent event) {
-				highlightCurrentItem();
-			}
-		};
+		this.caretListener = new HighlightingCurrentLineCaretListener(driver);
 	}
 
 	private void setCurrentDirAsWorkdirAndSwitchToIt() {
@@ -86,11 +81,7 @@ public class FileExplorerPerspective extends Perspective {
 		driver.setTitle("FileExplorer");
 		driver.setStatusBarText("FileExplorer: 'R' - root, 'W' - working dir (" + workDirExploredItems.pathToRoot() + "), 'Ctrl+P' - selected file path to clipboard, 'Ctrl+W' - set selected dir as workdir");
 		driver.setCursorPosition(exploredItems.lastCaretPosition);
-		highlightCurrentItem();
-	}
-
-	private void highlightCurrentItem() {
-		Texts.highlightCurrentLine(driver);
+		driver.highlightCurrentLine();
 	}
 
 	private void loadEditorWithFile() {

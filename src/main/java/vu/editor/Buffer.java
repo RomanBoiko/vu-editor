@@ -88,15 +88,6 @@ public class Buffer {
 	boolean hasUnsavedChanges() {
 		return hasUnsavedChanges;
 	}
-	
-	static class BufferState {
-		final String text;
-		final int caretPosition;
-		public BufferState(String text, int caretPosition) {
-			this.text = text;
-			this.caretPosition = caretPosition;
-		}
-	}
 
 	private final LinkedList<BufferState> states = new LinkedList<BufferState>();
 	private int currentState = 0;
@@ -124,5 +115,14 @@ public class Buffer {
 		while (states.size() > MAX_UNDO_HISTORY_SIZE) {
 			states.removeLast();
 		}
+	}
+}
+
+class BufferState {
+	final String text;
+	final int caretPosition;
+	public BufferState(String text, int caretPosition) {
+		this.text = text;
+		this.caretPosition = caretPosition;
 	}
 }
