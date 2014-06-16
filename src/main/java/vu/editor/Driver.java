@@ -1,9 +1,8 @@
 package vu.editor;
 
 import java.awt.Color;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
+import java.awt.Component;
+import java.awt.event.KeyListener;
 import java.io.File;
 
 import javax.swing.JTextArea;
@@ -191,13 +190,11 @@ public class Driver {
 	}
 
 	void copyCurrentFilePathToClipboard() {
-		copyCurrentFilePathToClipboard(buffers.currentBuffer().getPath());
+		Clipboards.put(buffers.currentBuffer().getPath());
 	}
 
 	void copyCurrentFilePathToClipboard(String currentFilePath) {
-		StringSelection path = new StringSelection(currentFilePath);
-		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-		clipboard.setContents(path, path);
+		Clipboards.put(currentFilePath);
 	}
 
 	JTextField statusBar() {
@@ -208,15 +205,27 @@ public class Driver {
 		search.search(textToSearch, rootFile);
 	}
 
-	String lastSearchText() {
-		return search.searchText();
+	private void focusOn(Component component) {
+		component.setFocusable(true);
+		component.requestFocus();
+		component.setFocusTraversalKeysEnabled(false);
 	}
 
-	int lastSearchViewPosition() {
-		return search.lastSearchViewPosition();
+	void focusOnStatusBar(KeyListener statusBarKeyListener) {
+		inputArea().setFocusable(false);
+		focusOn(statusBar());
+		statusBar().setEditable(true);
+		statusBar().addKeyListener(statusBarKeyListener);
 	}
-	void updateLatSearchViewPosition(int position) {
-		search.updateLatSearchViewPosition(position);
+	void focusOnEditArea(KeyListener statusBarKeyListenerToRemove) {
+		statusBar().removeKeyListener(statusBarKeyListenerToRemove);
+		focusOn(inputArea());
+		statusBar().setEditable(false);
+		statusBar().setFocusable(false);
+	}
+
+	String lastSearchText() {
+		return search.searchText();
 	}
 
 	void highlightCurrentLine() {

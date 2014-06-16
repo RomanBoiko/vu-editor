@@ -148,13 +148,8 @@ public class EditorPerspective extends Perspective {
 	};
 
 	private void backToEditMode() {
-		driver.statusBar().removeKeyListener(findKeyListener);
-		driver.statusBar().setEditable(false);
-		driver.statusBar().setFocusable(false);
-
+		driver.focusOnEditArea(findKeyListener);
 		driver.makeInputAreaEditable(true);
-		driver.inputArea().setFocusable(true);
-		driver.inputArea().requestFocus();
 
 		driver.setStatusBarText("");//path to current file not identified after find
 		if (currentFind.previousFindPosition() >= 0) {
@@ -175,14 +170,10 @@ public class EditorPerspective extends Perspective {
 
 		driver.makeInputAreaEditable(false);
 		driver.inputAreaHighlighter().removeAllHighlights();
+
 		driver.statusBar().getHighlighter().removeAllHighlights();
-		driver.statusBar().setEditable(true);
-
 		driver.statusBar().setText(currentFind.initialFindMessage());
-
-		driver.statusBar().setFocusable(true);
-		driver.statusBar().requestFocus();
-		driver.inputArea().setFocusable(false);
-		driver.statusBar().addKeyListener(findKeyListener);
+		
+		driver.focusOnStatusBar(findKeyListener);
 	}
 }

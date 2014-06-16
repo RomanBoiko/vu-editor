@@ -1,6 +1,5 @@
 package vu.editor;
 
-
 class SearchPerspective extends SelectableReadOnlyPerspective {
 	private final Search search;
 
@@ -25,10 +24,10 @@ class SearchPerspective extends SelectableReadOnlyPerspective {
 	}
 
 	@Override protected int cursorPositionOnLoad() {
-		return driver.lastSearchViewPosition();
+		return search.lastSearchViewPosition();
 	}
 
 	@Override void actionOnExitFromPerspective() {
-		driver.updateLatSearchViewPosition(driver.selectionStart());
+		search.updateLatSearchViewPosition(driver.selectionStart());
 	}
 }

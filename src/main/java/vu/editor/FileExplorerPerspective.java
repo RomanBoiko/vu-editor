@@ -115,13 +115,8 @@ public class FileExplorerPerspective extends Perspective {
 
 	private void searchMode() {
 		driver.statusBar().getHighlighter().removeAllHighlights();
-		driver.statusBar().setEditable(true);
 		driver.statusBar().setText(driver.lastSearchText());
-		
-		driver.statusBar().setFocusable(true);
-		driver.statusBar().requestFocus();
-		driver.inputArea().setFocusable(false);
-		driver.statusBar().addKeyListener(searchKeyListener);
+		driver.focusOnStatusBar(searchKeyListener);
 	}
 
 	private final KeyListener searchKeyListener = new KeyListener() {
@@ -152,11 +147,6 @@ public class FileExplorerPerspective extends Perspective {
 	}
 
 	private void resetStatusBar() {
-		driver.statusBar().removeKeyListener(searchKeyListener);
-		driver.statusBar().setEditable(false);
-		driver.statusBar().setFocusable(false);
-
-		driver.inputArea().setFocusable(true);
-		driver.inputArea().requestFocus();
+		driver.focusOnEditArea(searchKeyListener);
 	}	
 }
